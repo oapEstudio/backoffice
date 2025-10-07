@@ -1,0 +1,29 @@
+.nav-link {
+  text-decoration: none;
+  color: #000;                
+  display: inline-block;      
+  padding-bottom: 2px;       
+  border-bottom: 2px solid transparent;
+  transition: border-color 180ms ease;
+}
+
+.nav-link:hover {
+  border-bottom-color: #065FBF;
+}
+.nav-link.active {
+  border-bottom-color: #065FBF;
+
+}
+
+.nav-link.active .item-menu{
+  font-weight: 600;
+}
+
+
+.nav-link .item-menu{
+  margin: 0px;
+  font-weight: 400;
+  font-size: 1rem;         
+  line-height: var(--lh);
+  text-transform: none;
+}

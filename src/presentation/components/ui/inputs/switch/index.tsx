@@ -1,0 +1,1 @@
+export { CustomSwitchContainer } from "./switch.component";

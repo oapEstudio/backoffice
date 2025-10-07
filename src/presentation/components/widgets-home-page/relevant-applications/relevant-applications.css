@@ -1,0 +1,122 @@
+/* Contenedor general */
+.ra-section {
+  padding: 1.5rem 0;
+}
+
+.ra-header {
+  margin-bottom: 0.75rem;
+}
+
+.ra-title {
+  margin: 0 0 2px 0;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.ra-underline {
+  width: 140px;
+  height: 2px;
+  background: #000; /* ajustá a tu theme */
+}
+
+/* Grid responsive 1–2–4 */
+.ra-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 600px) {
+  .ra-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 900px) {
+  .ra-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Card base */
+.ra-card {
+  position: relative;
+  height: var(--card-h, 250px);
+  border-radius: 8px;
+  border: 1px solid #cfcfcf;
+  background: #fafafa;
+  overflow: clip; /* o hidden si necesitás compatibilidad total */
+  isolation: isolate; /* asegura stacking context propio */
+}
+
+/* Fondo hover que SIEMPRE cubre la card
+   -> no depende de hijos ni paddings */
+.ra-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: var(--hover-bg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 200ms ease;
+  pointer-events: none;
+}
+
+/* Overlay semitransparente */
+.ra-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: transparent;
+  transition: background-color 200ms ease;
+  pointer-events: none;
+}
+
+/* Área clickable */
+.ra-link {
+  position: relative;
+  z-index: 2; /* por encima de fondo/overlay */
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Contenido */
+.ra-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 15% 1rem 1rem 1rem; /* similar a tu pt: '15%' */
+}
+
+.ra-card-title {
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.ra-card-divider {
+  width: 40%;
+  height: 2px;
+  background: #000;
+}
+
+.ra-card-desc {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+/* Hover effects */
+.ra-card:hover::before { opacity: 1; }
+.ra-card:hover::after  { background-color: rgba(255,255,255,0.12); }
+.ra-card:hover .ra-card-title,
+.ra-card:hover .ra-card-desc {
+  color: #fff;
+}
+.ra-card:hover .ra-card-divider {
+  background: #fff;
+}

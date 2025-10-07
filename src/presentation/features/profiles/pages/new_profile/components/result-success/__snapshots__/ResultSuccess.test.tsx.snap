@@ -1,0 +1,31 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ResultSuccess > should match snapshot 1`] = `
+<div>
+  <div
+    class="MuiStack-root css-xjojea-MuiStack-root"
+  >
+    <img
+      alt=""
+      height="105"
+      src="data:image/svg+xml,%3csvg%20width='106'%20height='106'%20viewBox='0%200%20106%20106'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M53%20105.5C59.8944%20105.5%2066.7213%20104.142%2073.0909%20101.504C79.4605%2098.8653%2085.248%2094.9982%2090.1231%2090.1231C94.9982%2085.248%2098.8653%2079.4605%20101.504%2073.0909C104.142%2066.7213%20105.5%2059.8944%20105.5%2053C105.5%2046.1056%20104.142%2039.2787%20101.504%2032.9091C98.8653%2026.5395%2094.9982%2020.752%2090.1231%2015.8769C85.248%2011.0018%2079.4605%207.1347%2073.0909%204.49632C66.7213%201.85795%2059.8944%200.5%2053%200.5C39.0761%200.5%2025.7226%206.03123%2015.8769%2015.8769C6.03123%2025.7226%200.5%2039.0761%200.5%2053C0.5%2066.9239%206.03123%2080.2774%2015.8769%2090.1231C25.7226%2099.9688%2039.0761%20105.5%2053%20105.5ZM51.6467%2074.2333L80.8133%2039.2333L71.8533%2031.7667L46.77%2061.8608L33.7908%2048.8758L25.5425%2057.1242L43.0425%2074.6242L47.5575%2079.1392L51.6467%2074.2333Z'%20fill='%23007F49'/%3e%3c/svg%3e"
+      width="105"
+    />
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-1gacaac-MuiTypography-root"
+    >
+      El perfil
+    </p>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-8ijokt-MuiTypography-root"
+    >
+      "ProfileMock"
+    </p>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-1gacaac-MuiTypography-root"
+    >
+      Ha sido creado correctamente
+    </p>
+  </div>
+</div>
+`;

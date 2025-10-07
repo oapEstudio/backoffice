@@ -1,0 +1,1 @@
+export { CustomCheckboxInput } from './checkbox.component';
