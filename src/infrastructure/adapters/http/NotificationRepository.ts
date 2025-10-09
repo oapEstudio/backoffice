@@ -63,7 +63,7 @@ export class NotificationRepository extends RepositoryAbstract implements INotif
     const form = new FormData();
 
     form.append('notificationTypeId', String(dto.notificationTypeId ?? ''));
-    form.append('slideName', String(dto.slideName ?? ''));
+    form.append('name', String(dto.name ?? ''));
     form.append('title', String(dto.title ?? ''));
     form.append('description', String(dto.description ?? ''));
 
@@ -105,7 +105,7 @@ export class NotificationRepository extends RepositoryAbstract implements INotif
 
     const form = new FormData();
     form.append('notificationTypeId', String(payload.notificationTypeId ?? ''));
-    form.append('slideName', String(payload.slideName ?? ''));
+    form.append('name', String(payload.name ?? ''));
     form.append('title', String(payload.title ?? ''));
     form.append('description', String(payload.description ?? ''));
     if (payload.image instanceof File) {

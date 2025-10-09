@@ -9,7 +9,7 @@ import { StepNumber } from '../../shared/components/step-number/StepNumber'
 import { useScrollToTopOnStep } from '../../../../utils/useScrollToTopOnStep'
 import { ActionStepReducer, eStep, getActionStepInitialState } from './reducers/ActionStepReducer'
 import type { INotificationFormValues } from '../../shared/interface/INotificationFormValues'
-import { STATE_NOTIFICATION_CAROUSEL_NEW as STATE_NOTIFICATION_NEW } from '../../shared/constants/notifications'
+import { NOTIFICATION_ALERT, STATE_NOTIFICATION_CAROUSEL_NEW as STATE_NOTIFICATION_NEW } from '../../shared/constants/notifications'
 import StepOneNewAlert from './components/StepOneNewAlert/StepOneNewAlert'
 import { StepTwoNewAlert } from './components/StepTwoNewAlert/StepTwoNewAlert';
 import { StepThreeNewAlert } from './components/StepThreeNewAlert/StepThreeNewAlert';
@@ -18,6 +18,7 @@ import { ActionStep } from '../../shared/components/action-step/ActionStep'
 import { eToast, Toast } from '../../../../components/ui/toast/CustomToastService'
 import { useNavigate } from 'react-router-dom'
 import { navStepSelected } from '../../../../utils/navStepSelected'
+import { useCreateNotification } from '../../hooks/useCreateNotification'
 
 const navStepsInit: StepType[] = [{
     active: true,
@@ -44,7 +45,8 @@ export const NewAlertPage = () => {
   const [navSteps,setNavSteps] = useState(navStepsInit);
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(ActionStepReducer,getActionStepInitialState());
-
+  const { create, loading: creating, error: createError } = useCreateNotification();
+  
   useScrollToTopOnStep(state.step, {
        targetRef: contentStepRef,
        behavior: 'smooth',
@@ -62,7 +64,21 @@ export const NewAlertPage = () => {
               payload: ''
             });
   
-           
+             const newId = await create({
+               buttonLink: '',
+               buttonText: '',
+               dateFrom: data.hasPublication ? data.dateFrom!.format('YYYY-MM-DD') : null,
+               dateTO: data.hasExpired ? data.dateTo!.format('YYYY-MM-DD') : null,
+               timeFrom: data.hasPublication ? data.timeFrom!.format('HH:mm:ss') : null,
+               timeTO: data.hasExpired ? data.timeTo!.format('HH:mm:ss') : null,
+               description: '',
+               name: data.name,
+               title: data.title,
+               notificationTypeId: NOTIFICATION_ALERT.toString(),
+               profiles: data.profiles.map(x => x.id),
+               statusId: Number(data.state),
+               image: null
+             });
      
            Toast({
              message: 'Notificación creada correctamente',

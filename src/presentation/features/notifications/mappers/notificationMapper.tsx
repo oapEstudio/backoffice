@@ -8,10 +8,11 @@ import { EditActionIcon, DangerIcon } from '../../../components/ui/icons/index';
 import { CustomStack } from '../../../components/ui/stack/Stack';
 import type React from "react";
 import IconButton from "@mui/material/IconButton";
+import { NOTIFICATION_ALERT } from "../shared/constants/notifications";
 
 export interface INotificationRow extends IRow {
   id?: string;
-  slideName: string;
+  name: string;
   type: string;
   lastChangeView: string;
   dateFrom: string;
@@ -74,14 +75,14 @@ export function toNotificationRow(n: INotification,callbackEdit: any, callbackCa
 
     return {
         id: String(n.id),
-        slideName: n.slideName,
+        name: n.name,
         expired: n.dateTO?formatDate(n.dateTO,{includeTime: true}): 'Sin definir',
         lastChangeView:  `${formatDate(n.dateUpdated,{includeTime: true})} - ${n.updatedBy}`,
         profiles: buttonEdit,
         status: stateComp,
         type: n.notificationTypeDescription,
         cancellation: cancelationComp,
-        background: backgroundCalculed(n.dateTO),
+        background:  backgroundCalculed(n),
         dateFrom: n.dateFrom?formatDate(n.dateFrom,{includeTime: false}): 'Sin definir',
     }
 }
@@ -95,13 +96,16 @@ export function toNotificationSelect(f: IFilter): SelectOption {
 }
 
 
-function backgroundCalculed(dateTo: Date | null): string | null{
+function backgroundCalculed(n: INotification): string | null{
 
+    const dateTo =n.dateTO;
+    const defaultBackGroundColor =  n.notificationTypeId == NOTIFICATION_ALERT? '#FFD3D3': null;
+    
     if(!dateTo) return null;
     
     const t = dateTo instanceof Date ? dateTo.getTime() : new Date(dateTo).getTime();
    
     const expired = !Number.isNaN(t) && t < Date.now();
 
-    return expired?'#FFEB8A80' : null
+    return expired?'#FFEB8A80' : defaultBackGroundColor
 }

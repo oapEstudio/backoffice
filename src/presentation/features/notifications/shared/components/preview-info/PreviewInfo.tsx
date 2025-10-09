@@ -1,9 +1,9 @@
 import React from 'react'
-import { colors } from '../../../../../../../common/colors';
-import { CustomBox } from '../../../../../../../components/ui/box/CustomBox';
-import { CustomStack } from '../../../../../../../components/ui/stack/Stack';
+import { colors } from '../../../../../common/colors';
+import { CustomBox } from '../../../../../components/ui/box/CustomBox';
+import { CustomStack } from '../../../../../components/ui/stack/Stack';
 import Typography from '@mui/material/Typography';
-import CustomDivider from '../../../../../../../components/ui/divider';
+import CustomDivider from '../../../../../components/ui/divider';
 
 interface IPreview{
     title: string;

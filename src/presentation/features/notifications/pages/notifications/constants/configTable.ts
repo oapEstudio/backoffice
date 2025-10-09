@@ -6,9 +6,9 @@ export const Headers: IColumn[] =[{
     label: 'Tipo'
 },{
     align: 'left',
-    id: 'slideName',
+    id: 'name',
     label: 'Nombre',
-    order: 'slideName'
+    order: 'name'
 },{
     align: 'left',
     id: 'lastChangeView',
