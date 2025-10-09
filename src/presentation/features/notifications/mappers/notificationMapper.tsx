@@ -100,8 +100,8 @@ function backgroundCalculed(n: INotification): string | null{
 
     const dateTo =n.dateTO;
     const defaultBackGroundColor =  n.notificationTypeId == NOTIFICATION_ALERT? '#FFD3D3': null;
-    
-    if(!dateTo) return null;
+
+    if(!dateTo) return defaultBackGroundColor;
     
     const t = dateTo instanceof Date ? dateTo.getTime() : new Date(dateTo).getTime();
    
