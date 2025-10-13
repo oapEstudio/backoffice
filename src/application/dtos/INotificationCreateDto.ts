@@ -1,9 +1,9 @@
 export interface INotificationCreateDto {
     notificationTypeId: string;
-    slideName:          string;
+    name:               string;
     title:              string;
     description:        string;
-    image:         File;
+    image:         File | null;
     buttonText:         string;
     buttonLink:         string;
     statusId:           number;

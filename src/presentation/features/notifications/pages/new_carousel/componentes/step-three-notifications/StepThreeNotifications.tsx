@@ -1,19 +1,18 @@
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import type { INotificationFormValues } from '../../NewCarouselPage';
-import { Card, CardContent, CardHeader } from '@mui/material';
-import { Chip, Stack } from '@mui/material';
+
+
 import { usePreviewUrl } from '../../../../../../utils/usePreviewUrl';
 import { CustomStack } from '../../../../../../components/ui/stack/Stack';
 import { Carousel } from '../../../../../../components/widgets-home-page/carousel/Carousel';
 import { CustomBox } from '../../../../../../components/ui/box/CustomBox';
 import { colors } from '../../../../../../common/colors';
-import Typography from '@mui/material/Typography';
-import CustomDivider from '../../../../../../components/ui/divider';
+
 import BlankCard from '../../../../../../components/ui/card/blank';
 import { formatDate } from '../../../../../../utils/formatDate';
-import { PreviewInfo } from './components/PreviewInfo';
+import { PreviewInfo } from '../../../../shared/components/preview-info/PreviewInfo';
+import type { INotificationFormValues } from '../../../../shared/interface/INotificationFormValues';
 
 const FIELDS = [
   'title','subtitle','img','hasButton','buttonTitle','buttonLink',
