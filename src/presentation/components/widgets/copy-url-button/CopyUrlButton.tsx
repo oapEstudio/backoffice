@@ -1,6 +1,6 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { CopyIcon } from "../../../components/ui/icons";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import { eToast, Toast } from "../../ui/toast/CustomToastService";
@@ -32,7 +32,7 @@ export const CopyUrlButton: React.FC<CopyUrlProps> = ({ url }) => {
       <WrapperContainerUrl>
         <Tooltip title="Copiar URL" placement="top-start">
           <IconButton size="small" onClick={handleCopy}> 
-            <ContentCopyIcon fontSize="small" />
+            <CopyIcon/>
           </IconButton>
         </Tooltip>
       </WrapperContainerUrl>

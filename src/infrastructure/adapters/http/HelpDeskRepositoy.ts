@@ -9,7 +9,7 @@ import { MOCK_HELP_DESK_PAGINATED } from "./mock/getHelpDeskMock";
 
 export class HelpDeskRepository extends RepositoryAbstract implements IHelpDeskRepository {
 
-  resource = env.resources.notifications;
+  resource = env.resources.helpDesk;
 
   async getHelpDeskItems(params: IPageParameters): Promise<IPaginatedResponse<IHelpDesk>> {
 
