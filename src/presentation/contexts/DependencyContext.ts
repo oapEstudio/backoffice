@@ -28,12 +28,15 @@ import { UpdateNotificationsProfilesUseCase } from '../../application/usecases/U
 import { CancellationNotificationUseCase } from '../../application/usecases/CancellationNotificationsUseCase';
 import { GetNotificationByIdUseCase } from '../../application/usecases/GetNotificationByIdUseCase';
 import { UpdateNotificationUseCase } from '../../application/usecases/UpdateNotificationUseCase';
+import { GetHelpDeskUseCase } from '../../application/usecases/GetHelpDeskUseCase';
+import { HelpDeskRepository } from '../../infrastructure/adapters/http/HelpDeskRepositoy';
 
 const profileRepo = new ProfileRepository();
 const groupRepo = new GroupRepository();
 const menuRepo = new MenuRepository();
 const highlightRepo = new HighlightRepository();
 const notificationRepo = new NotificationRepository();
+const helpDeskRepo = new HelpDeskRepository();
 
 export interface IDependencies{
   getProfiles: GetProfilesUseCase,
@@ -59,11 +62,15 @@ export interface IDependencies{
   updateNotificationProfiles: UpdateNotificationsProfilesUseCase,
   cancellationNotification: CancellationNotificationUseCase,
   getNotificationById: GetNotificationByIdUseCase,
-  updateNotification: UpdateNotificationUseCase
+  updateNotification: UpdateNotificationUseCase,
+  getHelpDesk: GetHelpDeskUseCase,
+  getHelpDeskTypes: GetDatasetFiltersUseCase,
+  getHelpDeskTStatuses: GetDatasetFiltersUseCase,
 }
 
 const resourseDimDatasetProfile = env.resources.profiles.dim.dataset;
 const resourseDimDatasetNotification = env.resources.notifications.dim.dataset;
+const resourseDimDatasetHelpDesk = env.resources.helpDesk.dim.dataset;
 
 /**Profiles */
 const urlProfileStatus = resourseDimDatasetProfile.endpoint.replace('{dataset}','statuses');
@@ -73,6 +80,11 @@ const urlDimProfile = resourseDimDatasetProfile.endpoint.replace('{dataset}','pr
 /**Notifications */
 const urlNotificationStatus = resourseDimDatasetNotification.endpoint.replace('{dataset}','statuses');
 const urlNotificationTypes = resourseDimDatasetNotification.endpoint.replace('{dataset}','types');
+
+// TODO REVISAR SI ESTA OK 
+/**Help Desk */
+const urlHelpDeskStatus = resourseDimDatasetHelpDesk.endpoint.replace('{dataset}','statuses');
+const urlHelpDeskTypes = resourseDimDatasetHelpDesk.endpoint.replace('{dataset}','types');
 
 export const defaultDependencies: IDependencies = {
   getProfiles: new GetProfilesUseCase(profileRepo),
@@ -98,7 +110,10 @@ export const defaultDependencies: IDependencies = {
   updateNotificationProfiles: new UpdateNotificationsProfilesUseCase(notificationRepo),
   cancellationNotification: new CancellationNotificationUseCase(notificationRepo),
   getNotificationById: new GetNotificationByIdUseCase(notificationRepo),
-  updateNotification: new UpdateNotificationUseCase(notificationRepo)
+  updateNotification: new UpdateNotificationUseCase(notificationRepo),
+  getHelpDesk: new GetHelpDeskUseCase(helpDeskRepo),
+  getHelpDeskTypes: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpDeskTypes,resourseDimDatasetHelpDesk.version)),
+  getHelpDeskTStatuses: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpDeskStatus,resourseDimDatasetHelpDesk.version)),
 };
 
 export const DependencyContext = React.createContext<IDependencies>(defaultDependencies);

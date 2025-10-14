@@ -74,6 +74,13 @@ export const NEW_DYNAMIC_PAGE: IRoute = {
     children: [],
     viewNav: true
 }
+export const HELPDESK_PAGE: IRoute = {
+    title: 'Ayuda',
+    order:  'Ayuda',
+    name: '/helpdesk',
+    children: [],
+    viewNav: true
+}
 export const ROUTES: IRoute[] =[
-    HOME, FATHER_PROFILE, NOTIFICATION, FUNTIONALITIES, UPLOAD_PACK, NEW_DYNAMIC_PAGE
+    HOME, FATHER_PROFILE, NOTIFICATION, FUNTIONALITIES, NEW_DYNAMIC_PAGE, HELPDESK_PAGE
 ];
