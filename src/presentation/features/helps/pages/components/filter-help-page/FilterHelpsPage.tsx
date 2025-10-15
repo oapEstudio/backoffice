@@ -1,40 +1,36 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { CustomModal } from "../../../../../components/ui/modal/modal.component";
-import { toSelectOption } from "../../../mappers/filterHelpDeskMapper";
-import { useHelpDeskFilterOptions } from "../../../hooks/useHelpDeskFilterOptions";
-import { useProfileFilterOptions } from "../../../../profiles/hooks/useProfileFilterOptions";
+import { toSelectOption } from "../../../mappers/filterHelpsMapper";
 import { arraysEqual } from "../../../../../utils/arrayToEquals";
 import type { SelectOption } from "../../../../../components/ui/inputs/multiselect/multiselect.interface";
 import CustomMultiselect from "../../../../../components/ui/inputs/multiselect/multiselect.component";
 import ProfileMultiSelect from "../../../../../components/widgets/multiselect-profile/MultiSelectProfile";
 import Loading from "../../../../../components/ui/loading";
+import { useProfileFilterHelpOptions } from "../../../hooks/useProfileFilterOptions";
+import { useHelpFilterOptions } from "../../../hooks/useHelpsFilterOptions";
 
-export interface IFilteHelpDeskResult {
+export interface IFilterHelpsResult {
   profileIds: string[]
   status: string[]
-  helpDeskType: string[];
+  helpType: string[];
 }
 
 interface FilterHelpDeskPageProps {
   open: boolean
-  initialFilters: IFilteHelpDeskResult
-  onOk: (filters: IFilteHelpDeskResult) => void
+  initialFilters: IFilterHelpsResult
+  onOk: (filters: IFilterHelpsResult) => void
   onCancel: () => void
 }
 
-
-
-export const FilterHelpDeskPagePage: React.FC<FilterHelpDeskPageProps> = ({
+export const FilterHelpsPage: React.FC<FilterHelpDeskPageProps> = ({
   open,
   initialFilters,
   onOk,
   onCancel,
 }) => {
 
-  const { resultState, resultType, loading } = useHelpDeskFilterOptions({
-    stateFilters: { forUpdate: true }
-  })
-  const { profiles: profileFilters, loading: loadingProfiles } = useProfileFilterOptions()
+  const { resultState, resultType, loading } = useHelpFilterOptions();
+  const { profiles: profileFilters, loading: loadingProfiles } = useProfileFilterHelpOptions()
 
   const selectItemsStatuses: SelectOption[] = useMemo(
     () => resultState.map(toSelectOption),
@@ -87,7 +83,7 @@ export const FilterHelpDeskPagePage: React.FC<FilterHelpDeskPageProps> = ({
       return arraysEqual(prevIds, nextIds) ? prev : nextStatuses
     });
 
-    const nextTypes = selectItemsTypes.filter(o => initialFilters.helpDeskType.includes(String(o.id)))
+    const nextTypes = selectItemsTypes.filter(o => initialFilters.helpType.includes(String(o.id)))
 
     setSelectedTypes(prev => {
       const prevIds = prev.map(x => String(x.id))
@@ -116,7 +112,7 @@ export const FilterHelpDeskPagePage: React.FC<FilterHelpDeskPageProps> = ({
         onOk({
           profileIds,
           status: selectedStatuses.map(s => String(s.id)),
-          helpDeskType: selectedTypes.map(t => String(t.id))
+          helpType: selectedTypes.map(t => String(t.id))
         })
       }}
       onCancel={onCancel}
@@ -139,7 +135,7 @@ export const FilterHelpDeskPagePage: React.FC<FilterHelpDeskPageProps> = ({
         }}
       />
       <CustomMultiselect
-        key={open ? "open-type-notifications" : "closed-type-notifications"}
+        key={open ? "open-type-helps" : "closed-type-help"}
         multiple
         loading={loading}
         label="Tipo de documento"

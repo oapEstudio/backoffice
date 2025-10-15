@@ -28,15 +28,16 @@ import { UpdateNotificationsProfilesUseCase } from '../../application/usecases/U
 import { CancellationNotificationUseCase } from '../../application/usecases/CancellationNotificationsUseCase';
 import { GetNotificationByIdUseCase } from '../../application/usecases/GetNotificationByIdUseCase';
 import { UpdateNotificationUseCase } from '../../application/usecases/UpdateNotificationUseCase';
-import { GetHelpDeskUseCase } from '../../application/usecases/GetHelpDeskUseCase';
-import { HelpDeskRepository } from '../../infrastructure/adapters/http/HelpDeskRepositoy';
+import { GetHelpUseCase } from '../../application/usecases/GetHelpsUseCase';
+import { HelpRepository } from '../../infrastructure/adapters/http/HelpRepositoy';
+
 
 const profileRepo = new ProfileRepository();
 const groupRepo = new GroupRepository();
 const menuRepo = new MenuRepository();
 const highlightRepo = new HighlightRepository();
 const notificationRepo = new NotificationRepository();
-const helpDeskRepo = new HelpDeskRepository();
+const helpRepo = new HelpRepository();
 
 export interface IDependencies{
   getProfiles: GetProfilesUseCase,
@@ -63,14 +64,14 @@ export interface IDependencies{
   cancellationNotification: CancellationNotificationUseCase,
   getNotificationById: GetNotificationByIdUseCase,
   updateNotification: UpdateNotificationUseCase,
-  getHelpDesk: GetHelpDeskUseCase,
-  getHelpDeskTypes: GetDatasetFiltersUseCase,
-  getHelpDeskTStatuses: GetDatasetFiltersUseCase,
+  getHelps: GetHelpUseCase,
+  getHelpTypes: GetDatasetFiltersUseCase,
+  getHelpStatuses: GetDatasetFiltersUseCase,
 }
 
 const resourseDimDatasetProfile = env.resources.profiles.dim.dataset;
 const resourseDimDatasetNotification = env.resources.notifications.dim.dataset;
-const resourseDimDatasetHelpDesk = env.resources.helpDesk.dim.dataset;
+const resourseDimDatasetHelpDesk = env.resources.helps.dim.dataset;
 
 /**Profiles */
 const urlProfileStatus = resourseDimDatasetProfile.endpoint.replace('{dataset}','statuses');
@@ -111,9 +112,9 @@ export const defaultDependencies: IDependencies = {
   cancellationNotification: new CancellationNotificationUseCase(notificationRepo),
   getNotificationById: new GetNotificationByIdUseCase(notificationRepo),
   updateNotification: new UpdateNotificationUseCase(notificationRepo),
-  getHelpDesk: new GetHelpDeskUseCase(helpDeskRepo),
-  getHelpDeskTypes: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpDeskTypes,resourseDimDatasetHelpDesk.version)),
-  getHelpDeskTStatuses: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpDeskStatus,resourseDimDatasetHelpDesk.version)),
+  getHelps: new GetHelpUseCase(helpRepo),
+  getHelpTypes: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpDeskTypes,resourseDimDatasetHelpDesk.version)),
+  getHelpStatuses: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpDeskStatus,resourseDimDatasetHelpDesk.version)),
 };
 
 export const DependencyContext = React.createContext<IDependencies>(defaultDependencies);

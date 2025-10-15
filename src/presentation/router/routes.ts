@@ -77,7 +77,14 @@ export const NEW_DYNAMIC_PAGE: IRoute = {
 export const HELPDESK_PAGE: IRoute = {
     title: 'Ayuda',
     order:  'Ayuda',
-    name: '/helpdesk',
+    name: '/helps',
+    children: [],
+    viewNav: true
+}
+export const NEW_SECTION: IRoute = {
+    title: 'Nueva Sección',
+    order:  'HelpDeskSection',
+    name: '/new_section_help',
     children: [],
     viewNav: true
 }

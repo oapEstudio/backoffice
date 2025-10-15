@@ -3,7 +3,8 @@ import type { IColumn } from "../../../../components/ui/table/table.interface";
 export const Headers: IColumn[] =[{
     align: 'left',
     id: 'type',
-    label: 'Tipo'
+    label: 'Tipo',
+    order: 'helpType'
 },{
     align: 'left',
     id: 'name',
@@ -13,12 +14,12 @@ export const Headers: IColumn[] =[{
     align: 'left',
     id: 'lastChangeView',
     label: 'Última modificación',
-    order: 'lastChange'
+    order: 'dateUpdated'
 },{
     align: 'center',
     id: 'state',
     label: 'Estado',
-    order: 'statusDescription'
+    order: 'status'
 },{
     align: 'center',
     id: 'url',
@@ -32,6 +33,7 @@ export const Headers: IColumn[] =[{
 },{
     align: 'center',
     id: 'actions',
-    label: 'Acciones'
+    label: 'Acciones',
+    order: 'actions'
 }
 ];

@@ -34,9 +34,7 @@ export const SelectCreateNotifications = () => {
           setSelectedNotification(String(event.target.value));
           
           if(event.target.value == NOTIFICATION_CAROUSEL) navigate(NEW_CAROUSEL.name);
-          if(event.target.value == NOTIFICATION_ALERT) navigate(NEW_ALERT.name);
-          
-          
+          if(event.target.value == NOTIFICATION_ALERT) navigate(NEW_ALERT.name);    
   };
   
   return (

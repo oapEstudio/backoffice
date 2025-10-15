@@ -120,22 +120,29 @@ export const env = {
         }
       }
     },
-    // TODO REVISAR BACKEND
-    helpDesk: { 
+    helps: { 
       dim: {      
         dataset: {
-           endpoint: 'help_desk/dataset/{dataset}',   
+           endpoint: 'helps/dataset/{dataset}',   
            version: 'v1'
         },
         statuses: {
-           endpoint: 'help_desk/statuses',   
+           endpoint: 'helps/statuses',   
            version: 'v1'
         },
         types: {
-           endpoint: 'help_desk/types',   
+           endpoint: 'helps/types',   
            version: 'v1'
         }
-      }
+      },
+      getAll: {   
+         endpoint: 'helps',   
+         version: 'v1'
+      },
+      create: {
+         endpoint: 'helps',   
+         version: 'v1'
+      },
     },
   }
 };

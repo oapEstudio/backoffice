@@ -1,15 +1,13 @@
-// src/presentation/mappers/profileMapper.ts
-
 import { styled } from "@mui/material/styles";
 import type { IRow } from "../../../components/ui/table/table.interface";
 import { formatDate } from '../../../utils/formatDate';
-import type { IHelpDesk } from "../../../../domain/entities/IHelpDesk";
+import type { IHelp } from "../../../../domain/entities/IHelp";
 import { CopyUrlButton } from "../../../components/widgets/copy-url-button/CopyUrlButton";
 import { CustomStack } from "../../../components/ui/stack/Stack";
 import { EditActionIcon } from "../../../components/ui/icons";
 
 
-export interface IHelpDeskRow extends IRow {
+export interface IHelpRow extends IRow {
   name: string;
   state: any;
   lastChangeView: string;
@@ -19,7 +17,7 @@ export interface IHelpDeskRow extends IRow {
   type: string;
 }
 
-export function toHelpDeskRow(h: IHelpDesk, callbackEdit?: any): IHelpDeskRow {
+export function toHelpsRow(h: IHelp, callbackEdit?: any): IHelpRow {
 
   const styleContentElement = {
     justifyContent: "left",
@@ -30,11 +28,10 @@ export function toHelpDeskRow(h: IHelpDesk, callbackEdit?: any): IHelpDeskRow {
     cursor: 'pointer'
   }));
 
-
+  // {h.profile.join(', ')}
   const buttonEdit = (
     <CustomStack direction='row' spacing={2} sx={styleContentElement}>
       <span>
-        {h.groups.join(', ')}
       </span>
       <WrapperContainerEdit>
         <EditActionIcon handleClick={callbackEdit} parameterHandleClick={h} />
@@ -44,24 +41,24 @@ export function toHelpDeskRow(h: IHelpDesk, callbackEdit?: any): IHelpDeskRow {
 
 
   const WrapperContainerStatus = styled('div')(({ theme }) => ({
-    color: h.statusColor,
+    color: '',
     paddingLeft: '1%',
   }));
 
 
-  const urlComp = <CopyUrlButton url={h.url} />;
+  const urlComp = <CopyUrlButton url={h.link} />;
 
   const stateComp = <>
     <WrapperContainerStatus>
-      {h.statusDescription}
+      {h.status}
     </WrapperContainerStatus>
   </>
 
   return {
     id: h.id,
-    type: h.type,
+    type: h.helpType,
     name: h.name,
-    lastChangeView: `${formatDate(h.dateLastUpdate, { includeTime: true })} - ${h.updatedBy}`,
+    lastChangeView: `${formatDate(h.dateUpdated, { includeTime: true })} - ${h.updatedBy}`,
     state: stateComp,
     url: urlComp,
     statusId: h.statusId,

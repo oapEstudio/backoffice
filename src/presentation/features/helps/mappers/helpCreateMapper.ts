@@ -1,7 +1,7 @@
 import type { IFilter } from "../../../../domain/entities/IFilter";
 import type { SelectOption } from "../../../components/ui/inputs/select/select.interface";
 
-export function toHelpDeskSelect(f: IFilter): SelectOption {
+export function toHelpSelect(f: IFilter): SelectOption {
   return {
     label: f.description,
     value: f.id

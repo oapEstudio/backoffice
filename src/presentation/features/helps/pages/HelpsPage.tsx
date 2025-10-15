@@ -1,14 +1,11 @@
 import { TablePageStandard } from '../../../components/widgets/table-page-standard/TablePageStandard';
 import { HELPDESK_PAGE } from '../../../router/routes';
-import { useCallback, useMemo, useState } from 'react';
-import TableFilterBar from '../../../components/widgets/table-filter-bar/TableFilterBar';
 import { Headers } from './constants/configTable';
-import { SelectCreateHelpDesk } from './components/select-create-help-desk/SelectHelpDesk';
-import { useHelpDeskTable } from '../hooks/useHelpDeskTable';
-import { FilterHelpDeskPagePage, type IFilteHelpDeskResult } from './components/filter-help-desk-page/FilterHelpDeskPage';
+import { useHelpTable } from '../hooks/useHelpsTable';
+import { FilterHelpsPage, type IFilterHelpsResult  } from './components/filter-help-page/FilterHelpsPage';
 
 
-export const HelpDeskPage = () => {
+export const HelpsPage = () => {
   const {
     params,
     setParams,
@@ -21,16 +18,16 @@ export const HelpDeskPage = () => {
     openFilter,
     setOpenFilter,
     setFilters
-  } = useHelpDeskTable();
+  } = useHelpTable();
   
 
   
   return (
     <>
-      <FilterHelpDeskPagePage
+      <FilterHelpsPage
         open={openFilter}
         initialFilters={currentFilters}
-        onOk={(filters: IFilteHelpDeskResult) => {
+        onOk={(filters: IFilterHelpsResult) => {
           setFilters(filters);
           setOpenFilter(false);
         }}

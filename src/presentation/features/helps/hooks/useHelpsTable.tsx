@@ -1,17 +1,17 @@
 import { useCallback, useMemo, useState } from 'react';
 import type { IAction } from '../../../components/ui/table/table-actions/actions.interface';
 import type { IRow } from '../../../components/ui/table/table.interface';
-import type { IHelpDesk } from '../../../../domain/entities/IHelpDesk';
-import { toHelpDeskRow, type IHelpDeskRow } from '../mappers/helpDeskMapper';
-import { useGetHelpDesk } from './useGetHelpDesk';
+import type { IHelp} from '../../../../domain/entities/IHelp';
+import { useGetHelps } from './useGetHelps';
 import { INITIAL_PARAMS_TABLE } from '../../shared/constants/initialsParamTable';
 import Button from '../../../components/ui/button/button.component';
-import type { IFilteHelpDeskResult } from '../pages/components/filter-help-desk-page/FilterHelpDeskPage';
 import TableFilterBar from '../../../components/widgets/table-filter-bar/TableFilterBar';
 import { SelectCreateHelpDesk } from '../pages/components/select-create-help-desk/SelectHelpDesk';
+import { toHelpsRow, type IHelpRow } from '../mappers/helpMapper';
+import type { IFilterHelpsResult } from '../pages/components/filter-help-page/FilterHelpsPage';
 
-export const useHelpDeskTable = () => {
-  const { setParams, params, result, loading } = useGetHelpDesk(INITIAL_PARAMS_TABLE);
+export const useHelpTable = () => {
+  const { setParams, params, result, loading } = useGetHelps(INITIAL_PARAMS_TABLE);
   const [openFilter, setOpenFilter] = useState(false);
   const [editHelpDeskId, setEditHelpDeskId] = useState<string>('');
 
@@ -21,25 +21,25 @@ export const useHelpDeskTable = () => {
     [params.filters]
   );
 
-  const currentFilters: IFilteHelpDeskResult = {
+  const currentFilters: IFilterHelpsResult = {
     profileIds: (params.filters?.ProfileIds as string[]) ?? [],
     status: (params.filters?.StatusIds as string[]) ?? [],
-    helpDeskType: (params.filters?.TypeIds as string[]) ?? [],
+    helpType: (params.filters?.TypeIds as string[]) ?? [],
   }
 
   const count = result?.count ?? 0;
 
   // Callbacks
-  const openEdit = useCallback((helpDesk: any & { id: string }) => {
+  const openEdit = useCallback((help: any & { id: string }) => {
     // TODO: Implement edit logic here
-    setEditHelpDeskId(helpDesk.id);
+    setEditHelpDeskId(help.id);
   }, []);
 
   const setFilters = useCallback(
-    (f: IFilteHelpDeskResult) => {
+    (f: IFilterHelpsResult) => {
       setParams(p => ({
         ...p,
-        filters: { ProfileIds: (f.profileIds ?? []).map(id => String(id).toLowerCase()), StatusIds: f.status, TypeIds: f.helpDeskType },
+        filters: { ProfileIds: (f.profileIds ?? []).map(id => String(id).toLowerCase()), StatusIds: f.status, TypeIds: f.helpType },
         page: 1,
       }))
     },
@@ -54,7 +54,7 @@ export const useHelpDeskTable = () => {
     }));
   }, [setParams]);
 
-  const callbackProfiles = useCallback((n: IHelpDesk) => {
+  const callbackProfiles = useCallback((n: IHelp) => {
     // TODO: Implement profile callback logic
   }, []);
 
@@ -63,8 +63,8 @@ export const useHelpDeskTable = () => {
   }, []);
 
   // Table rows
-  const rows: IHelpDeskRow[] = useMemo(
-    () => (result?.data ?? []).map(p => toHelpDeskRow(p, callbackProfiles)),
+  const rows: IHelpRow[] = useMemo(
+    () => (result?.data ?? []).map(p => toHelpsRow(p, callbackProfiles)),
     [result?.data, callbackProfiles]
   );
 
@@ -74,8 +74,8 @@ export const useHelpDeskTable = () => {
       {
         icon: <><div><Button variant="secondary" title="Editar" /></div></>,
         onClick: (row: IRow) => {
-          const helpDesk = row as unknown as IHelpDesk;
-          setEditHelpDeskId(helpDesk.id);
+          const help = row as unknown as IHelp;
+          setEditHelpDeskId(help.id);
         },
       }
     ],
