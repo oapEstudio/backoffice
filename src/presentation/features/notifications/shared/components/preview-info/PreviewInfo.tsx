@@ -7,7 +7,7 @@ import CustomDivider from '../../../../../components/ui/divider';
 
 interface IPreview{
     title: string;
-    value: string;
+    value: string | React.ReactNode;
 }
 interface IPreviewInfoProps{
     preview: IPreview[]

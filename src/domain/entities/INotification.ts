@@ -24,4 +24,5 @@ export interface INotification {
     dateCreated:                 Date;
     dateUpdated:                 Date;
     updatedBy:                   string;
+    commonTypeId:                string;
 }

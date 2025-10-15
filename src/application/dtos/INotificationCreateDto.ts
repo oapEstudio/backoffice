@@ -12,4 +12,5 @@ export interface INotificationCreateDto {
     dateTO:             string | null;
     timeTO:             string | null;
     profiles:           string[];
+    notificationCommonTypeId?: string;
 }

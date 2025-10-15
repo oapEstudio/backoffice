@@ -1,25 +1,37 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react';
+import Typography from '@mui/material/Typography';
 import { Controller, useFormContext } from 'react-hook-form';
-import type { INotificationFormValues } from '../../interface/INotificationFormValues';
 import { useNotificationFilterOptions } from '../../../hooks/useNotificationFilterOptions';
+import type { INotificationFormValues } from '../../interface/INotificationFormValues';
 import { toNotificationSelect } from '../../../mappers/notificationMapper';
 import type { SelectOption } from '../../../../../components/ui/inputs/select/select.interface';
 import { useNotPastValidation } from '../../../../../utils/useNotPastValidation';
 import { useEndAfterStartValidation } from '../../../../../utils/useEndAfterStartValidation';
 import { minTrimmed } from '../../../../../utils/minTrimmed';
 import CustomTextInput from '../../../../../components/ui/inputs/text-input/text-input.component';
+import CustomTextAreaInput from '../../../../../components/ui/inputs/text-area-input/text-area-input.component';
+import ImageDropzone from '../../../../../components/ui/img-drop-zone/ImageDropZone';
+import CustomRadioButton from '../../../../../components/ui/inputs/radio-button/radio-button.component';
+import { env } from '../../../../../../infrastructure/config/env';
 import { CustomStack } from '../../../../../components/ui/stack/Stack';
 import { CustomBox } from '../../../../../components/ui/box/CustomBox';
-import CustomRadioButton from '../../../../../components/ui/inputs/radio-button/radio-button.component';
 import CustomDateInput from '../../../../../components/ui/inputs/date-input/date-input.component';
 import CustomTimePicker from '../../../../../components/ui/inputs/date-time-input/date-time-input.component';
 import CustomSelect from '../../../../../components/ui/inputs/select/select.component';
 
-
-interface INotificationAlertDetailFieldsProps{
-    autoCleanup: boolean
+interface NotificationDetailsFieldsProps {
+  autoCleanup?: boolean;
+  disabledAll?: boolean;
+  disabledState?: boolean;
+  initialImageUrl?: string;
 }
-export const NotificationAlertDetailFields: React.FC<INotificationAlertDetailFieldsProps> = ({autoCleanup}) => {
+
+export const NotificationDetailsFields: React.FC<NotificationDetailsFieldsProps> = ({
+  autoCleanup = false,
+  disabledAll = false,
+  disabledState = false,
+  initialImageUrl,
+}) => {
   const { control, formState: { errors }, watch, setValue } = useFormContext<INotificationFormValues>();
 
   const { resultState: statuses } = useNotificationFilterOptions({
@@ -107,7 +119,7 @@ export const NotificationAlertDetailFields: React.FC<INotificationAlertDetailFie
         rules={{
           required: 'El título es obligatorio',
           minLength: { value: 3, message: 'Mínimo 3 caracteres' },
-          maxLength: 110,
+          maxLength: 60,
           validate: { minTrimmed: minTrimmed(3) }
         }}
         render={({ field }) => (
@@ -115,22 +127,126 @@ export const NotificationAlertDetailFields: React.FC<INotificationAlertDetailFie
             {...field}
             label="Título"
             type="text"
-            maxLength={110}
+            maxLength={60}
             error={!!errors.title}
-            helperText={errors.title?.message}           
+            helperText={errors.title?.message}
+            disabled={disabledAll}
           />
         )}
       />
 
-    
+      <Controller
+        name="subtitle"
+        control={control}
+        rules={{
+          minLength: { value: 5, message: 'Mínimo 5 caracteres' },
+          maxLength: 300,
+          validate: { minTrimmed: minTrimmed(5) },          
+        }}
+        render={({ field }) => (
+          <CustomTextAreaInput
+            {...field}
+            label="Descripción"
+            maxLength={300}
+            error={!!errors.subtitle}
+            helperText={errors.subtitle?.message}
+            disabled={disabledAll}
+          />
+        )}
+      />
 
-     
+      <Controller
+        name="img"
+        control={control}
+        rules={{
+          validate: (v) => (v !== undefined || !!initialImageUrl) || 'Debes asignar una imagen',
+        }}
+        render={({ field, fieldState: { error } }) => (
+          <>
+            <ImageDropzone
+              multiple={false}
+              initialPreviewUrl={initialImageUrl}
+              value={field.value ? [field.value] : []}
+              onFiles={(files) => field.onChange(files[0])}
+              helperText="JPG/PNG hasta 3MB"
+              disabled={disabledAll}
+            />
+            {error && (
+              <Typography color="error" variant="caption">
+                {error.message}
+              </Typography>
+            )}
+          </>
+        )}
+      />
 
-     
+      <br />
+      <span>¿Esta publicación tendrá un botón?</span>
 
-     
+      <Controller
+        name="hasButton"
+        control={control}
+        render={({ field }) => (
+          <CustomRadioButton
+            {...field}
+            direction="row"
+            options={[
+              { label: 'Sí', value: true },
+              { label: 'No', value: false },
+            ]}
+          />
+        )}
+      />
 
-      
+      <Controller
+        name="buttonTitle"
+        control={control}
+        rules={{
+          validate: (v) => {
+            if (!hasButton) return true;
+            const t = (v ?? '').trim();
+            if (!t) return 'El título del botón es obligatorio';
+            if (t.length < 5) return 'Mínimo 5 caracteres';
+            if (!env.patternInputText.test(t)) return 'No se permiten caracteres especiales como + * ? [ ] ^ $ ( ) { } | \\ ! " # % & / = \' ¡';
+            return true;
+          },
+        }}
+        render={({ field, fieldState: { error } }) => (
+          <CustomTextInput
+            {...field}
+            label="Título botón"
+            type="text"
+            error={!!error}
+            helperText={error?.message}
+            disabled={!hasButton}
+          />
+        )}
+      />
+
+      <Controller
+        name="buttonLink"
+        control={control}
+        rules={{
+          validate: (v) => {
+            if (!hasButton) return true;
+            const t = (v ?? '').trim();
+            if (!t) return 'Debe ingresar un link para el botón';
+            const urlOk = /^(https?:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/.test(t);
+            if (!urlOk) return 'Ingrese una URL válida (ej: https://example.com)';
+            return true;
+          },
+        }}
+        render={({ field, fieldState: { error } }) => (
+          <CustomTextInput
+            {...field}
+            label="Link del botón"
+            type="url"
+            error={!!error}
+            helperText={error?.message}
+            disabled={!hasButton}
+          />
+        )}
+      />
 
       <br />
       <br />
@@ -149,7 +265,8 @@ export const NotificationAlertDetailFields: React.FC<INotificationAlertDetailFie
                 options={[
                   { label: 'Sí', value: true },
                   { label: 'No', value: false },
-                ]}               
+                ]}
+                disabled={disabledAll}
               />
             )}
           />
@@ -168,7 +285,7 @@ export const NotificationAlertDetailFields: React.FC<INotificationAlertDetailFie
                     onChange={wrapStartDateOnChange(field.onChange)}
                     label="Fecha de publicación"
                     size="small"                                  
-                    disabled={ !hasPublication}
+                    disabled={disabledAll || !hasPublication}
                     error={!!error}
                     helperText={error?.message}
                   />
@@ -187,7 +304,7 @@ export const NotificationAlertDetailFields: React.FC<INotificationAlertDetailFie
                     onChange={wrapStartTimeOnChange(field.onChange)} 
                     label="Hora de publicación"
                     size="small"
-                    disabled={ !hasPublication}
+                    disabled={disabledAll || !hasPublication}
                     error={!!error}
                     helperText={error?.message}
                   />
@@ -210,7 +327,8 @@ export const NotificationAlertDetailFields: React.FC<INotificationAlertDetailFie
                 options={[
                   { label: 'Sí', value: true },
                   { label: 'No', value: false },
-                ]}                
+                ]}
+                disabled={disabledAll}
               />
             )}
           />
@@ -229,7 +347,7 @@ export const NotificationAlertDetailFields: React.FC<INotificationAlertDetailFie
                       onChange={wrapEndDateOnChange(field.onChange)}
                       label="Fecha de caducidad"
                       size="small"
-                      disabled={ !hasExpired}
+                      disabled={disabledAll || !hasExpired}
                       error={!!error}                        
                       helperText={error?.message}  
                     />
@@ -248,7 +366,7 @@ export const NotificationAlertDetailFields: React.FC<INotificationAlertDetailFie
                       onChange={wrapEndTimeOnChange(field.onChange)}
                       label="Hora de caducidad"
                       size="small"
-                      disabled={!hasExpired}
+                      disabled={disabledAll || !hasExpired}
                       error={!!error}                        
                       helperText={error?.message}  
                     />
@@ -269,10 +387,12 @@ export const NotificationAlertDetailFields: React.FC<INotificationAlertDetailFie
             label="Estado"
             options={selectItemsStatuses}
             error={!!errors.state}
-           
+            disabled={disabledState || disabledAll}
           />
         )}
       />
     </>
   );
-}
+};
+
+export default NotificationDetailsFields;

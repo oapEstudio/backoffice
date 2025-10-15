@@ -55,6 +55,7 @@ export interface IDependencies{
   getNotifications: GetNotificationsUseCase,
   getNotificationStatuses: GetDatasetFiltersUseCase,
   getNotificationTypes: GetDatasetFiltersUseCase,
+  getNotificationCommon: GetDatasetFiltersUseCase,
   createNotification: CreateNotificationUseCase,
   updateNotificationProfiles: UpdateNotificationsProfilesUseCase,
   cancellationNotification: CancellationNotificationUseCase,
@@ -73,6 +74,7 @@ const urlDimProfile = resourseDimDatasetProfile.endpoint.replace('{dataset}','pr
 /**Notifications */
 const urlNotificationStatus = resourseDimDatasetNotification.endpoint.replace('{dataset}','statuses');
 const urlNotificationTypes = resourseDimDatasetNotification.endpoint.replace('{dataset}','types');
+const urlNotificationCommonTypes = resourseDimDatasetNotification.endpoint.replace('{dataset}','commontypes');
 
 export const defaultDependencies: IDependencies = {
   getProfiles: new GetProfilesUseCase(profileRepo),
@@ -94,6 +96,7 @@ export const defaultDependencies: IDependencies = {
   getNotifications: new GetNotificationsUseCase(notificationRepo),
   getNotificationStatuses: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlNotificationStatus,resourseDimDatasetNotification.version)),
   getNotificationTypes: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlNotificationTypes,resourseDimDatasetNotification.version)),
+  getNotificationCommon: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlNotificationCommonTypes,resourseDimDatasetNotification.version)),
   createNotification: new CreateNotificationUseCase(notificationRepo),
   updateNotificationProfiles: new UpdateNotificationsProfilesUseCase(notificationRepo),
   cancellationNotification: new CancellationNotificationUseCase(notificationRepo),

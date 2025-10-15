@@ -1,12 +1,10 @@
 import type { IPageParameters, IPaginatedResponse } from "../../../application/common/IPaginatedResponse";
-import type { IProfile } from "../../../domain/entities/IProfile";
 import { apiHandler } from "./apiHandler";
 
 import { RepositoryAbstract } from "./RepositoryAbstract";
 import { env } from "../../config/env";
 import type { INotification } from "../../../domain/entities/INotification";
 import type { INotificationRepository } from "../../../application/interfaces/INotificationRepository";
-import { mockPaginatedResponse, resolveAfter } from "./mock/getNotificationmock";
 import type { INotificationCreateDto } from "../../../application/dtos/INotificationCreateDto";
 import type { INotificationUpdateProfiles } from "../../../application/dtos/INotificationUpdateProfiles";
 import type { INotificationUpdateDto } from "../../../application/dtos/INotificationUpdateDto";
@@ -19,8 +17,6 @@ export class NotificationRepository extends RepositoryAbstract implements INotif
 
   async getNotifications(params: IPageParameters): Promise<IPaginatedResponse<INotification>> {
     
-  
-    //return  await resolveAfter(mockPaginatedResponse, 300);
     const mapped = this.paramsMap(params);
     const qs = this.toQueryStringPagination(mapped);
 
@@ -66,6 +62,7 @@ export class NotificationRepository extends RepositoryAbstract implements INotif
     form.append('name', String(dto.name ?? ''));
     form.append('title', String(dto.title ?? ''));
     form.append('description', String(dto.description ?? ''));
+    form.append('notificationCommonTypeId', String(dto.notificationCommonTypeId ?? ''));
 
     if (dto.image instanceof File) {
       form.append('image', dto.image, dto.image.name);
@@ -108,6 +105,7 @@ export class NotificationRepository extends RepositoryAbstract implements INotif
     form.append('name', String(payload.name ?? ''));
     form.append('title', String(payload.title ?? ''));
     form.append('description', String(payload.description ?? ''));
+    form.append('notificationCommonTypeId', String(payload.notificationCommonTypeId ?? ''));
     if (payload.image instanceof File) {
       form.append('image', payload.image, payload.image.name);
     }

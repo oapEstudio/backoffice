@@ -1,12 +1,12 @@
 import React, { useMemo, useState, type ChangeEvent } from 'react'
 import { colors } from '../../../../../../common/colors';
-import { NEW_ALERT, NEW_CAROUSEL } from '../../../../../../router/routes';
+import { NEW_ALERT, NEW_BELL, NEW_CAROUSEL } from '../../../../../../router/routes';
 import { CustomBox } from '../../../../../../components/ui/box/CustomBox';
 import CustomSelect from '../../../../../../components/ui/inputs/select/select.component';
 import { useNotificationsType } from '../../../../hooks/useGetNotificationsType';
 import { toNotificationSelect } from '../../../../mappers/notificationMapper';
 import type { SelectOption } from '../../../../../../components/ui/inputs/select/select.interface';
-import { NOTIFICATION_ALERT, NOTIFICATION_CAROUSEL } from '../../../../shared/constants/notifications';
+import { NOTIFICATION_ALERT, NOTIFICATION_BELL, NOTIFICATION_CAROUSEL } from '../../../../shared/constants/notifications';
 import { useNavigate } from 'react-router-dom';
 
  const styleCustomSelect = { '& .MuiOutlinedInput-root': { height: 36}, 
@@ -35,6 +35,7 @@ export const SelectCreateNotifications = () => {
           
           if(event.target.value == NOTIFICATION_CAROUSEL) navigate(NEW_CAROUSEL.name);
           if(event.target.value == NOTIFICATION_ALERT) navigate(NEW_ALERT.name);
+          if(event.target.value == NOTIFICATION_BELL) navigate(NEW_BELL.name);
           
           
   };

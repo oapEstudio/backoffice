@@ -43,6 +43,9 @@ import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrow
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import ImageRoundedIcon from '@mui/icons-material/ImageRounded';
+import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
+import DownloadIcon from '@mui/icons-material/Download';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
 export interface IIconAction{
   handleClick?: any,
@@ -224,4 +227,16 @@ export const CopyIcon = () => {
 
 export const ImageIcon = () =>{
   return <ImageRoundedIcon />
+}
+
+export const InfoIcon = () =>{
+  return <InfoOutlineIcon />
+}
+
+export const DownloaddIcon = () =>{
+  return <DownloadIcon />
+}
+
+export const WarningTriangleIcon = () =>{
+  return <WarningAmberIcon />
 }
