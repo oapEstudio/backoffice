@@ -6,14 +6,14 @@ import { useGetHelps } from './useGetHelps';
 import { INITIAL_PARAMS_TABLE } from '../../shared/constants/initialsParamTable';
 import Button from '../../../components/ui/button/button.component';
 import TableFilterBar from '../../../components/widgets/table-filter-bar/TableFilterBar';
-import { SelectCreateHelpDesk } from '../pages/components/select-create-help-desk/SelectHelpDesk';
 import { toHelpsRow, type IHelpRow } from '../mappers/helpMapper';
 import type { IFilterHelpsResult } from '../pages/components/filter-help-page/FilterHelpsPage';
+import { SelectCreateHelp } from '../pages/components/select-create-help-desk/SelectHelpDesk';
 
 export const useHelpTable = () => {
   const { setParams, params, result, loading } = useGetHelps(INITIAL_PARAMS_TABLE);
   const [openFilter, setOpenFilter] = useState(false);
-  const [editHelpDeskId, setEditHelpDeskId] = useState<string>('');
+  const [editHelpId, setEditHelpId] = useState<string>('');
 
   // Computed values
   const hasFilters = useMemo(
@@ -32,7 +32,7 @@ export const useHelpTable = () => {
   // Callbacks
   const openEdit = useCallback((help: any & { id: string }) => {
     // TODO: Implement edit logic here
-    setEditHelpDeskId(help.id);
+    setEditHelpId(help.id);
   }, []);
 
   const setFilters = useCallback(
@@ -75,7 +75,7 @@ export const useHelpTable = () => {
         icon: <><div><Button variant="secondary" title="Editar" /></div></>,
         onClick: (row: IRow) => {
           const help = row as unknown as IHelp;
-          setEditHelpDeskId(help.id);
+          setEditHelpId(help.id);
         },
       }
     ],
@@ -87,7 +87,7 @@ export const useHelpTable = () => {
       <TableFilterBar
         onClearFilters={clearFilters}
         onOpenFilter={() => setOpenFilter(true)}
-        leftActions={<SelectCreateHelpDesk />}
+        leftActions={<SelectCreateHelp />}
         hasFilters={hasFilters}
       />
     );
@@ -98,7 +98,7 @@ export const useHelpTable = () => {
     params,
     loading,
     openFilter,
-    editHelpDeskId,
+    editHelpId,
     currentFilters,
     filterButtons,
 
@@ -110,7 +110,7 @@ export const useHelpTable = () => {
     // Methods
     setParams,
     setOpenFilter,
-    setEditHelpDeskId,
+    setEditHelpId,
     openEdit,
     setFilters,
     clearFilters,

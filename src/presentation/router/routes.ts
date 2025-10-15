@@ -83,7 +83,7 @@ export const HELPDESK_PAGE: IRoute = {
 }
 export const NEW_SECTION: IRoute = {
     title: 'Nueva Sección',
-    order:  'HelpDeskSection',
+    order:  'HelpSection',
     name: '/new_section_help',
     children: [],
     viewNav: true

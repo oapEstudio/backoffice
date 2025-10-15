@@ -22,11 +22,11 @@ const styleCustomSelect = {
   },
 };
 
-export const SelectCreateHelpDesk = () => {
+export const SelectCreateHelp = () => {
 
 
   const { result, loading } = useGetHelpType();
-  const [selectedHelpDeskType, setSelectedHelpDeskType] = useState('');
+  const [selectedHelpType, setSelectedHelpType] = useState('');
   const navigate = useNavigate();
 
   const rows: SelectOption[] = useMemo(
@@ -34,8 +34,8 @@ export const SelectCreateHelpDesk = () => {
     [result]
   )
 
-  const handlerHelpDesks = (event: ChangeEvent<HTMLInputElement> | (Event & { target: { value: unknown; name: string; } })) => {
-    setSelectedHelpDeskType(String(event.target.value));
+  const handlerHelps = (event: ChangeEvent<HTMLInputElement> | (Event & { target: { value: unknown; name: string; } })) => {
+    setSelectedHelpType(String(event.target.value));
     if(event.target.value == HELP_SECTION) navigate(NEW_SECTION.name);
     // if(event.target.value == NOTIFICATION_ALERT) navigate(NEW_ALERT.name);    
   };
@@ -47,8 +47,8 @@ export const SelectCreateHelpDesk = () => {
         placeholder={'Crear item de ayuda'}
         size='small'
         sx={styleCustomSelect}
-        value={selectedHelpDeskType}
-        onChange={handlerHelpDesks}
+        value={selectedHelpType}
+        onChange={handlerHelps}
         options={rows} />
     </CustomBox>
   )

@@ -37,7 +37,7 @@ export const HelpsPage = () => {
         params={params}
         setParams={setParams}
         loading={loading}
-        description={'HelpDeskPage'}
+        description={'HelpPage'}
         messageEmpty={'No se encontraron documentos disponibles'}
         title={HELPDESK_PAGE.title}
         count={count}

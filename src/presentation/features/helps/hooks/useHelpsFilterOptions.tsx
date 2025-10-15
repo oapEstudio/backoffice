@@ -3,11 +3,11 @@ import { DependencyContext } from "../../../contexts/DependencyContext";
 import type { IFilter } from "../../../../domain/entities/IFilter";
 
 
-interface IUseHelpDeskFilterOptionsProps {
+interface IUseHelpFilterOptionsProps {
   stateFilters?: Record<string, any>
 }
 
-export function useHelpFilterOptions(filters?: IUseHelpDeskFilterOptionsProps) {
+export function useHelpFilterOptions(filters?: IUseHelpFilterOptionsProps) {
   const { getHelpTypes, getHelpStatuses } = useContext(DependencyContext);
 
   const [resultState, setResultState] = useState<IFilter[]>([]);

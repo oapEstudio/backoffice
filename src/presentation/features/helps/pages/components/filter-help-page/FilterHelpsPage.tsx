@@ -15,14 +15,14 @@ export interface IFilterHelpsResult {
   helpType: string[];
 }
 
-interface FilterHelpDeskPageProps {
+interface FilterHelpPageProps {
   open: boolean
   initialFilters: IFilterHelpsResult
   onOk: (filters: IFilterHelpsResult) => void
   onCancel: () => void
 }
 
-export const FilterHelpsPage: React.FC<FilterHelpDeskPageProps> = ({
+export const FilterHelpsPage: React.FC<FilterHelpPageProps> = ({
   open,
   initialFilters,
   onOk,

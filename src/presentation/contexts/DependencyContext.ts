@@ -71,7 +71,7 @@ export interface IDependencies{
 
 const resourseDimDatasetProfile = env.resources.profiles.dim.dataset;
 const resourseDimDatasetNotification = env.resources.notifications.dim.dataset;
-const resourseDimDatasetHelpDesk = env.resources.helps.dim.dataset;
+const resourseDimDatasetHelp = env.resources.helps.dim.dataset;
 
 /**Profiles */
 const urlProfileStatus = resourseDimDatasetProfile.endpoint.replace('{dataset}','statuses');
@@ -84,8 +84,8 @@ const urlNotificationTypes = resourseDimDatasetNotification.endpoint.replace('{d
 
 // TODO REVISAR SI ESTA OK 
 /**Help Desk */
-const urlHelpDeskStatus = resourseDimDatasetHelpDesk.endpoint.replace('{dataset}','statuses');
-const urlHelpDeskTypes = resourseDimDatasetHelpDesk.endpoint.replace('{dataset}','types');
+const urlHelpStatus = resourseDimDatasetHelp.endpoint.replace('{dataset}','statuses');
+const urlHelpTypes = resourseDimDatasetHelp.endpoint.replace('{dataset}','types');
 
 export const defaultDependencies: IDependencies = {
   getProfiles: new GetProfilesUseCase(profileRepo),
@@ -113,8 +113,8 @@ export const defaultDependencies: IDependencies = {
   getNotificationById: new GetNotificationByIdUseCase(notificationRepo),
   updateNotification: new UpdateNotificationUseCase(notificationRepo),
   getHelps: new GetHelpUseCase(helpRepo),
-  getHelpTypes: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpDeskTypes,resourseDimDatasetHelpDesk.version)),
-  getHelpStatuses: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpDeskStatus,resourseDimDatasetHelpDesk.version)),
+  getHelpTypes: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpTypes,resourseDimDatasetHelp.version)),
+  getHelpStatuses: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpStatus,resourseDimDatasetHelp.version)),
 };
 
 export const DependencyContext = React.createContext<IDependencies>(defaultDependencies);
