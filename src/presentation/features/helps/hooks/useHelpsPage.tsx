@@ -9,6 +9,7 @@ import TableFilterBar from '../../../components/widgets/table-filter-bar/TableFi
 import { toHelpsRow, type IHelpRow } from '../mappers/helpMapper';
 import type { IFilterHelpsResult } from '../pages/helps/components/filter-help-page/FilterHelpsPage';
 import { SelectCreateHelp } from '../pages/helps/components/select-create-help/SelectHelp';
+import { eToast, Toast } from '../../../components/ui/toast/CustomToastService';
 
 export const useHelpPage = () => {
   const { setParams, params, result, loading } = useGetHelps(INITIAL_PARAMS_TABLE);
@@ -20,7 +21,9 @@ export const useHelpPage = () => {
   const [openProfilesModal, setOpenProfilesModal] = useState(false);
   const [selectedProfiles, setSelectedProfiles] = useState<Array<{ id: string; name: string }>>([]);
   const [selectedHelpId, setSelectedHelpId] = useState<string>('');
-  // Computed values
+  const [openDelete, setOpenDelete] = useState(false);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string>('');
+
   const hasFilters = useMemo(
     () => params.filters !== undefined && Object.keys(params.filters).length > 0,
     [params.filters]
@@ -59,19 +62,47 @@ export const useHelpPage = () => {
 
     const profs = (h.profile ?? []).map(p => ({ id: String(p.profileId), name: p.profiles.description }));
 
-    console.log(profs)
     setSelectedProfiles(profs);
     setOpenProfilesModal(true);
 
   }, []);
-  
+
+  const doConfirmDelete = useCallback(async () => {
+    try {
+
+      setOpenDelete(false);
+
+      //await cancellation(pendingDeleteId);
+
+      Toast({ message: 'Item de Ayuda dada de baja correctamente', type: eToast.Success })
+
+      refresh();
+
+    } catch {
+      Toast({ message: 'Error al dar de baja el item de Ayuda', type: eToast.Error })
+    }
+
+    //[cancellation, pendingDeleteId, refresh]
+  }, [refresh]);
+
+  const confirmDelete = useCallback((id: string) => {
+    setPendingDeleteId(String(id));
+    setOpenDelete(true);
+  }, []);
+
+  const callbackCancelled = useCallback((h: IHelp) => {
+
+    confirmDelete(String(h.id));
+
+  }, [confirmDelete]);
+
   const toggleFilter = useCallback(() => {
     setOpenFilter(prev => !prev);
   }, []);
 
   // Table rows
   const rows: IHelpRow[] = useMemo(
-    () => (result?.data ?? []).map(p => toHelpsRow(p, callbackProfiles)),
+    () => (result?.data ?? []).map(p => toHelpsRow(p, callbackProfiles, callbackCancelled)),
     [result?.data, callbackProfiles]
   );
 
@@ -79,7 +110,7 @@ export const useHelpPage = () => {
   const actions: IAction[] = useMemo(
     () => [
       {
-        icon: <><div><Button variant="secondary" title="Editar" /></div></>,
+        icon: <Button variant="secondary" title="Editar" />,
         onClick: (row: IRow) => {
           const h = row as unknown as IHelp;
           setEditHelpId(String(h.id));
@@ -102,12 +133,13 @@ export const useHelpPage = () => {
     );
   }, [clearFilters, hasFilters, setOpenFilter]);
 
-   return {
+  return {
     // State
     params,
     loading,
     openFilter,
     openProfilesModal,
+    openDelete,
     editHelpId,
     editHelpType,
     selectedHelpId,
@@ -130,6 +162,8 @@ export const useHelpPage = () => {
     setOpenEdit,
     setFilters,
     refresh,
+    doConfirmDelete,
+    setOpenDelete,
     setOpenProfilesModal,
     clearFilters,
     toggleFilter,

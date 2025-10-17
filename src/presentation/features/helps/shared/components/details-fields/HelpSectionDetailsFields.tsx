@@ -8,10 +8,10 @@ import { minTrimmed } from '../../../../../utils/minTrimmed';
 import { toHelpSelect } from '../../../mappers/helpCreateMapper';
 import { useHelpFilterOptions } from '../../../hooks/useHelpsFilterOptions';
 import type { IHelpFormValues } from '../../interface/IHelpFormValues';
+import { MAX_LENGTH_INPUT } from '../../../../shared/constants/default-input';
 
 
 interface HelpSectionDetailsFieldsProps {
-  autoCleanup?: boolean;
   disabledAll?: boolean;
   titleLabel?: string;
   disabledState?: boolean;
@@ -19,14 +19,13 @@ interface HelpSectionDetailsFieldsProps {
 
 export const HelpSectionDetailsFields: React.FC<HelpSectionDetailsFieldsProps> = ({
   titleLabel = 'Título',
-  autoCleanup = false,
   disabledAll = false,
   disabledState = false,
 }) => {
-  const { control, formState: { errors }, watch, setValue } = useFormContext<IHelpFormValues>();
+  const { control, formState: { errors } } = useFormContext<IHelpFormValues>();
 
   const { resultState: statuses } = useHelpFilterOptions({
-    stateFilters: autoCleanup ? { forUpdate: true } : { forCreate: true }
+     stateFilters: { forCreate: true } 
   });
 
   const selectItemsStatuses: SelectOption[] = useMemo(
@@ -42,7 +41,7 @@ export const HelpSectionDetailsFields: React.FC<HelpSectionDetailsFieldsProps> =
         rules={{
           required: 'El título es obligatorio',
           minLength: { value: 3, message: 'Mínimo 3 caracteres' },
-          maxLength: 60,
+          maxLength: MAX_LENGTH_INPUT,
           validate: { minTrimmed: minTrimmed(3) }
         }}
         render={({ field }) => (
@@ -50,7 +49,7 @@ export const HelpSectionDetailsFields: React.FC<HelpSectionDetailsFieldsProps> =
             {...field}
             label={titleLabel}
             type="text"
-            maxLength={60}
+            maxLength={MAX_LENGTH_INPUT}
             error={!!errors.title}
             helperText={errors.title?.message}
             disabled={disabledAll}

@@ -10,11 +10,12 @@ import { StepTwoNewAlert } from "./components/StepTwoNewAlert/StepTwoNewAlert";
 import { eStep } from "./reducers/ActionStepReducer";
 import { ActionStep } from "../../shared/components/action-step/ActionStep";
 import { useNewSectionPage } from "./hooks/useNewSectionPage";
+import Loading from "../../../../components/ui/loading";
 
 
 export const NewSectionPage = () => {
 
-  const {contentStepRef,form,navSteps,state,onSubmit,handleBack,handleNext} = useNewSectionPage();
+  const { contentStepRef, form, navSteps, state, onSubmit, handleBack, handleNext, creating } = useNewSectionPage();
 
   return (
     <ContainerPage description="NewSectionPage" title={`${HELP.title} - ${NEW_SECTION.title}`} titleSEO='Gestión de ayuda - Alta sección'>
@@ -23,10 +24,16 @@ export const NewSectionPage = () => {
         <StepperWrapperBackOfficeDefault width='40%'>
           <StepNavigationBackOffice steps={navSteps} />
         </StepperWrapperBackOfficeDefault>
-        <CustomBox sx={{ p: '0 4rem', minHeight: 300, paddingTop: '2rem' }}>
-          {state.step == 1 ? <StepOneNewAlert /> : <></>}
-          {state.step == 2 ? <StepTwoNewAlert /> : <></>}
-        </CustomBox>
+        
+        {creating ? 
+           <CustomBox sx={{ p: '0 4rem', minHeight: 300, paddingTop: '10rem' }}>
+              <center><Loading /></center> 
+          </CustomBox>
+        :
+          <CustomBox sx={{ p: '0 4rem', minHeight: 300, paddingTop: '2rem' }}>
+            {state.step == 1 ? <StepOneNewAlert /> : <></>}
+            {state.step == 2 ? <StepTwoNewAlert /> : <></>}
+          </CustomBox> }
         <CustomBox sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
           {false ? (
             <Button variant="primary" onClick={() => { }} title='Volver al Inicio' />

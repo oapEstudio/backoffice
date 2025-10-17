@@ -12,11 +12,6 @@ export const Headers: IColumn[] =[{
     order: 'name'
 },{
     align: 'left',
-    id: 'title',
-    label: 'Título',
-    order: 'title'
-},{
-    align: 'left',
     id: 'lastChangeView',
     label: 'Última modificación',
     order: 'dateUpdated'
@@ -24,7 +19,7 @@ export const Headers: IColumn[] =[{
     align: 'center',
     id: 'state',
     label: 'Estado',
-    order: 'status'
+    order: 'statusDescription'
 },{
     align: 'center',
     id: 'url',
@@ -40,5 +35,9 @@ export const Headers: IColumn[] =[{
     id: 'actions',
     label: 'Acciones',
     order: 'actions'
+},{
+    align: 'left',
+    id: 'cancellation',
+    label: 'Baja'
 }
 ];

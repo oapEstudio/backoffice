@@ -10,7 +10,8 @@ export interface IHelp {
      parent: string;
      link: string;
      statusId: number;
-     status: string;
+     statusDescription: string;
+     statusColor: string;
      helpDocumentTypeId: number;
      helpDocumentType: string;
      document: File[];

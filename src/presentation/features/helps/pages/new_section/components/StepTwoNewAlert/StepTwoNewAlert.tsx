@@ -2,6 +2,6 @@ import HelpSectionDetailsFields from '../../../../shared/components/details-fiel
 
 export const StepTwoNewAlert = () => {
   return (
-   <HelpSectionDetailsFields autoCleanup={false} />
+   <HelpSectionDetailsFields />
   )
 }

@@ -57,7 +57,7 @@ export const useEditHelpModal = ({
           })),
           title: help.title,
           document: [],
-          state: help.status,
+          state: help.statusDescription,
           helpTypeId: String(help.helpTypeId),
           helpDocumentTypeId: '',
           link: String(help.link),
@@ -80,7 +80,7 @@ export const useEditHelpModal = ({
   const shouldShowFields = useMemo(() => {
     switch (helpType) {
       case HELP_SECTION:
-        return <HelpSectionDetailsFields autoCleanup disabledState={false} />;
+        return <HelpSectionDetailsFields disabledState={false} />;
       case HELP_ARTICLE:
         return null;
       case HELP_DOCUMENT:

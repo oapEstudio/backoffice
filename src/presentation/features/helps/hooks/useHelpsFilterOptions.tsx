@@ -18,27 +18,15 @@ export function useHelpFilterOptions(filters?: IUseHelpFilterOptionsProps) {
   const mountedRef = useRef(true);
 
   useEffect(() => {
-    mountedRef.current = true;
-    setLoading(true);
-    Promise.all([getHelpStatuses.execute(), getHelpTypes.execute()])
-      .then(([statuses, types]) => {
-        if (!mountedRef.current) return;
-        setResultState(statuses);
-        setResultType(types);
-      })
-      .catch(err => {
-        if (!mountedRef.current) return;
-        setError(err instanceof Error ? err : new Error(String(err)));
-      })
-      .finally(() => {
-        if (!mountedRef.current) return;
-        setLoading(false);
-      });
-
-    return () => {
-      mountedRef.current = false;
-    };
-  }, []); // si las funciones son estables, está OK
+      setLoading(true);
+      Promise.all([getHelpStatuses.execute(filters?.stateFilters? {filters: filters.stateFilters} : undefined),getHelpTypes.execute()])
+        .then(([statuses, types]) => {
+          setResultState(statuses);
+          setResultType(types);        
+        })
+        .catch(err => setError(err instanceof Error ? err : new Error(String(err))))
+        .finally(() => setLoading(false));
+  }, [getHelpStatuses]);
 
   return { resultState, resultType, loading, error };
 }

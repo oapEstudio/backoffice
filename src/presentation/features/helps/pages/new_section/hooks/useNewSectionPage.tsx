@@ -71,6 +71,7 @@ export function useNewSectionPage() {
       await create({
         description: data.title,
         name: data.name,
+        title: data.title ? data.title : '',
         profiles: data.profiles.map(x => x.id),
         statusId: Number(data.state),
         parentId: '',
@@ -158,6 +159,7 @@ export function useNewSectionPage() {
   }
 
   return {
+    creating,
     contentStepRef,
     form,
     navSteps,

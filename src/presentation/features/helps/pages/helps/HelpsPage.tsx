@@ -5,6 +5,7 @@ import { HELP } from '../../../../router/routes';
 import EditHelpModal from './components/edit-help/EditHelpModal';
 import { useHelpPage } from '../../hooks/useHelpsPage';
 import UpdateHelpProfile from './components/update-help-profile/UpdateHelpProfile';
+import { ConfirmDialog } from '../../../../components/ui/confirm-dialog/ConfirmDialog';
 
 
 export const HelpsPage = () => {
@@ -20,10 +21,13 @@ export const HelpsPage = () => {
     filterButtons,
     selectedHelpId,
     selectedProfiles,
+    openDelete,
     count,
     rows,
     actions,
+    doConfirmDelete,
     refresh,
+    setOpenDelete,
     setOpenProfilesModal,
     setOpenEdit,
     openFilter,
@@ -40,6 +44,10 @@ export const HelpsPage = () => {
         helpType={editHelpType}
         onClose={() => setOpenEdit(false)}
       />
+      <ConfirmDialog
+        open={openDelete}
+        onOk={doConfirmDelete}
+        onCancel={() => setOpenDelete(false)} />
       <UpdateHelpProfile
         open={openProfilesModal}
         helpId={selectedHelpId}
