@@ -9,12 +9,14 @@ import { EditActionIcon } from "../../../components/ui/icons";
 
 export interface IHelpRow extends IRow {
   name: string;
+  title: string;
   state: any;
+  helpTypeId: number;
   lastChangeView: string;
   statusId: number;
   profiles: any;
   url: any;
-  type: string;
+  helpType: string;
 }
 
 export function toHelpsRow(h: IHelp, callbackEdit?: any): IHelpRow {
@@ -28,17 +30,16 @@ export function toHelpsRow(h: IHelp, callbackEdit?: any): IHelpRow {
     cursor: 'pointer'
   }));
 
-  // {h.profile.join(', ')}
   const buttonEdit = (
     <CustomStack direction='row' spacing={2} sx={styleContentElement}>
       <span>
+        {h.profile.length}
       </span>
       <WrapperContainerEdit>
         <EditActionIcon handleClick={callbackEdit} parameterHandleClick={h} />
       </WrapperContainerEdit>
     </CustomStack>
   );
-
 
   const WrapperContainerStatus = styled('div')(({ theme }) => ({
     color: '',
@@ -56,11 +57,13 @@ export function toHelpsRow(h: IHelp, callbackEdit?: any): IHelpRow {
 
   return {
     id: h.id,
-    type: h.helpType,
+    helpType: h.helpType,
+    helpTypeId: h.helpTypeId,
+    title: h.title,
     name: h.name,
     lastChangeView: `${formatDate(h.dateUpdated, { includeTime: true })} - ${h.updatedBy}`,
     state: stateComp,
-    url: urlComp,
+    url: h.link ? urlComp : null,
     statusId: h.statusId,
     profiles: buttonEdit,
     styleContentElement

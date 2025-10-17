@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
-import { CustomModal } from "../../../../../components/ui/modal/modal.component";
-import { toSelectOption } from "../../../mappers/filterHelpsMapper";
-import { arraysEqual } from "../../../../../utils/arrayToEquals";
-import type { SelectOption } from "../../../../../components/ui/inputs/multiselect/multiselect.interface";
-import CustomMultiselect from "../../../../../components/ui/inputs/multiselect/multiselect.component";
-import ProfileMultiSelect from "../../../../../components/widgets/multiselect-profile/MultiSelectProfile";
-import Loading from "../../../../../components/ui/loading";
-import { useProfileFilterHelpOptions } from "../../../hooks/useProfileFilterOptions";
-import { useHelpFilterOptions } from "../../../hooks/useHelpsFilterOptions";
+import { CustomModal } from "../../../../../../components/ui/modal/modal.component";
+import { toSelectOption } from "../../../../mappers/filterHelpsMapper";
+import { arraysEqual } from "../../../../../../utils/arrayToEquals";
+import type { SelectOption } from "../../../../../../components/ui/inputs/multiselect/multiselect.interface";
+import CustomMultiselect from "../../../../../../components/ui/inputs/multiselect/multiselect.component";
+import ProfileMultiSelect from "../../../../../../components/widgets/multiselect-profile/MultiSelectProfile";
+import Loading from "../../../../../../components/ui/loading";
+import { useProfileFilterHelpOptions } from "../../../../hooks/useProfileFilterOptions";
+import { useHelpFilterOptions } from "../../../../hooks/useHelpsFilterOptions";
 
 export interface IFilterHelpsResult {
   profileIds: string[]

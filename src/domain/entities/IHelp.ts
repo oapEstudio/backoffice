@@ -2,6 +2,7 @@
 export interface IHelp {
      id: string;
      name: string;
+     title: string;
      helpTypeId: number;
      helpType: string;
      parentId: string;
@@ -11,8 +12,8 @@ export interface IHelp {
      status: string;
      helpDocumentTypeId: number;
      helpDocumentType: string;
-     document: any[];
-     profile: any[]; //TODO cambiar 
+     document: File[];
+     profile: any[];  
      dateCreated: Date;
      dateUpdated: string;
      updatedBy: string;

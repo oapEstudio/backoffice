@@ -74,7 +74,7 @@ export const NEW_DYNAMIC_PAGE: IRoute = {
     children: [],
     viewNav: true
 }
-export const HELPDESK_PAGE: IRoute = {
+export const HELP: IRoute = {
     title: 'Ayuda',
     order:  'Ayuda',
     name: '/helps',
@@ -89,5 +89,5 @@ export const NEW_SECTION: IRoute = {
     viewNav: true
 }
 export const ROUTES: IRoute[] =[
-    HOME, FATHER_PROFILE, NOTIFICATION, FUNTIONALITIES, NEW_DYNAMIC_PAGE, HELPDESK_PAGE
+    HOME, FATHER_PROFILE, NOTIFICATION, FUNTIONALITIES, NEW_DYNAMIC_PAGE, HELP
 ];

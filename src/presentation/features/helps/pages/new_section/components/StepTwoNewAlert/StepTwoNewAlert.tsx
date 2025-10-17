@@ -1,8 +1,7 @@
-import React from 'react'
-import { NotificationAlertDetailFields } from '../../../../shared/components/notification-alert-detail-fields/NotificationAlertDetailFields'
+import HelpSectionDetailsFields from '../../../../shared/components/HelpSectionDetailsFields'
 
 export const StepTwoNewAlert = () => {
   return (
-   <NotificationAlertDetailFields autoCleanup={false} />
+   <HelpSectionDetailsFields autoCleanup={false} />
   )
 }

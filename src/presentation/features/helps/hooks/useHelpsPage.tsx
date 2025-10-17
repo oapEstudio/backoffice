@@ -1,19 +1,22 @@
 import { useCallback, useMemo, useState } from 'react';
 import type { IAction } from '../../../components/ui/table/table-actions/actions.interface';
 import type { IRow } from '../../../components/ui/table/table.interface';
-import type { IHelp} from '../../../../domain/entities/IHelp';
+import type { IHelp } from '../../../../domain/entities/IHelp';
 import { useGetHelps } from './useGetHelps';
 import { INITIAL_PARAMS_TABLE } from '../../shared/constants/initialsParamTable';
 import Button from '../../../components/ui/button/button.component';
 import TableFilterBar from '../../../components/widgets/table-filter-bar/TableFilterBar';
 import { toHelpsRow, type IHelpRow } from '../mappers/helpMapper';
-import type { IFilterHelpsResult } from '../pages/components/filter-help-page/FilterHelpsPage';
-import { SelectCreateHelp } from '../pages/components/select-create-help-desk/SelectHelpDesk';
+import type { IFilterHelpsResult } from '../pages/helps/components/filter-help-page/FilterHelpsPage';
+import { SelectCreateHelp } from '../pages/helps/components/select-create-help/SelectHelp';
 
-export const useHelpTable = () => {
+export const useHelpPage = () => {
   const { setParams, params, result, loading } = useGetHelps(INITIAL_PARAMS_TABLE);
   const [openFilter, setOpenFilter] = useState(false);
   const [editHelpId, setEditHelpId] = useState<string>('');
+  const [editHelpType, setEditHelpTypeId] = useState<number>(0);
+  const [openEdit, setOpenEdit] = useState(false);
+  const refresh = useCallback(() => setParams(p => ({ ...p })), [setParams]);
 
   // Computed values
   const hasFilters = useMemo(
@@ -28,12 +31,6 @@ export const useHelpTable = () => {
   }
 
   const count = result?.count ?? 0;
-
-  // Callbacks
-  const openEdit = useCallback((help: any & { id: string }) => {
-    // TODO: Implement edit logic here
-    setEditHelpId(help.id);
-  }, []);
 
   const setFilters = useCallback(
     (f: IFilterHelpsResult) => {
@@ -74,8 +71,10 @@ export const useHelpTable = () => {
       {
         icon: <><div><Button variant="secondary" title="Editar" /></div></>,
         onClick: (row: IRow) => {
-          const help = row as unknown as IHelp;
-          setEditHelpId(help.id);
+          const h = row as unknown as IHelp;
+          setEditHelpId(String(h.id));
+          setEditHelpTypeId(h.helpTypeId);
+          setOpenEdit(true);
         },
       }
     ],
@@ -99,6 +98,9 @@ export const useHelpTable = () => {
     loading,
     openFilter,
     editHelpId,
+    editHelpType,
+    openEdit,
+
     currentFilters,
     filterButtons,
 
@@ -111,8 +113,9 @@ export const useHelpTable = () => {
     setParams,
     setOpenFilter,
     setEditHelpId,
-    openEdit,
+    setOpenEdit,
     setFilters,
+    refresh,
     clearFilters,
     toggleFilter,
   };

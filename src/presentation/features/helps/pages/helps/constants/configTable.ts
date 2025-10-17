@@ -1,8 +1,8 @@
-import type { IColumn } from "../../../../components/ui/table/table.interface";
+import type { IColumn } from "../../../../../components/ui/table/table.interface";
 
 export const Headers: IColumn[] =[{
     align: 'left',
-    id: 'type',
+    id: 'helpType',
     label: 'Tipo',
     order: 'helpType'
 },{
@@ -10,6 +10,11 @@ export const Headers: IColumn[] =[{
     id: 'name',
     label: 'Nombre',
     order: 'name'
+},{
+    align: 'left',
+    id: 'title',
+    label: 'Título',
+    order: 'title'
 },{
     align: 'left',
     id: 'lastChangeView',

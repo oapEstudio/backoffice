@@ -1,8 +1,9 @@
-import { TablePageStandard } from '../../../components/widgets/table-page-standard/TablePageStandard';
-import { HELPDESK_PAGE } from '../../../router/routes';
+import { TablePageStandard } from '../../../../components/widgets/table-page-standard/TablePageStandard';
 import { Headers } from './constants/configTable';
-import { useHelpTable } from '../hooks/useHelpsTable';
-import { FilterHelpsPage, type IFilterHelpsResult  } from './components/filter-help-page/FilterHelpsPage';
+import { FilterHelpsPage, type IFilterHelpsResult } from './components/filter-help-page/FilterHelpsPage';
+import { HELP } from '../../../../router/routes';
+import EditHelpModal from './components/edit-help/EditHelpModal';
+import { useHelpPage } from '../../hooks/useHelpsPage';
 
 
 export const HelpsPage = () => {
@@ -10,20 +11,29 @@ export const HelpsPage = () => {
     params,
     setParams,
     loading,
+    openEdit,
+    editHelpId,
+    editHelpType,
     currentFilters,
     filterButtons,
     count,
     rows,
     actions,
+    refresh,
+    setOpenEdit,
     openFilter,
     setOpenFilter,
     setFilters
-  } = useHelpTable();
-  
+  } = useHelpPage();
 
-  
   return (
     <>
+      <EditHelpModal
+        open={openEdit}
+        helpId={editHelpId}
+        helpType={editHelpType}
+        onClose={() => setOpenEdit(false)}
+        onSaved={() => refresh()} />
       <FilterHelpsPage
         open={openFilter}
         initialFilters={currentFilters}
@@ -39,7 +49,7 @@ export const HelpsPage = () => {
         loading={loading}
         description={'HelpPage'}
         messageEmpty={'No se encontraron documentos disponibles'}
-        title={HELPDESK_PAGE.title}
+        title={HELP.title}
         count={count}
         filter={filterButtons}
         data={rows}

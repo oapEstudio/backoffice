@@ -1,0 +1,19 @@
+export interface IHelpCreateDto {
+  helpType?: string;
+  helpTypeId?: number;
+  name: string;
+  description: string;
+  parentId?: string;
+  parent?: string;
+  link: string;
+  statusId: number;
+  status?: string;
+  helpDocumentTypeId?: string;
+  helpDocumentType?: string;
+  documents?: File[];
+  profiles?: string[];
+  id?: string;
+  dateCreated?: string;
+  dateUpdated?: string;
+  updatedBy?: string;
+}

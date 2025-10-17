@@ -1,14 +1,14 @@
 
-import { colors } from '../../../../../common/colors';
+import { colors } from '../../../../../../common/colors';
 import { useMemo, useState, type ChangeEvent } from 'react';
-import { CustomBox } from '../../../../../components/ui/box/CustomBox';
-import CustomSelect from '../../../../../components/ui/inputs/select/select.component';
-import type { SelectOption } from '../../../../../components/ui/inputs/select/select.interface';
-import { toHelpSelect } from '../../../mappers/helpCreateMapper';
+import { CustomBox } from '../../../../../../components/ui/box/CustomBox';
+import CustomSelect from '../../../../../../components/ui/inputs/select/select.component';
+import type { SelectOption } from '../../../../../../components/ui/inputs/select/select.interface';
+import { toHelpSelect } from '../../../../mappers/helpCreateMapper';
 import { useNavigate } from 'react-router-dom';
-import { HELP_SECTION } from '../../../shared/constants/helps';
-import { NEW_SECTION } from '../../../../../router/routes';
-import { useGetHelpType } from '../../../hooks/useGetHelpsType';
+import { HELP_ARTICLE, HELP_SECTION } from '../../../../shared/constants/helps';
+import { NEW_SECTION } from '../../../../../../router/routes';
+import { useGetHelpType } from '../../../../hooks/useGetHelpsType';
 
 const styleCustomSelect = {
   '& .MuiOutlinedInput-root': { height: 36 },
@@ -24,8 +24,7 @@ const styleCustomSelect = {
 
 export const SelectCreateHelp = () => {
 
-
-  const { result, loading } = useGetHelpType();
+  const { result } = useGetHelpType();
   const [selectedHelpType, setSelectedHelpType] = useState('');
   const navigate = useNavigate();
 
@@ -37,7 +36,6 @@ export const SelectCreateHelp = () => {
   const handlerHelps = (event: ChangeEvent<HTMLInputElement> | (Event & { target: { value: unknown; name: string; } })) => {
     setSelectedHelpType(String(event.target.value));
     if(event.target.value == HELP_SECTION) navigate(NEW_SECTION.name);
-    // if(event.target.value == NOTIFICATION_ALERT) navigate(NEW_ALERT.name);    
   };
 
   return (
