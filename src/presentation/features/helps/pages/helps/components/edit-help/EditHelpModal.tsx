@@ -39,7 +39,7 @@ export const EditHelpModal: React.FC<EditHelpModalProps> = ({   open,
       disabled={isDisabled}
       maxWidth="sm">
       <FormProvider {...form}>
-        {isLoading ? <center><Loading /> </center> : shouldShowFields }
+        {isLoading ? <center> <Loading/> </center> : shouldShowFields }
       </FormProvider>
     </CustomModal>
   );

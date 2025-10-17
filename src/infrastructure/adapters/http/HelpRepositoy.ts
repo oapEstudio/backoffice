@@ -5,6 +5,7 @@ import type { IHelp } from "../../../domain/entities/IHelp";
 import { apiHandler } from "./apiHandler";
 import type { IHelpRepository } from "../../../application/interfaces/IHelpRepository";
 import type { IHelpCreateDto } from "../../../application/dtos/IHelpCreateDto";
+import type { IHelpUpdateProfiles } from "../../../application/dtos/IHelpUpdateProfiles";
 
 
 export class HelpRepository extends RepositoryAbstract implements IHelpRepository {
@@ -56,6 +57,16 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
     const version = this.resource.edit.notification.version;
     const url = this.resource.edit.notification.endpoint.replace('{id}', id);
     const res = await apiHandler.get<IHelp>(this.resolveURL(url, version));
+    return res.data;
+  }
+
+  async updateHelpProfiles(id: string, payload: IHelpUpdateProfiles) {
+
+    const url = this.resource.edit.profiles.endpoint.replace('{id}', id);
+    const version = this.resource.edit.profiles.version;
+
+    const res = await apiHandler.put<any>(this.resolveURL(url, version), {}, payload);
+
     return res.data;
   }
 }

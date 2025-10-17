@@ -29,7 +29,7 @@ export const Headers: IColumn[] =[{
     align: 'center',
     id: 'url',
     label: 'URL',
-    order: 'url'
+    order: 'link'
 },{
     align: 'left',
     id: 'profiles',

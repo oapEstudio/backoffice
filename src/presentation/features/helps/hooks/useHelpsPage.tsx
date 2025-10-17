@@ -17,7 +17,9 @@ export const useHelpPage = () => {
   const [editHelpType, setEditHelpTypeId] = useState<number>(0);
   const [openEdit, setOpenEdit] = useState(false);
   const refresh = useCallback(() => setParams(p => ({ ...p })), [setParams]);
-
+  const [openProfilesModal, setOpenProfilesModal] = useState(false);
+  const [selectedProfiles, setSelectedProfiles] = useState<Array<{ id: string; name: string }>>([]);
+  const [selectedHelpId, setSelectedHelpId] = useState<string>('');
   // Computed values
   const hasFilters = useMemo(
     () => params.filters !== undefined && Object.keys(params.filters).length > 0,
@@ -51,10 +53,18 @@ export const useHelpPage = () => {
     }));
   }, [setParams]);
 
-  const callbackProfiles = useCallback((n: IHelp) => {
-    // TODO: Implement profile callback logic
-  }, []);
+  const callbackProfiles = useCallback((h: IHelp) => {
 
+    setSelectedHelpId(String(h.id));
+
+    const profs = (h.profile ?? []).map(p => ({ id: String(p.profileId), name: p.profiles.description }));
+
+    console.log(profs)
+    setSelectedProfiles(profs);
+    setOpenProfilesModal(true);
+
+  }, []);
+  
   const toggleFilter = useCallback(() => {
     setOpenFilter(prev => !prev);
   }, []);
@@ -92,30 +102,35 @@ export const useHelpPage = () => {
     );
   }, [clearFilters, hasFilters, setOpenFilter]);
 
-  return {
+   return {
     // State
     params,
     loading,
     openFilter,
+    openProfilesModal,
     editHelpId,
     editHelpType,
+    selectedHelpId,
     openEdit,
-
-    currentFilters,
-    filterButtons,
+    selectedProfiles,
 
     // Computed
+    currentFilters,
+    hasFilters,
     count,
     rows,
     actions,
+    filterButtons,
 
     // Methods
     setParams,
     setOpenFilter,
     setEditHelpId,
+    setEditHelpTypeId,
     setOpenEdit,
     setFilters,
     refresh,
+    setOpenProfilesModal,
     clearFilters,
     toggleFilter,
   };

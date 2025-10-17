@@ -4,6 +4,7 @@ import { FilterHelpsPage, type IFilterHelpsResult } from './components/filter-he
 import { HELP } from '../../../../router/routes';
 import EditHelpModal from './components/edit-help/EditHelpModal';
 import { useHelpPage } from '../../hooks/useHelpsPage';
+import UpdateHelpProfile from './components/update-help-profile/UpdateHelpProfile';
 
 
 export const HelpsPage = () => {
@@ -12,14 +13,18 @@ export const HelpsPage = () => {
     setParams,
     loading,
     openEdit,
+    openProfilesModal,
     editHelpId,
     editHelpType,
     currentFilters,
     filterButtons,
+    selectedHelpId,
+    selectedProfiles,
     count,
     rows,
     actions,
     refresh,
+    setOpenProfilesModal,
     setOpenEdit,
     openFilter,
     setOpenFilter,
@@ -34,7 +39,17 @@ export const HelpsPage = () => {
         helpId={editHelpId}
         helpType={editHelpType}
         onClose={() => setOpenEdit(false)}
-        />
+      />
+      <UpdateHelpProfile
+        open={openProfilesModal}
+        helpId={selectedHelpId}
+        selectedProfiles={selectedProfiles}
+        onClose={() => setOpenProfilesModal(false)}
+        onSaved={() => {
+          setOpenProfilesModal(false);
+          setParams(p => ({ ...p }));
+        }}
+      />
       <FilterHelpsPage
         open={openFilter}
         initialFilters={currentFilters}
