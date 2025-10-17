@@ -1,4 +1,4 @@
-import HelpSectionDetailsFields from '../../../../shared/components/HelpSectionDetailsFields'
+import HelpSectionDetailsFields from '../../../../shared/components/details-fields/HelpSectionDetailsFields'
 
 export const StepTwoNewAlert = () => {
   return (

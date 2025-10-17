@@ -26,6 +26,7 @@ export const HelpsPage = () => {
     setFilters
   } = useHelpPage();
 
+
   return (
     <>
       <EditHelpModal
@@ -33,7 +34,7 @@ export const HelpsPage = () => {
         helpId={editHelpId}
         helpType={editHelpType}
         onClose={() => setOpenEdit(false)}
-        onSaved={() => refresh()} />
+        />
       <FilterHelpsPage
         open={openFilter}
         initialFilters={currentFilters}

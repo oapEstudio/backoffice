@@ -36,7 +36,7 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
 
     if (dto.documents instanceof File) {
     }
-    
+
     form.append('statusId', String(dto.statusId ?? ''));
 
 
@@ -50,6 +50,13 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
       form
     );
     return res.data.id;
+  }
+
+  async getHelpById(id: string): Promise<IHelp> {
+    const version = this.resource.edit.notification.version;
+    const url = this.resource.edit.notification.endpoint.replace('{id}', id);
+    const res = await apiHandler.get<IHelp>(this.resolveURL(url, version));
+    return res.data;
   }
 }
 

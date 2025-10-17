@@ -3,6 +3,7 @@ export interface IHelp {
      id: string;
      name: string;
      title: string;
+     description: string;
      helpTypeId: number;
      helpType: string;
      parentId: string;

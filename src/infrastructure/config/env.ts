@@ -143,6 +143,20 @@ export const env = {
          endpoint: 'helps',   
          version: 'v1'
       },
+      edit: {
+        profiles: {
+         endpoint: 'helps/{id}/profiles',   
+         version: 'v1'
+        },
+        notification: {
+          endpoint: 'helps/{id}',   
+          version: 'v1'
+        },
+         status: {
+          endpoint: 'helps/{id}/status',   
+          version: 'v1'
+        }
+      }
     },
   }
 };

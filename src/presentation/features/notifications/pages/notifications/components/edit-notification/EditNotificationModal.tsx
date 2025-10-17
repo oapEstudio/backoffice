@@ -3,7 +3,6 @@ import CustomModal from '../../../../../../components/ui/modal/modal.component';
 import { FormProvider, useForm } from 'react-hook-form';
 import NotificationDetailsFields from '../../../../shared/components/NotificationDetailsFields';
  
-import type { INotificationFormValues } from '../../../new_carousel/NewCarouselPage';
 import dayjs from 'dayjs';
 import { useGetNotificationById } from '../../../../hooks/useGetNotificationById';
 import { useUpdateNotification } from '../../../../hooks/useUpdateNotification';
@@ -12,6 +11,7 @@ import type { INotification } from '../../../../../../../domain/entities/INotifi
 import type { INotificationUpdateDto } from '../../../../../../../application/dtos/INotificationUpdateDto';
 import { dataUrlToFile } from '../../../../../../utils/dataUrlToFile';
 import Loading from '../../../../../../components/ui/loading';
+import type { INotificationFormValues } from '../../../../shared/interface/INotificationFormValues';
  
 interface EditNotificationModalProps {
   open: boolean;

@@ -31,6 +31,7 @@ import { UpdateNotificationUseCase } from '../../application/usecases/UpdateNoti
 import { GetHelpUseCase } from '../../application/usecases/GetHelpsUseCase';
 import { HelpRepository } from '../../infrastructure/adapters/http/HelpRepositoy';
 import { CreateHelpUseCase } from '../../application/usecases/CreateHelpUseCase';
+import { GetHelpByIdUseCase } from '../../application/usecases/GetHelpByIdUseCase';
 
 
 const profileRepo = new ProfileRepository();
@@ -69,6 +70,7 @@ export interface IDependencies{
   getHelpTypes: GetDatasetFiltersUseCase,
   getHelpStatuses: GetDatasetFiltersUseCase,
   createHelp: CreateHelpUseCase,
+  getHelpById: GetHelpByIdUseCase,
 }
 
 const resourseDimDatasetProfile = env.resources.profiles.dim.dataset;
@@ -118,6 +120,7 @@ export const defaultDependencies: IDependencies = {
   getHelpTypes: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpTypes,resourseDimDatasetHelp.version)),
   getHelpStatuses: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpStatus,resourseDimDatasetHelp.version)),
   createHelp: new CreateHelpUseCase(helpRepo),
+  getHelpById: new GetHelpByIdUseCase(helpRepo),
 };
 
 export const DependencyContext = React.createContext<IDependencies>(defaultDependencies);

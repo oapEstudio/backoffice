@@ -7,5 +7,6 @@ export interface IHelpRepository{
 
     getHelps(params: IPageParameters): Promise<IPaginatedResponse<IHelp>>;
     createHelp(param: IHelpCreateDto): Promise<string>;
+    getHelpById(id: string): Promise<IHelp>;
 
 }

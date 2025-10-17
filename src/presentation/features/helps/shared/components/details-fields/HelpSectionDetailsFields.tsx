@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import CustomTextInput from '../../../../components/ui/inputs/text-input/text-input.component';
+import CustomTextInput from '../../../../../components/ui/inputs/text-input/text-input.component';
 
-import CustomSelect from '../../../../components/ui/inputs/select/select.component';
-import type { SelectOption } from '../../../../components/ui/inputs/select/select.interface';
-import { minTrimmed } from '../../../../utils/minTrimmed';
-import { toHelpSelect } from '../../mappers/helpCreateMapper';
-import { useHelpFilterOptions } from '../../hooks/useHelpsFilterOptions';
-import type { IHelpFormValues } from '../interface/IHelpFormValues';
+import CustomSelect from '../../../../../components/ui/inputs/select/select.component';
+import type { SelectOption } from '../../../../../components/ui/inputs/select/select.interface';
+import { minTrimmed } from '../../../../../utils/minTrimmed';
+import { toHelpSelect } from '../../../mappers/helpCreateMapper';
+import { useHelpFilterOptions } from '../../../hooks/useHelpsFilterOptions';
+import type { IHelpFormValues } from '../../interface/IHelpFormValues';
 
 
 interface HelpSectionDetailsFieldsProps {
