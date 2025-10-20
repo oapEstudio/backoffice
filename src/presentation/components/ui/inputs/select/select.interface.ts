@@ -1,9 +1,10 @@
 import type { SelectProps } from "@mui/material";
 import type { FieldValues } from "react-hook-form";
 import type { CustomControllerProps } from "../controller.interface";
+import type React from "react";
 
 export type SelectOption = {
-  label: string | undefined,
+  label: string | undefined | React.ReactNode,
   value: string | number | boolean | any[] | Date | [] | null | undefined | any;
 }
 

@@ -1,6 +1,6 @@
 export interface INotificationUpdateDto{
     notificationTypeId: string;
-    slideName: string;
+    name: string;
     title: string;
     description: string;
     image: File;
@@ -11,4 +11,5 @@ export interface INotificationUpdateDto{
     timeFrom: Date;
     dateTo: Date;
     timeTo: Date;
+    notificationCommonTypeId?: string;
 }

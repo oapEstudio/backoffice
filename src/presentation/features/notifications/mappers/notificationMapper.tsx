@@ -4,14 +4,16 @@ import type { INotification } from "../../../../domain/entities/INotification";
 import type { SelectOption } from "../../../components/ui/inputs/select/select.interface";
 import type { IRow } from "../../../components/ui/table/table.interface";
 import { formatDate } from "../../../utils/formatDate";
-import { EditActionIcon, DangerIcon } from '../../../components/ui/icons/index';
+import { EditActionIcon, DangerIcon, LinksIcon, InfoIcon, DownloaddIcon, WarningTriangleIcon } from '../../../components/ui/icons/index';
 import { CustomStack } from '../../../components/ui/stack/Stack';
 import type React from "react";
 import IconButton from "@mui/material/IconButton";
+import { NOTIFICATION_ALERT } from "../shared/constants/notifications";
+import { selectedIconsNotificationCommon } from "../shared/utils/selected-icon-notification-common";
 
 export interface INotificationRow extends IRow {
   id?: string;
-  slideName: string;
+  name: string;
   type: string;
   lastChangeView: string;
   dateFrom: string;
@@ -74,14 +76,14 @@ export function toNotificationRow(n: INotification,callbackEdit: any, callbackCa
 
     return {
         id: String(n.id),
-        slideName: n.slideName,
+        name: n.name,
         expired: n.dateTO?formatDate(n.dateTO,{includeTime: true}): 'Sin definir',
         lastChangeView:  `${formatDate(n.dateUpdated,{includeTime: true})} - ${n.updatedBy}`,
         profiles: buttonEdit,
         status: stateComp,
         type: n.notificationTypeDescription,
         cancellation: cancelationComp,
-        background: backgroundCalculed(n.dateTO),
+        background:  backgroundCalculed(n),
         dateFrom: n.dateFrom?formatDate(n.dateFrom,{includeTime: false}): 'Sin definir',
     }
 }
@@ -94,14 +96,31 @@ export function toNotificationSelect(f: IFilter): SelectOption {
   }
 }
 
+export function toNotificationSelectCommon(f: IFilter): SelectOption {
 
-function backgroundCalculed(dateTo: Date | null): string | null{
+  const icon = selectedIconsNotificationCommon(f.id)
 
-    if(!dateTo) return null;
+  return {
+    label: <CustomStack spacing={2} direction="row" sx={{alignItems: 'center'}}>
+                <>{icon}</>
+                <span>{f.description}</span>
+           </CustomStack>,
+    value: f.id
+  }
+}
+
+
+
+function backgroundCalculed(n: INotification): string | null{
+
+    const dateTo =n.dateTO;
+    const defaultBackGroundColor =  n.notificationTypeId == NOTIFICATION_ALERT? '#FFD3D3': null;
+
+    if(!dateTo) return defaultBackGroundColor;
     
     const t = dateTo instanceof Date ? dateTo.getTime() : new Date(dateTo).getTime();
    
     const expired = !Number.isNaN(t) && t < Date.now();
 
-    return expired?'#FFEB8A80' : null
+    return expired?'#FFEB8A80' : defaultBackGroundColor
 }

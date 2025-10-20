@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo } from 'react';
 import CustomModal from '../../../../../../components/ui/modal/modal.component';
 import { FormProvider, useForm } from 'react-hook-form';
-import NotificationDetailsFields from '../../../../shared/components/NotificationDetailsFields';
- 
-import type { INotificationFormValues } from '../../../new_carousel/NewCarouselPage';
+
+
 import dayjs from 'dayjs';
 import { useGetNotificationById } from '../../../../hooks/useGetNotificationById';
 import { useUpdateNotification } from '../../../../hooks/useUpdateNotification';
@@ -12,7 +11,13 @@ import type { INotification } from '../../../../../../../domain/entities/INotifi
 import type { INotificationUpdateDto } from '../../../../../../../application/dtos/INotificationUpdateDto';
 import { dataUrlToFile } from '../../../../../../utils/dataUrlToFile';
 import Loading from '../../../../../../components/ui/loading';
- 
+import type { INotificationFormValues } from '../../../../shared/interface/INotificationFormValues';
+import { NOTIFICATION_ALERT, NOTIFICATION_BELL, NOTIFICATION_CAROUSEL } from '../../../../shared/constants/notifications';
+import { NotificationAlertDetailFields } from '../../../../shared/components/notification-alert-detail-fields/NotificationAlertDetailFields';
+import NotificationDetailsFields from '../../../../shared/components/notification-carousel-detail-fields/NotificationDetailsFields';
+import NotificationBellDetailsFields from '../../../../shared/components/notification-bell-detail-fields/NotificationBellDetailsFields';
+import Typography from '@mui/material/Typography';
+
 interface EditNotificationModalProps {
   open: boolean;
   notificationId: string | null;
@@ -21,36 +26,40 @@ interface EditNotificationModalProps {
 }
  
 export const EditNotificationModal: React.FC<EditNotificationModalProps> = ({ open, notificationId, onClose, onSaved }) => {
+  
   const { fetchById, loading: loadingFetch } = useGetNotificationById();
   const { update, loading: loadingUpdate } = useUpdateNotification();
   const [current, setCurrent] = React.useState<INotification | null>(null);
   const existingImageFileRef = React.useRef<File | null>(null);
  
   const form = useForm<INotificationFormValues>({
-  defaultValues: {
-    name: '',
-    profiles: [],
-    img: undefined as any,
-    subtitle: '',
-    state: '2',
-    title: '',
-    hasButton: true,
-    hasPublication: false,
-    hasExpired: false,
-    dateFrom: null,
-    timeFrom: null,
-    dateTo: null,
-    timeTo: null,
-    buttonLink: '',
-    buttonTitle: '',
-  },
-  mode: 'onChange',
-  reValidateMode: 'onChange',
-});
+    defaultValues: {
+      name: '',
+      profiles: [],
+      img: undefined as any,
+      subtitle: '',
+      state: '2',
+      title: '',
+      hasButton: true,
+      hasPublication: false,
+      hasExpired: false,
+      dateFrom: null,
+      timeFrom: null,
+      dateTo: null,
+      timeTo: null,
+      buttonLink: '',
+      buttonTitle: '',
+    },
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+  });
 
  
   useEffect(() => {
     if (!open || !notificationId) return;
+    
+    setCurrent(()=>null);
+
     (async () => {
       try {
         
@@ -70,13 +79,14 @@ export const EditNotificationModal: React.FC<EditNotificationModalProps> = ({ op
         }
 
       form.reset({
-          name: n.slideName ?? '',
+          name: n.name ?? '',
           profiles: (n.profiles ?? []).map(p => ({ id: String(p.id), name: p.name })),
           img: undefined as any,
           subtitle: n.description ?? '',
           state: String(n.statusId ?? ''),
           title: n.title ?? '',
           hasButton: !!n.buttonText,
+          notificationCommonTypeId: n.commonTypeId,
           hasPublication: !!n.hasImmediatePublication,
           hasExpired: !!n.hasExpiration,
           dateFrom: n.dateFrom ? dayjs(n.dateFrom) : null,
@@ -104,13 +114,14 @@ export const EditNotificationModal: React.FC<EditNotificationModalProps> = ({ op
     try {
       const payload: INotificationUpdateDto = {
         notificationTypeId: String(current?.notificationTypeId ?? ''),
-        slideName: data.name,
+        name: data.name,
         title: data.title,
         description: data.subtitle,
         image: imageToSend,
         buttonText: data.hasButton ? data.buttonTitle : '',
         buttonLink: data.hasButton ? data.buttonLink : '',
         statusId: Number(data.state),
+        notificationCommonTypeId: data.notificationCommonTypeId,
         dateFrom: data.hasPublication && data.dateFrom ? data.dateFrom.format('YYYY-MM-DD') : (undefined as any),
         timeFrom: data.hasPublication && data.timeFrom ? data.timeFrom.format('HH:mm:ss') : (undefined as any),
         dateTo: data.hasExpired && data.dateTo ? data.dateTo.format('YYYY-MM-DD') : (undefined as any),
@@ -118,7 +129,9 @@ export const EditNotificationModal: React.FC<EditNotificationModalProps> = ({ op
       };
  
       await update(notificationId, payload);
+
       Toast({ message: 'Notificación actualizada', type: eToast.Success });
+      
       onSaved();
       onClose();
 
@@ -138,8 +151,20 @@ export const EditNotificationModal: React.FC<EditNotificationModalProps> = ({ op
       maxWidth="sm"
     >
       <FormProvider {...form}>
-        {loadingFetch? <center><Loading /> </center>:
-          <NotificationDetailsFields autoCleanup disabledState={false} initialImageUrl={current?.imagenLink} />
+        {loadingFetch && !current? 
+          <center> <Loading /> </center> :
+          current?.notificationTypeId == NOTIFICATION_CAROUSEL? <NotificationDetailsFields 
+                                                                    autoCleanup 
+                                                                    disabledState={false} 
+                                                                    initialImageUrl={current?.imagenLink} 
+                                                                />:
+          current?.notificationTypeId == NOTIFICATION_ALERT? <NotificationAlertDetailFields 
+                                                                    autoCleanup 
+                                                              /> :
+
+          current?.notificationTypeId == NOTIFICATION_BELL? <NotificationBellDetailsFields 
+                                                                    autoCleanup
+                                                            /> : <Typography>Error inesperado</Typography>
         }
       </FormProvider>
     </CustomModal>
