@@ -26,7 +26,6 @@ export const HelpsPage = () => {
     rows,
     actions,
     doConfirmDelete,
-    refresh,
     setOpenDelete,
     setOpenProfilesModal,
     setOpenEdit,
@@ -42,7 +41,7 @@ export const HelpsPage = () => {
         open={openEdit}
         helpId={editHelpId}
         helpType={editHelpType}
-        onSuccess={() => refresh}
+        onSuccess={() => setParams(p => ({ ...p }))}
         onClose={() => setOpenEdit(false)}
       />
       <ConfirmDialog
@@ -56,7 +55,7 @@ export const HelpsPage = () => {
         onClose={() => setOpenProfilesModal(false)}
         onSaved={() => {
           setOpenProfilesModal(false);
-          refresh;
+          setParams(p => ({ ...p }));
         }}
       />
       <FilterHelpsPage
