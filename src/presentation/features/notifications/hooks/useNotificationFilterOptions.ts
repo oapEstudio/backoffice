@@ -25,7 +25,7 @@ export function useNotificationFilterOptions(filters?:IUseNotificationFilterOpti
       Promise.all([
                     getNotificationStatuses.execute(filters?.stateFilters? {filters: filters.stateFilters}: undefined),
                     getNotificationTypes.execute({filters: {forUpdate: true}}),
-                    getNotificationCommon.execute()])
+                    getNotificationCommon.execute({filters: {PageSize: 100}})])
         .then(([statuses, types,commons]) => {
           setResultState(statuses);
           setResultType(types);   
