@@ -21,7 +21,6 @@ export const HelpsPage = () => {
     filterButtons,
     selectedHelpId,
     selectedProfiles,
-    pendingDelete,
     openDelete,
     count,
     rows,
@@ -43,15 +42,13 @@ export const HelpsPage = () => {
         open={openEdit}
         helpId={editHelpId}
         helpType={editHelpType}
-        onSuccess={() => setParams(p => ({ ...p }))}
+        onSuccess={() => refresh}
         onClose={() => setOpenEdit(false)}
       />
       <ConfirmDialog
-        subtitle={`¿Desea dar de baja ${pendingDelete?.name}?`}
-        title={`Confirmar baja de ${pendingDelete?.helpType}`}
         open={openDelete}
         onOk={doConfirmDelete}
-        onCancel={() => setOpenDelete(false)} />
+        onCancel={() => setOpenDelete(false)}/>
       <UpdateHelpProfile
         open={openProfilesModal}
         helpId={selectedHelpId}
@@ -59,7 +56,7 @@ export const HelpsPage = () => {
         onClose={() => setOpenProfilesModal(false)}
         onSaved={() => {
           setOpenProfilesModal(false);
-          setParams(p => ({ ...p }));
+          refresh;
         }}
       />
       <FilterHelpsPage

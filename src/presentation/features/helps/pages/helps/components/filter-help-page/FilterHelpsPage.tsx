@@ -29,7 +29,9 @@ export const FilterHelpsPage: React.FC<FilterHelpPageProps> = ({
   onCancel,
 }) => {
 
-  const { resultState, resultType, loading } = useHelpFilterOptions();
+  const { resultState, resultType, loading } = useHelpFilterOptions({
+    stateFilters: { forCreate: true }
+  });
   const { profiles: profileFilters, loading: loadingProfiles } = useProfileFilterHelpOptions()
 
   const selectItemsStatuses: SelectOption[] = useMemo(

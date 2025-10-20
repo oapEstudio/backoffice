@@ -9,6 +9,7 @@ import IconButton from "@mui/material/IconButton";
 
 
 export interface IHelpRow extends IRow {
+  id: string;
   name: string;
   title: string;
   state: any;

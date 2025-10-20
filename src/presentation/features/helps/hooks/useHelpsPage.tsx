@@ -10,6 +10,7 @@ import { toHelpsRow, type IHelpRow } from '../mappers/helpMapper';
 import type { IFilterHelpsResult } from '../pages/helps/components/filter-help-page/FilterHelpsPage';
 import { SelectCreateHelp } from '../pages/helps/components/select-create-help/SelectHelp';
 import { eToast, Toast } from '../../../components/ui/toast/CustomToastService';
+import { useHelpCancellation } from './useCancellationHelp';
 
 export const useHelpPage = () => {
   const { setParams, params, result, loading } = useGetHelps(INITIAL_PARAMS_TABLE);
@@ -22,7 +23,8 @@ export const useHelpPage = () => {
   const [selectedProfiles, setSelectedProfiles] = useState<Array<{ id: string; name: string }>>([]);
   const [selectedHelpId, setSelectedHelpId] = useState<string>('');
   const [openDelete, setOpenDelete] = useState(false);
-  const [pendingDelete, setPendingDelete] = useState<IHelpRow>();
+  const [pendingDeleteId, setPendingDeleteId] = useState<string>('');
+  const { cancellation } = useHelpCancellation()
 
   const hasFilters = useMemo(
     () => params.filters !== undefined && Object.keys(params.filters).length > 0,
@@ -67,32 +69,30 @@ export const useHelpPage = () => {
 
   }, []);
 
-  const doConfirmDelete = useCallback(async () => {
-    try {
+    const confirmDelete = useCallback((id: string) => {
+      setPendingDeleteId(String(id));
+      setOpenDelete(true);
+    },[]);
 
-      setOpenDelete(false);
+    const doConfirmDelete = useCallback(async () => {
+      try {
+    
+        setOpenDelete(false);
+    
+        await cancellation(pendingDeleteId);
+    
+        Toast({ message: 'Item de ayuda dado de baja correctamente', type: eToast.Success })
+    
+        refresh();
+    
+      } catch {
+        Toast({ message: 'Error al dar de baja el item de ayuda', type: eToast.Error })
+      }
+    }, [cancellation, pendingDeleteId, refresh]);
 
-      //await cancellation(pendingDeleteId);
+  const callbackCancelled = useCallback((n: IHelp) => {
 
-      Toast({ message: 'Item de Ayuda dada de baja correctamente', type: eToast.Success })
-
-      refresh();
-
-    } catch {
-      Toast({ message: 'Error al dar de baja el item de Ayuda', type: eToast.Error })
-    }
-
-    //[cancellation, pendingDeleteId, refresh]
-  }, [refresh]);
-
-  const confirmDelete = useCallback((h: IHelpRow) => {
-    setPendingDelete(h);
-    setOpenDelete(true);
-  }, []);
-
-  const callbackCancelled = useCallback((h: IHelpRow) => {
-
-    confirmDelete(h);
+    confirmDelete(String(n.id));
 
   }, [confirmDelete]);
 
@@ -145,7 +145,7 @@ export const useHelpPage = () => {
     selectedHelpId,
     openEdit,
     selectedProfiles,
-    pendingDelete,
+    pendingDeleteId,
     // Computed
     currentFilters,
     hasFilters,

@@ -9,3 +9,5 @@ export const HELP_TYPES: Record<number, string> = {
   [HELP_DOCUMENT]: 'Documento',
   [HELP_INVISIBLE]: 'Invisible',
 };
+
+export const STATE_HELP_CANCEL: number = 4;

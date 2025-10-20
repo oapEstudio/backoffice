@@ -96,6 +96,7 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
   async updateHelpsStatus(id: string, statusId: string): Promise<IHelp> {
     const url = this.resource.edit.status.endpoint.replace('{id}', id);
 
+    console.log(url)
     const version = this.resource.edit.status.version;
 
     const res = await apiHandler.put<any>(this.resolveURL(url, version), {}, {
