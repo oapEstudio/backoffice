@@ -52,7 +52,7 @@ export function toHelpsRow(h: IHelp, callbackEdit?: any, callbackCancellation?: 
     paddingRight: '20px'
   }));
 
-  const urlComp = <CopyUrlButton url={h.link} />;
+  const urlComp = h.link ? <CopyUrlButton url={h.link} /> : <p style={{ textAlign: 'center', paddingRight: '20%'}}> - </p>;
 
   const stateComp = <>
     <WrapperContainerStatus>
@@ -71,7 +71,7 @@ export function toHelpsRow(h: IHelp, callbackEdit?: any, callbackCancellation?: 
     name: h.name,
     lastChangeView: `${formatDate(h.dateUpdated, { includeTime: true })} - ${h.updatedBy}`,
     state: stateComp,
-    url: h.link ? urlComp : null,
+    url: urlComp,
     statusId: h.statusId,
     profiles: buttonEdit,
     cancellation: cancelationComp,
