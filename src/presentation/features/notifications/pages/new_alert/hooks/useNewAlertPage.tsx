@@ -51,8 +51,12 @@ export function useNewAlertPage(){
            navigate(NOTIFICATION.name);
   
          } catch(e) {
+           dispatch({
+              type: 'STEP_THREE',
+              payload: ''
+            });
            Toast({
-             message: 'Error al crear ls notificación',
+             message: 'Error al crear la notificación',
              type: eToast.Error
            });
          }

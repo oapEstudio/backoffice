@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
@@ -46,6 +45,8 @@ import ImageRoundedIcon from '@mui/icons-material/ImageRounded';
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 import DownloadIcon from '@mui/icons-material/Download';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import SvgIcon from '@mui/material/SvgIcon';
+import type { ElementType } from "react";
 
 export interface IIconAction{
   handleClick?: any,
@@ -239,4 +240,21 @@ export const DownloaddIcon = () =>{
 
 export const WarningTriangleIcon = () =>{
   return <WarningAmberIcon />
-}
+} 
+
+
+type SVGIconProps = {
+  icon: ElementType;           
+  color?: string;
+  fontSize?: 'inherit'|'small'|'medium'|'large';
+};
+
+
+export const SVGIcon = ({ icon, color = colors.palette.primary.main, fontSize = 'medium' }: SVGIconProps) => (
+  <SvgIcon
+    component={icon}
+    inheritViewBox
+    fontSize={fontSize}
+    sx={color ? { color } : undefined}
+  />
+);
