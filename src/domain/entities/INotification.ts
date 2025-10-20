@@ -5,7 +5,7 @@ export interface INotification {
     notificationTypeId:          number;
     notificationTypeDescription: string;
     notificationTypeColor:       string;
-    slideName:                   string;
+    name:                   string;
     title:                       string;
     description:                 string;
     imagenLink:                  string;

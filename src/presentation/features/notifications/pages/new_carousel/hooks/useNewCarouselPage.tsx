@@ -69,7 +69,7 @@ export function useNewCarouselPage(){
           timeFrom: data.hasPublication? data.timeFrom!.format('HH:mm:ss'): null,
           timeTO: data.hasExpired? data.timeTo!.format('HH:mm:ss'): null,
           description: data.subtitle,
-          slideName: data.name,
+          name: data.name,
           title: data.title,
           image: data.img,
           notificationTypeId: NOTIFICATION_CAROUSEL.toString(),
