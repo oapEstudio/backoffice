@@ -3,35 +3,26 @@ import { Controller, useFormContext } from 'react-hook-form';
 import CustomTextInput from '../../../../../components/ui/inputs/text-input/text-input.component';
 
 import CustomSelect from '../../../../../components/ui/inputs/select/select.component';
-import type { SelectOption } from '../../../../../components/ui/inputs/select/select.interface';
 import { minTrimmed } from '../../../../../utils/minTrimmed';
-import { toHelpSelect } from '../../../mappers/helpCreateMapper';
-import { useHelpFilterOptions } from '../../../hooks/useHelpsFilterOptions';
 import type { IHelpFormValues } from '../../interface/IHelpFormValues';
 import { MAX_LENGTH_INPUT } from '../../../../shared/constants/default-input';
+import type { SelectOption } from '../../../../../components/ui/inputs/select/select.interface';
 
 
 interface HelpSectionDetailsFieldsProps {
   disabledAll?: boolean;
   titleLabel?: string;
   disabledState?: boolean;
+  selectItemsStatuses: SelectOption[];
 }
 
 export const HelpSectionDetailsFields: React.FC<HelpSectionDetailsFieldsProps> = ({
   titleLabel = 'Título',
   disabledAll = false,
   disabledState = false,
+  selectItemsStatuses = []
 }) => {
   const { control, formState: { errors } } = useFormContext<IHelpFormValues>();
-
-  const { resultState: statuses } = useHelpFilterOptions({
-     stateFilters: { forCreate: true } 
-  });
-
-  const selectItemsStatuses: SelectOption[] = useMemo(
-    () => statuses.map(toHelpSelect),
-    [statuses]
-  );
 
   return (
     <>

@@ -22,7 +22,7 @@ export const useHelpPage = () => {
   const [selectedProfiles, setSelectedProfiles] = useState<Array<{ id: string; name: string }>>([]);
   const [selectedHelpId, setSelectedHelpId] = useState<string>('');
   const [openDelete, setOpenDelete] = useState(false);
-  const [pendingDeleteId, setPendingDeleteId] = useState<string>('');
+  const [pendingDelete, setPendingDelete] = useState<IHelpRow>();
 
   const hasFilters = useMemo(
     () => params.filters !== undefined && Object.keys(params.filters).length > 0,
@@ -85,14 +85,14 @@ export const useHelpPage = () => {
     //[cancellation, pendingDeleteId, refresh]
   }, [refresh]);
 
-  const confirmDelete = useCallback((id: string) => {
-    setPendingDeleteId(String(id));
+  const confirmDelete = useCallback((h: IHelpRow) => {
+    setPendingDelete(h);
     setOpenDelete(true);
   }, []);
 
-  const callbackCancelled = useCallback((h: IHelp) => {
+  const callbackCancelled = useCallback((h: IHelpRow) => {
 
-    confirmDelete(String(h.id));
+    confirmDelete(h);
 
   }, [confirmDelete]);
 
@@ -145,7 +145,7 @@ export const useHelpPage = () => {
     selectedHelpId,
     openEdit,
     selectedProfiles,
-
+    pendingDelete,
     // Computed
     currentFilters,
     hasFilters,

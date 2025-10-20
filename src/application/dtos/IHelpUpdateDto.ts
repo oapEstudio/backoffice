@@ -1,4 +1,4 @@
-export interface IHelpCreateDto {
+export interface IHelpUpdateDto {
   helpType?: string;
   helpTypeId?: number;
   name: string;
@@ -7,10 +7,11 @@ export interface IHelpCreateDto {
   parentId?: string;
   parent?: string;
   link: string;
-  statusId: number | null;
+  statusId: number;
   status?: string;
   helpDocumentTypeId?: string;
   helpDocumentType?: string;
   documents?: File[];
   profiles?: string[];
+  id?: string;
 }

@@ -6,6 +6,7 @@ import { apiHandler } from "./apiHandler";
 import type { IHelpRepository } from "../../../application/interfaces/IHelpRepository";
 import type { IHelpCreateDto } from "../../../application/dtos/IHelpCreateDto";
 import type { IHelpUpdateProfiles } from "../../../application/dtos/IHelpUpdateProfiles";
+import type { IHelpUpdateDto } from "../../../application/dtos/IHelpUpdateDto";
 
 
 export class HelpRepository extends RepositoryAbstract implements IHelpRepository {
@@ -25,11 +26,18 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
     return response.data;
   }
 
+  async getHelpById(id: string): Promise<IHelp> {
+    const version = this.resource.edit.helps.version;
+    const url = this.resource.edit.helps.endpoint.replace('{id}', id);
+    const res = await apiHandler.get<IHelp>(this.resolveURL(url, version));
+    return res.data;
+  }
+
   async createHelp(dto: IHelpCreateDto): Promise<string> {
     const version = this.resource.create.version;
     const url = `${this.resource.create.endpoint}`;
-    const form = new FormData();
 
+    const form = new FormData();
     form.append('name', String(dto.name ?? ''));
     form.append('title', String(dto.title ?? ''));
     form.append('description', String(dto.description ?? ''));
@@ -54,10 +62,24 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
     return res.data.id;
   }
 
-  async getHelpById(id: string): Promise<IHelp> {
-    const version = this.resource.edit.notification.version;
-    const url = this.resource.edit.notification.endpoint.replace('{id}', id);
-    const res = await apiHandler.get<IHelp>(this.resolveURL(url, version));
+  async updateHelp(id: string, dto: IHelpUpdateDto): Promise<IHelp> {
+    console.log(dto)
+    const version = this.resource.edit.helps.version;
+    const url = this.resource.edit.helps.endpoint.replace('{id}', id);
+
+    const form = new FormData();
+    form.append('name', String(dto.name ?? ''));
+    form.append('title', String(dto.title ?? ''));
+    form.append('description', String(dto.description ?? ''));
+    form.append('helpTypeId', String(dto.helpTypeId ?? ''));
+
+    if (dto.documents instanceof File) {
+    }
+
+    form.append('statusId', String(dto.statusId ?? ''));
+
+
+    const res = await apiHandler.put<IHelp, FormData>(this.resolveURL(url, version), {}, form);
     return res.data;
   }
 
@@ -69,6 +91,19 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
     const res = await apiHandler.put<any>(this.resolveURL(url, version), {}, payload);
 
     return res.data;
+  }
+
+  async updateHelpsStatus(id: string, statusId: string): Promise<IHelp> {
+    const url = this.resource.edit.status.endpoint.replace('{id}', id);
+
+    const version = this.resource.edit.status.version;
+
+    const res = await apiHandler.put<any>(this.resolveURL(url, version), {}, {
+      statusId
+    });
+
+    return res.data;
+
   }
 }
 

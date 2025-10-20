@@ -33,6 +33,7 @@ import { HelpRepository } from '../../infrastructure/adapters/http/HelpRepositoy
 import { CreateHelpUseCase } from '../../application/usecases/CreateHelpUseCase';
 import { GetHelpByIdUseCase } from '../../application/usecases/GetHelpByIdUseCase';
 import { UpdateHelpProfilesUseCase } from '../../application/usecases/UpdateHelpProfilesUseCase';
+import { UpdateHelpUseCase } from '../../application/usecases/UpdateHelpUseCase';
 
 
 const profileRepo = new ProfileRepository();
@@ -73,6 +74,7 @@ export interface IDependencies{
   createHelp: CreateHelpUseCase,
   getHelpById: GetHelpByIdUseCase,
   updateHelpProfiles: UpdateHelpProfilesUseCase,
+  updateHelp: UpdateHelpUseCase,
 }
 
 const resourseDimDatasetProfile = env.resources.profiles.dim.dataset;
@@ -124,6 +126,8 @@ export const defaultDependencies: IDependencies = {
   createHelp: new CreateHelpUseCase(helpRepo),
   getHelpById: new GetHelpByIdUseCase(helpRepo),
   updateHelpProfiles: new UpdateHelpProfilesUseCase(helpRepo),
+  updateHelp: new UpdateHelpUseCase(helpRepo),
+
 };
 
 export const DependencyContext = React.createContext<IDependencies>(defaultDependencies);

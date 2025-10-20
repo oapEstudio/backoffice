@@ -1,33 +1,49 @@
 // hooks/useEditHelpModal.ts
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { HELP_ARTICLE, HELP_DOCUMENT, HELP_SECTION } from '../shared/constants/helps';
 import type { IHelpFormValues } from '../shared/interface/IHelpFormValues';
 import { useGetHelpById } from './useGetHelpById';
 import HelpSectionDetailsFields from '../shared/components/details-fields/HelpSectionDetailsFields';
+import type { IHelpUpdateDto } from '../../../../application/dtos/IHelpUpdateDto';
+import { eToast, Toast } from '../../../components/ui/toast/CustomToastService';
+import { useUpdateHelp } from './useUpdateHelp';
+import { toHelpSelect } from '../mappers/helpCreateMapper';
+import { useHelpFilterOptions } from './useHelpsFilterOptions';
+import { useGetHelpStatus } from './useGetHelpsState';
 
 interface UseEditHelpModalProps {
   open: boolean;
   helpType: number;
   helpId: string | null;
-  onSuccess?: () => void;
+  onClose: () => void;
+  onSuccess: () => void;
 }
 
-export const useEditHelpModal = ({ 
-  open, 
-  helpId, 
+export const useEditHelpModal = ({
+  open,
+  helpId,
   helpType,
-  onSuccess 
+  onSuccess,
+  onClose
 }: UseEditHelpModalProps) => {
   const { fetchById, loading: loadingFetch } = useGetHelpById();
+  const { update, loading: loadingUpdate } = useUpdateHelp()
+  const { result: statuses } = useGetHelpStatus({
+    stateFilters: { forCreate: true }
+  });
+
+  const selectItemsStatuses = useMemo(
+    () => statuses.map(toHelpSelect),
+    [statuses]
+  );
 
   const form = useForm<IHelpFormValues>({
     defaultValues: {
       name: '',
       description: '',
       parentId: '',
-      profiles: [],
       title: '',
       document: [],
       state: '',
@@ -39,25 +55,21 @@ export const useEditHelpModal = ({
     reValidateMode: 'onChange',
   });
 
-  
+
   useEffect(() => {
     if (!open || !helpId) return;
 
     const loadHelpData = async () => {
       try {
         const help = await fetchById(helpId);
-        
+
         form.reset({
           name: help.name,
+          state: String(help.statusId ?? ''),
           description: help.description,
           parentId: help.parentId,
-          profiles: (help.profile ?? []).map(p => ({ 
-            id: String(p.id), 
-            name: p.name 
-          })),
           title: help.title,
           document: [],
-          state: help.statusDescription,
           helpTypeId: String(help.helpTypeId),
           helpDocumentTypeId: '',
           link: String(help.link),
@@ -70,6 +82,32 @@ export const useEditHelpModal = ({
     loadHelpData();
   }, [open, helpId, fetchById, form]);
 
+  const handleOk = form.handleSubmit(async (data) => {
+
+    if (!helpId) return;
+
+    try {
+      const payload: IHelpUpdateDto = {
+        description: data.title,
+        name: data.name,
+        title: data.title ? data.title : '',
+        statusId: Number(data.state),
+        parentId: '',
+        link: '',
+        helpTypeId: HELP_SECTION,
+        helpDocumentTypeId: '',
+        documents: []
+      };
+
+      await update(helpId, payload);
+      Toast({ message: 'Item de ayuda actualizado', type: eToast.Success });
+      onSuccess();
+      onClose();
+    } catch {
+      Toast({ message: 'Error al actualizar el item de ayuda', type: eToast.Error });
+    }
+  });
+
   useEffect(() => {
     if (!open) {
       form.reset();
@@ -80,7 +118,7 @@ export const useEditHelpModal = ({
   const shouldShowFields = useMemo(() => {
     switch (helpType) {
       case HELP_SECTION:
-        return <HelpSectionDetailsFields disabledState={false} />;
+        return <HelpSectionDetailsFields disabledState={false} selectItemsStatuses={selectItemsStatuses} />;
       case HELP_ARTICLE:
         return null;
       case HELP_DOCUMENT:
@@ -90,8 +128,7 @@ export const useEditHelpModal = ({
     }
   }, [helpType]);
 
-  //TODO AGREGAR FETCHEEDIT
-  const isLoading = loadingFetch;
+  const isLoading = loadingFetch || loadingUpdate;
   const isDisabled = !form.formState.isValid || isLoading;
 
   return {
@@ -99,5 +136,6 @@ export const useEditHelpModal = ({
     shouldShowFields,
     isLoading,
     isDisabled,
+    handleOk
   };
 };

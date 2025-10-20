@@ -10,10 +10,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 interface IConfirmDialogProps{
     open: boolean;
+    title?: string;
+    subtitle?: string;
     onOk: ()=> void;
     onCancel: ()=> void;
 }
-export const ConfirmDialog: React.FC<IConfirmDialogProps> = ({open,onOk,onCancel})=>{
+export const ConfirmDialog: React.FC<IConfirmDialogProps> = ({open,onOk,onCancel, title, subtitle})=>{
 
 
   return (
@@ -25,11 +27,11 @@ export const ConfirmDialog: React.FC<IConfirmDialogProps> = ({open,onOk,onCancel
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Confirmacion!"}
+          {title ? title :"Confirmacion!"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-             Desea continuar con la operacion?
+             {subtitle ? subtitle :"Desea continuar con la operacion?"}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

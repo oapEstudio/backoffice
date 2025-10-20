@@ -1,3 +1,5 @@
+import type { SelectOption } from "../../../../components/ui/inputs/multiselect/multiselect.interface";
+
 export interface IHelpFormValues {
   name: string;
   description: string;

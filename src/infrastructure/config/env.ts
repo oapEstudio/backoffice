@@ -148,7 +148,7 @@ export const env = {
          endpoint: 'helps/{id}/profiles',   
          version: 'v1'
         },
-        notification: {
+        helps: {
           endpoint: 'helps/{id}',   
           version: 'v1'
         },

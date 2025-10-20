@@ -5,15 +5,19 @@ import { HELP_TYPES } from "../../../../shared/constants/helps";
 import HelpSectionDetailsFields from "../../../../shared/components/details-fields/HelpSectionDetailsFields";
 import { useEditHelpModal } from "../../../../hooks/useEditHelpModal";
 import Loading from "../../../../../../components/ui/loading";
+import { useHelpFilterOptions } from "../../../../hooks/useHelpsFilterOptions";
 
 interface EditHelpModalProps {
   open: boolean;
   helpType: number;
   helpId: string | null;
+  onSuccess: () => void;
   onClose: () => void;
 }
 
-export const EditHelpModal: React.FC<EditHelpModalProps> = ({   open, 
+export const EditHelpModal: React.FC<EditHelpModalProps> = ({   
+  open, 
+  onSuccess, 
   onClose, 
   helpId, 
   helpType }) => {
@@ -21,19 +25,21 @@ export const EditHelpModal: React.FC<EditHelpModalProps> = ({   open,
     form, 
     shouldShowFields, 
     isLoading, 
+    handleOk,
     isDisabled 
   } = useEditHelpModal({
     open,
     helpId,
     helpType,
-    onSuccess: onClose,
+    onSuccess,
+    onClose
   });
 
   return (
     <CustomModal
       title={`Editar ${HELP_TYPES[helpType]}`}
       open={open}
-      onOk={close}
+      onOk={handleOk}
       onClose={onClose}
       onCancel={onClose}
       disabled={isDisabled}

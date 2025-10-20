@@ -1,4 +1,4 @@
-import { useReducer, useRef, useState } from "react";
+import { useMemo, useReducer, useRef, useState } from "react";
 import type { StepType } from "../../../../../components/ui/step/step-navigation-backoffice";
 import { StepNumber } from "../../../shared/components/step-number/StepNumber";
 import { useForm } from "react-hook-form";
@@ -11,6 +11,8 @@ import type { IHelpFormValues } from "../../../shared/interface/IHelpFormValues"
 import { ActionStepReducer, getActionStepInitialState, eStep } from "../reducers/ActionStepReducer";
 import { HELP_SECTION } from "../../../shared/constants/helps";
 import { useCreateHelp } from "../../../hooks/useCreateHelp";
+import { useGetHelpStatus } from "../../../hooks/useGetHelpsState";
+import { toHelpSelect } from "../../../mappers/helpCreateMapper";
 
 
 const navStepsInit: StepType[] = [{
@@ -27,13 +29,20 @@ const navStepsInit: StepType[] = [{
 },];
 
 
-
 export function useNewSectionPage() {
   const contentStepRef = useRef<HTMLDivElement>(null);
   const [navSteps, setNavSteps] = useState(navStepsInit);
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(ActionStepReducer, getActionStepInitialState());
-  const { create, loading: creating, error: createError } = useCreateHelp();
+  const { create, loading: creating, error: createError } = useCreateHelp(); 
+  const { result: statuses } = useGetHelpStatus({
+    stateFilters: { forCreate: true }
+  });
+
+  const selectItemsStatuses = useMemo(
+    () => statuses.map(toHelpSelect),
+    [statuses]
+  );
 
   const form = useForm<IHelpFormValues>({
     defaultValues: {
@@ -43,7 +52,7 @@ export function useNewSectionPage() {
       profiles: [],
       title: '',
       document: [],
-      state: '',
+      state: '1',
       helpTypeId: '',
       helpDocumentTypeId: '',
       link: '',
@@ -61,7 +70,7 @@ export function useNewSectionPage() {
   const onSubmit = async (data: IHelpFormValues) => {
     try {
 
-      if (false || state.step == eStep.SUCCESS) return;
+      if (false || state.step == eStep.SUCCESS || !data.state) return;
 
       dispatch({
         type: 'SUCCESS',
@@ -160,6 +169,7 @@ export function useNewSectionPage() {
 
   return {
     creating,
+    selectItemsStatuses,
     contentStepRef,
     form,
     navSteps,

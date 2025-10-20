@@ -15,7 +15,7 @@ import Loading from "../../../../components/ui/loading";
 
 export const NewSectionPage = () => {
 
-  const { contentStepRef, form, navSteps, state, onSubmit, handleBack, handleNext, creating } = useNewSectionPage();
+  const { contentStepRef, form, navSteps, state, onSubmit, handleBack, handleNext, creating, selectItemsStatuses } = useNewSectionPage();
 
   return (
     <ContainerPage description="NewSectionPage" title={`${HELP.title} - ${NEW_SECTION.title}`} titleSEO='Gestión de ayuda - Alta sección'>
@@ -32,7 +32,7 @@ export const NewSectionPage = () => {
         :
           <CustomBox sx={{ p: '0 4rem', minHeight: 300, paddingTop: '2rem' }}>
             {state.step == 1 ? <StepOneNewAlert /> : <></>}
-            {state.step == 2 ? <StepTwoNewAlert /> : <></>}
+            {state.step == 2 ? <StepTwoNewAlert selectItemsStatuses={selectItemsStatuses} /> : <></>}
           </CustomBox> }
         <CustomBox sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
           {false ? (
