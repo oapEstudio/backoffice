@@ -28,12 +28,21 @@ import { UpdateNotificationsProfilesUseCase } from '../../application/usecases/U
 import { CancellationNotificationUseCase } from '../../application/usecases/CancellationNotificationsUseCase';
 import { GetNotificationByIdUseCase } from '../../application/usecases/GetNotificationByIdUseCase';
 import { UpdateNotificationUseCase } from '../../application/usecases/UpdateNotificationUseCase';
+import { GetHelpUseCase } from '../../application/usecases/GetHelpsUseCase';
+import { HelpRepository } from '../../infrastructure/adapters/http/HelpRepositoy';
+import { CreateHelpUseCase } from '../../application/usecases/CreateHelpUseCase';
+import { GetHelpByIdUseCase } from '../../application/usecases/GetHelpByIdUseCase';
+import { UpdateHelpProfilesUseCase } from '../../application/usecases/UpdateHelpProfilesUseCase';
+import { UpdateHelpUseCase } from '../../application/usecases/UpdateHelpUseCase';
+import { CancellationHelpUseCase } from '../../application/usecases/CancellationHelpUseCase';
+
 
 const profileRepo = new ProfileRepository();
 const groupRepo = new GroupRepository();
 const menuRepo = new MenuRepository();
 const highlightRepo = new HighlightRepository();
 const notificationRepo = new NotificationRepository();
+const helpRepo = new HelpRepository();
 
 export interface IDependencies{
   getProfiles: GetProfilesUseCase,
@@ -60,11 +69,20 @@ export interface IDependencies{
   updateNotificationProfiles: UpdateNotificationsProfilesUseCase,
   cancellationNotification: CancellationNotificationUseCase,
   getNotificationById: GetNotificationByIdUseCase,
-  updateNotification: UpdateNotificationUseCase
+  updateNotification: UpdateNotificationUseCase,
+  getHelps: GetHelpUseCase,
+  getHelpTypes: GetDatasetFiltersUseCase,
+  getHelpStatuses: GetDatasetFiltersUseCase,
+  createHelp: CreateHelpUseCase,
+  getHelpById: GetHelpByIdUseCase,
+  updateHelpProfiles: UpdateHelpProfilesUseCase,
+  updateHelp: UpdateHelpUseCase,
+  cancellationHelp: CancellationHelpUseCase,
 }
 
 const resourseDimDatasetProfile = env.resources.profiles.dim.dataset;
 const resourseDimDatasetNotification = env.resources.notifications.dim.dataset;
+const resourseDimDatasetHelp = env.resources.helps.dim.dataset;
 
 /**Profiles */
 const urlProfileStatus = resourseDimDatasetProfile.endpoint.replace('{dataset}','statuses');
@@ -75,6 +93,11 @@ const urlDimProfile = resourseDimDatasetProfile.endpoint.replace('{dataset}','pr
 const urlNotificationStatus = resourseDimDatasetNotification.endpoint.replace('{dataset}','statuses');
 const urlNotificationTypes = resourseDimDatasetNotification.endpoint.replace('{dataset}','types');
 const urlNotificationCommonTypes = resourseDimDatasetNotification.endpoint.replace('{dataset}','commontypes');
+
+// TODO REVISAR SI ESTA OK 
+/**Help Desk */
+const urlHelpStatus = resourseDimDatasetHelp.endpoint.replace('{dataset}','statuses');
+const urlHelpTypes = resourseDimDatasetHelp.endpoint.replace('{dataset}','types');
 
 export const defaultDependencies: IDependencies = {
   getProfiles: new GetProfilesUseCase(profileRepo),
@@ -101,7 +124,15 @@ export const defaultDependencies: IDependencies = {
   updateNotificationProfiles: new UpdateNotificationsProfilesUseCase(notificationRepo),
   cancellationNotification: new CancellationNotificationUseCase(notificationRepo),
   getNotificationById: new GetNotificationByIdUseCase(notificationRepo),
-  updateNotification: new UpdateNotificationUseCase(notificationRepo)
+  updateNotification: new UpdateNotificationUseCase(notificationRepo),
+  getHelps: new GetHelpUseCase(helpRepo),
+  getHelpTypes: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpTypes,resourseDimDatasetHelp.version)),
+  getHelpStatuses: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpStatus,resourseDimDatasetHelp.version)),
+  createHelp: new CreateHelpUseCase(helpRepo),
+  getHelpById: new GetHelpByIdUseCase(helpRepo),
+  updateHelpProfiles: new UpdateHelpProfilesUseCase(helpRepo),
+  updateHelp: new UpdateHelpUseCase(helpRepo),
+  cancellationHelp: new CancellationHelpUseCase(helpRepo),
 };
 
 export const DependencyContext = React.createContext<IDependencies>(defaultDependencies);

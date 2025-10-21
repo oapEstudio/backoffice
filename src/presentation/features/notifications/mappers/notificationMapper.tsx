@@ -23,7 +23,7 @@ export interface INotificationRow extends IRow {
   cancellation: React.ReactNode
 }
 
-export function toNotificationRow(n: INotification,callbackEdit: any, callbackCancellation: any): INotificationRow {
+export function toNotificationRow(n: INotification, callbackEdit: any, callbackCancellation: any): INotificationRow {
 
     const styleContentElement= {
       justifyContent: "left",
