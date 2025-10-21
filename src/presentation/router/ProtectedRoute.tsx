@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 
-import { HOME, NEW_PROFILE, FATHER_PROFILE, NEW_DYNAMIC_PAGE, FUNTIONALITIES, NOTIFICATION, NEW_CAROUSEL, NEW_ALERT, NEW_BELL } from './routes';
-import { HOME, NEW_PROFILE, FATHER_PROFILE, NEW_DYNAMIC_PAGE, FUNTIONALITIES, NOTIFICATION, NEW_CAROUSEL, NEW_ALERT, HELP, NEW_SECTION } from './routes';
+import { HOME, NEW_PROFILE, FATHER_PROFILE, NEW_DYNAMIC_PAGE, FUNTIONALITIES, NOTIFICATION, NEW_CAROUSEL, NEW_ALERT, NEW_BELL,HELP, NEW_SECTION } from './routes';
 import { NewProfilePage } from '../features/profiles/pages/new_profile/NewProfilePage';
 import { ProfilesPage } from '../features/profiles/pages/profiles/ProfilesPage';
 import { HomePage } from '../features/home/HomePage';
