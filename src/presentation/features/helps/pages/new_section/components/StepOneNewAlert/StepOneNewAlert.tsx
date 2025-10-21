@@ -3,7 +3,7 @@ import StepOneGeneric from '../../../../shared/components/StepOneGeneric'
 
 const StepOneNewAlert = () => {
   return (
-    <StepOneGeneric remountKey="open" />
+    <StepOneGeneric profilesLabel="Seleccione los perfiles que podrán ver este sección" remountKey="open" />
   )
 }
 

@@ -12,6 +12,7 @@ import { useUpdateHelp } from './useUpdateHelp';
 import { toHelpSelect } from '../mappers/helpCreateMapper';
 import { useHelpFilterOptions } from './useHelpsFilterOptions';
 import { useGetHelpStatus } from './useGetHelpsState';
+import HelpArticleDetailsFields from '../shared/components/details-fields/HelpArticleDetailsField';
 
 interface UseEditHelpModalProps {
   open: boolean;
@@ -120,7 +121,7 @@ export const useEditHelpModal = ({
       case HELP_SECTION:
         return <HelpSectionDetailsFields disabledState={false} selectItemsStatuses={selectItemsStatuses} />;
       case HELP_ARTICLE:
-        return null;
+        return <HelpArticleDetailsFields disabledState={false} selectItemsSection={[]}  selectItemsStatuses={selectItemsStatuses} />;
       case HELP_DOCUMENT:
         return null;
       default:
@@ -133,6 +134,7 @@ export const useEditHelpModal = ({
 
   return {
     form,
+    helpType,
     shouldShowFields,
     isLoading,
     isDisabled,

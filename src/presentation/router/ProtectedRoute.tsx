@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 
-import { HOME, NEW_PROFILE, FATHER_PROFILE, NEW_DYNAMIC_PAGE, FUNTIONALITIES, NOTIFICATION, NEW_CAROUSEL, NEW_ALERT, NEW_BELL,HELP, NEW_SECTION } from './routes';
+import { HOME, NEW_PROFILE, FATHER_PROFILE, NEW_DYNAMIC_PAGE, FUNTIONALITIES, NOTIFICATION, NEW_CAROUSEL, NEW_ALERT, NEW_BELL,HELP, NEW_SECTION, NEW_ARTICLE } from './routes';
 import { NewProfilePage } from '../features/profiles/pages/new_profile/NewProfilePage';
 import { ProfilesPage } from '../features/profiles/pages/profiles/ProfilesPage';
 import { HomePage } from '../features/home/HomePage';
@@ -12,6 +12,7 @@ import { NewAlertPage } from '../features/notifications/pages/new_alert/NewAlert
 import { NewBellPage } from '../features/notifications/pages/new_bell/NewBellPage';
 import { HelpsPage } from '../features/helps/pages/helps/HelpsPage';
 import { NewSectionPage } from '../features/helps/pages/new_section/NewSectionPage';
+import { NewArticlePage } from '../features/helps/pages/new_article/NewArticlePage';
 
 
 export const ProtectedRoute = () => (
@@ -75,6 +76,12 @@ export const ProtectedRoute = () => (
       path={NEW_SECTION.name}
       element={                   
             <NewSectionPage />            
+      }
+    />
+    <Route
+      path={NEW_ARTICLE.name}
+      element={                   
+            <NewArticlePage />            
       }
     />
      <Route
