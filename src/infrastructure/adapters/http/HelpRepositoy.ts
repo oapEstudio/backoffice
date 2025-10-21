@@ -40,9 +40,7 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
     const form = new FormData();
     form.append('name', String(dto.name ?? ''));
     form.append('title', String(dto.title ?? ''));
-    form.append('description', String(dto.description ?? ''));
     form.append('helpTypeId', String(dto.helpTypeId ?? ''));
-    form.append('profiles', String(dto.profiles ?? ''));
 
     if (dto.documents instanceof File) {
     }

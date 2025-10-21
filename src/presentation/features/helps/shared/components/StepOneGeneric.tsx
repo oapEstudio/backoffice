@@ -24,7 +24,7 @@ type StepOneGenericProps = {
 export const StepOneGeneric: React.FC<StepOneGenericProps> = ({
   remountKey,
   nameLabel = 'Nombre',
-  profilesLabel = 'Seleccione los perfiles que podrán ver esta notificación',
+  profilesLabel = 'Seleccione los perfiles que podrán ver esta sección',
   disabledAll = false,
   requireProfiles = true,
 }) => {
