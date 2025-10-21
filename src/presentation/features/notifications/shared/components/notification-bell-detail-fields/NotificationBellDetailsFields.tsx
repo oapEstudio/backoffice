@@ -1,46 +1,44 @@
 import React, { useEffect, useMemo } from 'react';
 import Typography from '@mui/material/Typography';
 import { Controller, useFormContext } from 'react-hook-form';
-import { env } from '../../../../../infrastructure/config/env';
-import CustomTextInput from '../../../../components/ui/inputs/text-input/text-input.component';
-import CustomTextAreaInput from '../../../../components/ui/inputs/text-area-input/text-area-input.component';
-import ImageDropzone from '../../../../components/ui/img-drop-zone/ImageDropZone';
-import CustomRadioButton from '../../../../components/ui/inputs/radio-button/radio-button.component';
-import { CustomStack } from '../../../../components/ui/stack/Stack';
-import { CustomBox } from '../../../../components/ui/box/CustomBox';
-import CustomDateInput from '../../../../components/ui/inputs/date-input/date-input.component';
+import type { INotificationFormValues } from '../../interface/INotificationFormValues';
+import { useNotificationFilterOptions } from '../../../hooks/useNotificationFilterOptions';
+import { toNotificationSelect, toNotificationSelectCommon } from '../../../mappers/notificationMapper';
+import type { SelectOption } from '../../../../../components/ui/inputs/select/select.interface';
+import { useNotPastValidation } from '../../../../../utils/useNotPastValidation';
+import { useEndAfterStartValidation } from '../../../../../utils/useEndAfterStartValidation';
+import { minTrimmed } from '../../../../../utils/minTrimmed';
+import CustomTextInput from '../../../../../components/ui/inputs/text-input/text-input.component';
+import CustomTextAreaInput from '../../../../../components/ui/inputs/text-area-input/text-area-input.component';
+import CustomRadioButton from '../../../../../components/ui/inputs/radio-button/radio-button.component';
+import { env } from '../../../../../../infrastructure/config/env';
+import { CustomStack } from '../../../../../components/ui/stack/Stack';
+import { CustomBox } from '../../../../../components/ui/box/CustomBox';
+import CustomDateInput from '../../../../../components/ui/inputs/date-input/date-input.component';
+import CustomTimePicker from '../../../../../components/ui/inputs/date-time-input/date-time-input.component';
+import CustomSelect from '../../../../../components/ui/inputs/select/select.component';
 
-import CustomSelect from '../../../../components/ui/inputs/select/select.component';
-import { toNotificationSelect } from '../../mappers/notificationMapper';
-import type { SelectOption } from '../../../../components/ui/inputs/select/select.interface';
-import { useNotificationFilterOptions } from '../../hooks/useNotificationFilterOptions';
-import { minTrimmed } from '../../../../utils/minTrimmed';
-import { useEndAfterStartValidation } from '../../../../utils/useEndAfterStartValidation';
-import CustomTimePicker from '../../../../components/ui/inputs/date-time-input/date-time-input.component';
-import { useNotPastValidation } from '../../../../utils/useNotPastValidation';
-import type { INotificationFormValues } from '../interface/INotificationFormValues';
 
-interface NotificationDetailsFieldsProps {
+interface NotificatioBellDetailsFieldsProps {
   autoCleanup?: boolean;
-  disabledAll?: boolean;
-  disabledState?: boolean;
-  initialImageUrl?: string;
 }
 
-export const NotificationDetailsFields: React.FC<NotificationDetailsFieldsProps> = ({
+export const NotificationBellDetailsFields: React.FC<NotificatioBellDetailsFieldsProps> = ({
   autoCleanup = false,
-  disabledAll = false,
-  disabledState = false,
-  initialImageUrl,
 }) => {
   const { control, formState: { errors }, watch, setValue } = useFormContext<INotificationFormValues>();
 
-  const { resultState: statuses } = useNotificationFilterOptions({
+  const { resultState: statuses,resultCommon } = useNotificationFilterOptions({
     stateFilters: autoCleanup ? { forUpdate: true } : { forCreate: true }
   });
   const selectItemsStatuses: SelectOption[] = useMemo(
     () => statuses.map(toNotificationSelect),
     [statuses]
+  );
+
+   const selectItemsCommon: SelectOption[] = useMemo(
+    () => resultCommon.map(toNotificationSelectCommon),
+    [resultCommon]
   );
 
   const hasButton = watch('hasButton');
@@ -130,8 +128,7 @@ export const NotificationDetailsFields: React.FC<NotificationDetailsFieldsProps>
             type="text"
             maxLength={60}
             error={!!errors.title}
-            helperText={errors.title?.message}
-            disabled={disabledAll}
+            helperText={errors.title?.message}           
           />
         )}
       />
@@ -150,36 +147,11 @@ export const NotificationDetailsFields: React.FC<NotificationDetailsFieldsProps>
             label="Descripción"
             maxLength={300}
             error={!!errors.subtitle}
-            helperText={errors.subtitle?.message}
-            disabled={disabledAll}
+            helperText={errors.subtitle?.message}           
           />
         )}
       />
-
-      <Controller
-        name="img"
-        control={control}
-        rules={{
-          validate: (v) => (v !== undefined || !!initialImageUrl) || 'Debes asignar una imagen',
-        }}
-        render={({ field, fieldState: { error } }) => (
-          <>
-            <ImageDropzone
-              multiple={false}
-              initialPreviewUrl={initialImageUrl}
-              value={field.value ? [field.value] : []}
-              onFiles={(files) => field.onChange(files[0])}
-              helperText="JPG/PNG hasta 3MB"
-              disabled={disabledAll}
-            />
-            {error && (
-              <Typography color="error" variant="caption">
-                {error.message}
-              </Typography>
-            )}
-          </>
-        )}
-      />
+    
 
       <br />
       <span>¿Esta publicación tendrá un botón?</span>
@@ -266,8 +238,7 @@ export const NotificationDetailsFields: React.FC<NotificationDetailsFieldsProps>
                 options={[
                   { label: 'Sí', value: true },
                   { label: 'No', value: false },
-                ]}
-                disabled={disabledAll}
+                ]}               
               />
             )}
           />
@@ -286,7 +257,7 @@ export const NotificationDetailsFields: React.FC<NotificationDetailsFieldsProps>
                     onChange={wrapStartDateOnChange(field.onChange)}
                     label="Fecha de publicación"
                     size="small"                                  
-                    disabled={disabledAll || !hasPublication}
+                    disabled={!hasPublication}
                     error={!!error}
                     helperText={error?.message}
                   />
@@ -305,7 +276,7 @@ export const NotificationDetailsFields: React.FC<NotificationDetailsFieldsProps>
                     onChange={wrapStartTimeOnChange(field.onChange)} 
                     label="Hora de publicación"
                     size="small"
-                    disabled={disabledAll || !hasPublication}
+                    disabled={!hasPublication}
                     error={!!error}
                     helperText={error?.message}
                   />
@@ -328,8 +299,7 @@ export const NotificationDetailsFields: React.FC<NotificationDetailsFieldsProps>
                 options={[
                   { label: 'Sí', value: true },
                   { label: 'No', value: false },
-                ]}
-                disabled={disabledAll}
+                ]}               
               />
             )}
           />
@@ -348,7 +318,7 @@ export const NotificationDetailsFields: React.FC<NotificationDetailsFieldsProps>
                       onChange={wrapEndDateOnChange(field.onChange)}
                       label="Fecha de caducidad"
                       size="small"
-                      disabled={disabledAll || !hasExpired}
+                      disabled={!hasExpired}
                       error={!!error}                        
                       helperText={error?.message}  
                     />
@@ -367,7 +337,7 @@ export const NotificationDetailsFields: React.FC<NotificationDetailsFieldsProps>
                       onChange={wrapEndTimeOnChange(field.onChange)}
                       label="Hora de caducidad"
                       size="small"
-                      disabled={disabledAll || !hasExpired}
+                      disabled={ !hasExpired}
                       error={!!error}                        
                       helperText={error?.message}  
                     />
@@ -377,7 +347,19 @@ export const NotificationDetailsFields: React.FC<NotificationDetailsFieldsProps>
           </CustomStack>
         </CustomBox>
       </CustomStack>
-
+       <Controller
+        name="notificationCommonTypeId"
+        control={control}
+        rules={{ required: 'El tipo de notificacion es obligatorio', min: 1 }}
+        render={({ field }) => (
+          <CustomSelect
+            {...field}
+            label="Tipo de notificacion"
+            options={selectItemsCommon}
+            error={!!errors.state}            
+          />
+        )}
+      />
       <Controller
         name="state"
         control={control}
@@ -387,8 +369,7 @@ export const NotificationDetailsFields: React.FC<NotificationDetailsFieldsProps>
             {...field}
             label="Estado"
             options={selectItemsStatuses}
-            error={!!errors.state}
-            disabled={disabledState || disabledAll}
+            error={!!errors.state}            
           />
         )}
       />
@@ -396,4 +377,4 @@ export const NotificationDetailsFields: React.FC<NotificationDetailsFieldsProps>
   );
 };
 
-export default NotificationDetailsFields;
+export default NotificationBellDetailsFields;

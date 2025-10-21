@@ -11,6 +11,7 @@ export interface INotificationFormValues{
   buttonLink: string;
   buttonTitle: string;
   hasPublication: boolean;
+  notificationCommonTypeId: string;
   hasExpired: boolean;
   dateFrom: Dayjs | null;
   dateTo: Dayjs | null;

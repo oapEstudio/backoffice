@@ -11,4 +11,5 @@ export interface INotificationUpdateDto{
     timeFrom: Date;
     dateTo: Date;
     timeTo: Date;
+    notificationCommonTypeId?: string;
 }

@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import CustomModal from '../../../../../../components/ui/modal/modal.component';
 import { FormProvider, useForm } from 'react-hook-form';
-import NotificationDetailsFields from '../../../../shared/components/NotificationDetailsFields';
- 
+
 
 import dayjs from 'dayjs';
 import { useGetNotificationById } from '../../../../hooks/useGetNotificationById';
@@ -13,9 +12,12 @@ import type { INotificationUpdateDto } from '../../../../../../../application/dt
 import { dataUrlToFile } from '../../../../../../utils/dataUrlToFile';
 import Loading from '../../../../../../components/ui/loading';
 import type { INotificationFormValues } from '../../../../shared/interface/INotificationFormValues';
-import { NOTIFICATION_ALERT, NOTIFICATION_CAROUSEL } from '../../../../shared/constants/notifications';
+import { NOTIFICATION_ALERT, NOTIFICATION_BELL, NOTIFICATION_CAROUSEL } from '../../../../shared/constants/notifications';
 import { NotificationAlertDetailFields } from '../../../../shared/components/notification-alert-detail-fields/NotificationAlertDetailFields';
- 
+import NotificationDetailsFields from '../../../../shared/components/notification-carousel-detail-fields/NotificationDetailsFields';
+import NotificationBellDetailsFields from '../../../../shared/components/notification-bell-detail-fields/NotificationBellDetailsFields';
+import Typography from '@mui/material/Typography';
+
 interface EditNotificationModalProps {
   open: boolean;
   notificationId: string | null;
@@ -84,6 +86,7 @@ export const EditNotificationModal: React.FC<EditNotificationModalProps> = ({ op
           state: String(n.statusId ?? ''),
           title: n.title ?? '',
           hasButton: !!n.buttonText,
+          notificationCommonTypeId: n.commonTypeId,
           hasPublication: !!n.hasImmediatePublication,
           hasExpired: !!n.hasExpiration,
           dateFrom: n.dateFrom ? dayjs(n.dateFrom) : null,
@@ -118,6 +121,7 @@ export const EditNotificationModal: React.FC<EditNotificationModalProps> = ({ op
         buttonText: data.hasButton ? data.buttonTitle : '',
         buttonLink: data.hasButton ? data.buttonLink : '',
         statusId: Number(data.state),
+        notificationCommonTypeId: data.notificationCommonTypeId,
         dateFrom: data.hasPublication && data.dateFrom ? data.dateFrom.format('YYYY-MM-DD') : (undefined as any),
         timeFrom: data.hasPublication && data.timeFrom ? data.timeFrom.format('HH:mm:ss') : (undefined as any),
         dateTo: data.hasExpired && data.dateTo ? data.dateTo.format('YYYY-MM-DD') : (undefined as any),
@@ -156,8 +160,11 @@ export const EditNotificationModal: React.FC<EditNotificationModalProps> = ({ op
                                                                 />:
           current?.notificationTypeId == NOTIFICATION_ALERT? <NotificationAlertDetailFields 
                                                                     autoCleanup 
-                                                              /> : <><p>future componente</p></>
+                                                              /> :
 
+          current?.notificationTypeId == NOTIFICATION_BELL? <NotificationBellDetailsFields 
+                                                                    autoCleanup
+                                                            /> : <Typography>Error inesperado</Typography>
         }
       </FormProvider>
     </CustomModal>

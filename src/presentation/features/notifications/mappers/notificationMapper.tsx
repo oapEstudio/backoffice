@@ -4,11 +4,12 @@ import type { INotification } from "../../../../domain/entities/INotification";
 import type { SelectOption } from "../../../components/ui/inputs/select/select.interface";
 import type { IRow } from "../../../components/ui/table/table.interface";
 import { formatDate } from "../../../utils/formatDate";
-import { EditActionIcon, DangerIcon } from '../../../components/ui/icons/index';
+import { EditActionIcon, DangerIcon, LinksIcon, InfoIcon, DownloaddIcon, WarningTriangleIcon } from '../../../components/ui/icons/index';
 import { CustomStack } from '../../../components/ui/stack/Stack';
 import type React from "react";
 import IconButton from "@mui/material/IconButton";
 import { NOTIFICATION_ALERT } from "../shared/constants/notifications";
+import { selectedIconsNotificationCommon } from "../shared/utils/selected-icon-notification-common";
 
 export interface INotificationRow extends IRow {
   id?: string;
@@ -94,6 +95,20 @@ export function toNotificationSelect(f: IFilter): SelectOption {
     value: f.id
   }
 }
+
+export function toNotificationSelectCommon(f: IFilter): SelectOption {
+
+  const icon = selectedIconsNotificationCommon(f.id)
+
+  return {
+    label: <CustomStack spacing={2} direction="row" sx={{alignItems: 'center'}}>
+                <>{icon}</>
+                <span>{f.description}</span>
+           </CustomStack>,
+    value: f.id
+  }
+}
+
 
 
 function backgroundCalculed(n: INotification): string | null{

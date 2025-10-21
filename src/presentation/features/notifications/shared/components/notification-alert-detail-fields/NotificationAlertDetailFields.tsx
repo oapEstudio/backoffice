@@ -107,7 +107,7 @@ export const NotificationAlertDetailFields: React.FC<INotificationAlertDetailFie
         rules={{
           required: 'El título es obligatorio',
           minLength: { value: 3, message: 'Mínimo 3 caracteres' },
-          maxLength: 60,
+          maxLength: 110,
           validate: { minTrimmed: minTrimmed(3) }
         }}
         render={({ field }) => (
@@ -115,7 +115,7 @@ export const NotificationAlertDetailFields: React.FC<INotificationAlertDetailFie
             {...field}
             label="Título"
             type="text"
-            maxLength={60}
+            maxLength={110}
             error={!!errors.title}
             helperText={errors.title?.message}           
           />

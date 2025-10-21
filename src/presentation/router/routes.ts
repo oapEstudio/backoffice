@@ -45,6 +45,13 @@ export const NEW_ALERT: IRoute = {
     children: [],
     viewNav: true
 }
+export const NEW_BELL: IRoute = {
+    title: 'Nueva campana',
+    order:  'NotificacionCampana',
+    name: '/new_bell_notification',
+    children: [],
+    viewNav: true
+}
 export const FUNTIONALITIES: IRoute = {
     title: 'Menús',
     order:  'Menús',
