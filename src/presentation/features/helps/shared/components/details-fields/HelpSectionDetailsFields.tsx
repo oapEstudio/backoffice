@@ -17,7 +17,7 @@ interface HelpSectionDetailsFieldsProps {
 }
 
 export const HelpSectionDetailsFields: React.FC<HelpSectionDetailsFieldsProps> = ({
-  titleLabel = 'Título',
+  titleLabel = 'Título de la sección',
   disabledAll = false,
   disabledState = false,
   selectItemsStatuses = []

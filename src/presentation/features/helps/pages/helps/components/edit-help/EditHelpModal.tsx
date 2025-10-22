@@ -2,10 +2,8 @@ import React from "react";
 import { FormProvider } from "react-hook-form";
 import CustomModal from "../../../../../../components/ui/modal/modal.component";
 import { HELP_TYPES } from "../../../../shared/constants/helps";
-import HelpSectionDetailsFields from "../../../../shared/components/details-fields/HelpSectionDetailsFields";
 import { useEditHelpModal } from "../../../../hooks/useEditHelpModal";
 import Loading from "../../../../../../components/ui/loading";
-import { useHelpFilterOptions } from "../../../../hooks/useHelpsFilterOptions";
 
 interface EditHelpModalProps {
   open: boolean;

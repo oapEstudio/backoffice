@@ -32,7 +32,7 @@ export const useEditHelpModal = ({
   const { fetchById, loading: loadingFetch } = useGetHelpById();
   const { update, loading: loadingUpdate } = useUpdateHelp()
   const { result: statuses } = useGetHelpStatus({
-    stateFilters: { forCreate: true }
+    stateFilters: { forUpdate: true }
   });
 
   const selectItemsStatuses = useMemo(
@@ -67,8 +67,8 @@ export const useEditHelpModal = ({
         form.reset({
           name: help.name,
           state: String(help.statusId ?? ''),
-          description: help.description,
-          parentId: help.parentId,
+          description: help.description ?? '',
+          parentId: help.parentId  ?? '',
           title: help.title,
           document: [],
           helpTypeId: String(help.helpTypeId),
@@ -89,7 +89,7 @@ export const useEditHelpModal = ({
 
     try {
       const payload: IHelpUpdateDto = {
-        description: data.title,
+        description: data.description ? data.description : '',
         name: data.name,
         title: data.title ? data.title : '',
         statusId: Number(data.state),

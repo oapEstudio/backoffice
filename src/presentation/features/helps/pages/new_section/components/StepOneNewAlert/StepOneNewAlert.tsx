@@ -1,10 +1,14 @@
-import React from 'react'
-import StepOneGeneric from '../../../../shared/components/StepOneGeneric'
+import type { SelectOption } from '../../../../../../components/ui/inputs/select/select.interface';
+import HelpSectionDetailsFields from '../../../../shared/components/details-fields/HelpSectionDetailsFields'
 
-const StepOneNewAlert = () => {
-  return (
-    <StepOneGeneric profilesLabel="Seleccione los perfiles que podrán ver este sección" remountKey="open" />
-  )
+interface StepOneNewAlertProps {
+  selectItemsStatuses: SelectOption[];
 }
 
-export default StepOneNewAlert
+export const StepOneNewAlert: React.FC<StepOneNewAlertProps> = ({
+  selectItemsStatuses = []
+}) => {
+  return (
+    <HelpSectionDetailsFields selectItemsStatuses={selectItemsStatuses} />
+  )
+}
