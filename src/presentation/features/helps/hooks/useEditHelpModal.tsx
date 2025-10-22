@@ -95,7 +95,7 @@ export const useEditHelpModal = ({
         statusId: Number(data.state),
         parentId: '',
         link: '',
-        helpTypeId: HELP_SECTION,
+        helpTypeId: Number(data.helpTypeId),
         helpDocumentTypeId: '',
         documents: []
       };

@@ -41,6 +41,7 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
     form.append('name', String(dto.name ?? ''));
     form.append('title', String(dto.title ?? ''));
     form.append('helpTypeId', String(dto.helpTypeId ?? ''));
+    form.append('description', String(dto.description ?? ''));
     form.append('parentId', String(dto.parentId ?? ''));
 
     if (dto.documents instanceof File) {
@@ -69,6 +70,7 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
     const form = new FormData();
     form.append('name', String(dto.name ?? ''));
     form.append('title', String(dto.title ?? ''));
+    form.append('helpTypeId', String(dto.helpTypeId ?? ''));
     form.append('description', String(dto.description ?? ''));
     form.append('parentId', String(dto.parentId ?? ''));
 
