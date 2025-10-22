@@ -15,8 +15,9 @@ import StepTwoNewAlert from "./components/StepTwoNewAlert/StepTwoNewAlert";
 
 export const NewArticlePage = () => {
 
-  const { contentStepRef, form, navSteps, state, onSubmit, handleBack, handleNext, creating, selectItemsStatuses, selectItemsSection } = useNewArticlePage();
+  const { contentStepRef, form, navSteps, state, onSubmit, handleBack, handleNext, creating, selectItemsStatuses, isStepValid } = useNewArticlePage();
 
+  console.log("es valido",isStepValid)
   return (
     <ContainerPage description="NewSectionPage" title={`${HELP.title} - ${NEW_ARTICLE.title}`} titleSEO='Gestión de ayuda - Alta sección'>
       <div ref={contentStepRef} />
@@ -31,7 +32,7 @@ export const NewArticlePage = () => {
           </CustomBox>
         :
           <CustomBox sx={{ p: '0 4rem', minHeight: 300, paddingTop: '2rem' }}>
-            {state.step == 1 ? <StepOneNewAlert selectItemsSection={selectItemsSection} selectItemsStatuses={selectItemsStatuses} /> : <></>}
+            {state.step == 1 ? <StepOneNewAlert selectItemsStatuses={selectItemsStatuses} /> : <></>}
             {state.step == 2 ? <StepTwoNewAlert /> : <></>}
           </CustomBox> }
         <CustomBox sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
@@ -43,7 +44,7 @@ export const NewArticlePage = () => {
               labelNext={state.labelNext}
               handleNext={state.step == eStep.STEP_CONFIRMATION ? form.handleSubmit(onSubmit) : handleNext}
               handleBack={handleBack}
-              isValid={form.formState.isValid}
+              isValid={isStepValid}
               isLast={false}
             />
           )}

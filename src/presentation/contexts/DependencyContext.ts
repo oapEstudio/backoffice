@@ -72,6 +72,7 @@ export interface IDependencies{
   updateNotification: UpdateNotificationUseCase,
   getHelps: GetHelpUseCase,
   getHelpTypes: GetDatasetFiltersUseCase,
+  getHelpSections: GetDatasetFiltersUseCase,
   getHelpStatuses: GetDatasetFiltersUseCase,
   createHelp: CreateHelpUseCase,
   getHelpById: GetHelpByIdUseCase,
@@ -98,6 +99,7 @@ const urlNotificationCommonTypes = resourseDimDatasetNotification.endpoint.repla
 /**Help Desk */
 const urlHelpStatus = resourseDimDatasetHelp.endpoint.replace('{dataset}','statuses');
 const urlHelpTypes = resourseDimDatasetHelp.endpoint.replace('{dataset}','types');
+const urlHelpsSections = resourseDimDatasetHelp.endpoint.replace('{dataset}','sections');
 
 export const defaultDependencies: IDependencies = {
   getProfiles: new GetProfilesUseCase(profileRepo),
@@ -127,6 +129,7 @@ export const defaultDependencies: IDependencies = {
   updateNotification: new UpdateNotificationUseCase(notificationRepo),
   getHelps: new GetHelpUseCase(helpRepo),
   getHelpTypes: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpTypes,resourseDimDatasetHelp.version)),
+  getHelpSections: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpsSections,resourseDimDatasetHelp.version)),
   getHelpStatuses: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpStatus,resourseDimDatasetHelp.version)),
   createHelp: new CreateHelpUseCase(helpRepo),
   getHelpById: new GetHelpByIdUseCase(helpRepo),

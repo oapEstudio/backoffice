@@ -73,7 +73,7 @@ export function useNewSectionPage() {
       const fieldsToCheck = state.field as Array<keyof IHelpFormValues>;
 
       const isValid = fieldsToCheck.every(field => {
-        const fieldValue = form.getValues(field);
+      const fieldValue = form.getValues(field);
 
         if (Array.isArray(fieldValue)) {
           return fieldValue.length > 0;
@@ -168,16 +168,6 @@ export function useNewSectionPage() {
       }
     }
   }
-
-  const isCurrentStepValid = () => {
-    const fieldsToCheck = state.field as Array<keyof IHelpFormValues>;
-    return fieldsToCheck.every(field => {
-      const fieldState = form.getFieldState(field);
-      console.log(field, fieldState)
-      return !fieldState.invalid && form.getValues(field) !== '';
-    });
-  };
-
 
   const handleBack = () => {
 

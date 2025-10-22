@@ -55,6 +55,7 @@ export const StepTwoGeneric: React.FC<StepTwoGenericProps> = ({
             {...field}
             label={nameLabel}
             type="text"
+            required
             maxLength={MAX_LENGTH_INPUT}
             error={!!errors.name}
             helperText={errors.name?.message}

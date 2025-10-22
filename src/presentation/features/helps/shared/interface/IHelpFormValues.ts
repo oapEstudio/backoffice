@@ -3,7 +3,7 @@ import type { SelectOption } from "../../../../components/ui/inputs/multiselect/
 export interface IHelpFormValues {
   name: string;
   description: string;
-  parentId: string | null;
+  parentId?: string;
   profiles: {id: string,name: string}[],
   title: string;
   document: File[],

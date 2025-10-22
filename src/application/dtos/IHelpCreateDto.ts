@@ -4,7 +4,7 @@ export interface IHelpCreateDto {
   name: string;
   title: string;
   description: string;
-  parentId?: string;
+  parentId: string;
   parent?: string;
   link: string;
   statusId: number | null;
