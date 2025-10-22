@@ -13,7 +13,7 @@ import { styles } from '../../../../components/ui/inputs/styles';
 import type { IHelpFormValues } from '../interface/IHelpFormValues';
 
 
-type StepOneGenericProps = {
+type StepTwoGenericProps = {
   remountKey?: string;
   nameLabel?: string;
   profilesLabel?: string;
@@ -21,7 +21,7 @@ type StepOneGenericProps = {
   requireProfiles?: boolean;
 };
 
-export const StepOneGeneric: React.FC<StepOneGenericProps> = ({
+export const StepTwoGeneric: React.FC<StepTwoGenericProps> = ({
   remountKey,
   nameLabel = 'Nombre',
   profilesLabel = 'Seleccione los perfiles que podrán ver esta sección',
@@ -98,4 +98,4 @@ export const StepOneGeneric: React.FC<StepOneGenericProps> = ({
   );
 };
 
-export default StepOneGeneric;
+export default StepTwoGeneric;

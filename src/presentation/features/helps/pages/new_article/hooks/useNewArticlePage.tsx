@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer, useRef, useState } from "react";
+import { useMemo, useReducer, useRef, useState } from "react";
 import type { StepType } from "../../../../../components/ui/step/step-navigation-backoffice";
 import { StepNumber } from "../../../shared/components/step-number/StepNumber";
 import { useForm } from "react-hook-form";
@@ -9,7 +9,7 @@ import { navStepSelected } from "../../../../../utils/navStepSelected";
 import { useScrollToTopOnStep } from "../../../../../utils/useScrollToTopOnStep";
 import type { IHelpFormValues } from "../../../shared/interface/IHelpFormValues";
 import { ActionStepReducer, getActionStepInitialState, eStep } from "../reducers/ActionStepReducer";
-import { HELP_SECTION } from "../../../shared/constants/helps";
+import { HELP_ARTICLE, HELP_SECTION } from "../../../shared/constants/helps";
 import { useCreateHelp } from "../../../hooks/useCreateHelp";
 import { useGetHelpStatus } from "../../../hooks/useGetHelpsState";
 import { toHelpSelect } from "../../../mappers/helpCreateMapper";
@@ -19,7 +19,7 @@ const navStepsInit: StepType[] = [{
   active: true,
   icon: <StepNumber number={1} />,
   show: true,
-  title: 'Sección'
+  title: 'Artículo'
 
 }, {
   active: false,
@@ -29,13 +29,12 @@ const navStepsInit: StepType[] = [{
 },];
 
 
-export function useNewSectionPage() {
+export function useNewArticlePage() {
   const contentStepRef = useRef<HTMLDivElement>(null);
   const [navSteps, setNavSteps] = useState(navStepsInit);
   const navigate = useNavigate();
-  const [isStepValid, setIsStepValid] = useState(false);
   const [state, dispatch] = useReducer(ActionStepReducer, getActionStepInitialState());
-  const { create, loading: creating, error: createError } = useCreateHelp();
+  const { create, loading: creating, error: createError } = useCreateHelp(); 
   const { result: statuses } = useGetHelpStatus({
     stateFilters: { forCreate: true }
   });
@@ -43,6 +42,15 @@ export function useNewSectionPage() {
   const selectItemsStatuses = useMemo(
     () => statuses.map(toHelpSelect),
     [statuses]
+  );
+
+  const { result: sectionItems } = useGetHelpStatus({
+    stateFilters: { forCreate: true }
+  });
+
+  const selectItemsSection = useMemo(
+    () => sectionItems.map(toHelpSelect),
+    [sectionItems]
   );
 
   const form = useForm<IHelpFormValues>({
@@ -68,36 +76,6 @@ export function useNewSectionPage() {
     offset: 72,
   });
 
-  useEffect(() => {
-    const validateCurrentStep = async () => {
-      const fieldsToCheck = state.field as Array<keyof IHelpFormValues>;
-
-      const isValid = fieldsToCheck.every(field => {
-        const fieldValue = form.getValues(field);
-
-        if (Array.isArray(fieldValue)) {
-          return fieldValue.length > 0;
-        }
-
-        return fieldValue !== '' && fieldValue !== null && fieldValue !== undefined;
-      });
-
-      setIsStepValid(isValid);
-    };
-
-    validateCurrentStep();
-
-    const subscription = form.watch((_, { name }) => {
-      const fieldsToCheck = state.field as Array<keyof IHelpFormValues>;
-      if (name && fieldsToCheck.includes(name as keyof IHelpFormValues)) {
-        validateCurrentStep();
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [form, state.field, state.step]);
-
-
   const onSubmit = async (data: IHelpFormValues) => {
     try {
 
@@ -114,15 +92,15 @@ export function useNewSectionPage() {
         title: data.title ? data.title : '',
         profiles: data.profiles.map(x => x.id),
         statusId: Number(data.state),
-        parentId: '',
+        parentId: 'a6d0e767-30c0-4b44-843c-445b09444787',
         link: '',
-        helpTypeId: HELP_SECTION,
+        helpTypeId: HELP_ARTICLE,
         helpDocumentTypeId: '',
         documents: []
       });
 
       Toast({
-        message: 'Sección creada correctamente',
+        message: 'Artículo creado correctamente',
         type: eToast.Success
       });
 
@@ -130,53 +108,47 @@ export function useNewSectionPage() {
 
     } catch (e) {
       Toast({
-        message: 'Error al crear la sección',
+        message: 'Error al crear el artículo',
         type: eToast.Error
       });
 
       dispatch({
         type: 'STEP_CONFIRMATION',
-        payload: '',
+        payload: ''
       });
     }
   }
 
-
   const handleNext = async () => {
-    // Validar solo los campos del paso actual
-    const fieldsToValidate = state.field as Array<keyof IHelpFormValues>;
-    const isValid = await form.trigger(fieldsToValidate);
-
-    if (!isValid) return;
 
     switch (state.step) {
+
       case eStep.STEP_ONE: {
+
         setNavSteps(navStepSelected(navSteps, state.step + 1));
+
         dispatch({
           type: 'STEP_CONFIRMATION',
-          payload: '',
+          payload: ''
         });
+
         break;
+
       }
       case eStep.STEP_CONFIRMATION: {
+
         setNavSteps(navStepSelected(navSteps, state.step + 1));
+
         dispatch({
           type: 'SUCCESS',
-          payload: '',
+          payload: ''
         });
+
         break;
+
       }
     }
   }
-
-  const isCurrentStepValid = () => {
-    const fieldsToCheck = state.field as Array<keyof IHelpFormValues>;
-    return fieldsToCheck.every(field => {
-      const fieldState = form.getFieldState(field);
-      console.log(field, fieldState)
-      return !fieldState.invalid && form.getValues(field) !== '';
-    });
-  };
 
 
   const handleBack = () => {
@@ -195,7 +167,7 @@ export function useNewSectionPage() {
 
         dispatch({
           type: 'STEP_ONE',
-          payload: '',
+          payload: ''
         });
 
         break;
@@ -207,13 +179,13 @@ export function useNewSectionPage() {
   return {
     creating,
     selectItemsStatuses,
+    selectItemsSection,
     contentStepRef,
     form,
     navSteps,
     state,
     handleBack,
     onSubmit,
-    handleNext,
-    isStepValid
+    handleNext
   }
 }

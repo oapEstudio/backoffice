@@ -6,6 +6,8 @@ export enum eStep {
 
 export interface ActionStepState {
     field: string[];
+    isValidStep1?: boolean;
+    isValidStep2?: boolean
     labelNext: string;
     labelPrev: string;
     step: number | eStep;
@@ -35,6 +37,7 @@ export const ActionStepReducer = (state: ActionStepState, action: ActionStepType
 
             const step_one: ActionStepState = {
                 field: ['title', 'state'],
+                isValidStep1: false,
                 labelNext: 'Siguiente',
                 labelPrev: 'Cancelar',
                 step: 1
@@ -46,7 +49,8 @@ export const ActionStepReducer = (state: ActionStepState, action: ActionStepType
         case 'STEP_CONFIRMATION': {
 
             const step_two: ActionStepState = {
-                field: ['name', 'profiles'],
+                field: ['title', 'state', 'name', 'profiles'],
+                isValidStep1: true,
                 labelNext: 'Confirmar',
                 labelPrev: 'Atrás',
                 step: 2
@@ -58,7 +62,9 @@ export const ActionStepReducer = (state: ActionStepState, action: ActionStepType
         case 'SUCCESS': {
 
             const step_three: ActionStepState = {
-                field: ['name', 'profiles', 'title', 'subtitle'],
+                field: ['title', 'state', 'name', 'profiles'],
+                isValidStep1: true,
+                isValidStep2: true,
                 labelNext: 'Guardando...',
                 labelPrev: 'Atrás',
                 step: 3
