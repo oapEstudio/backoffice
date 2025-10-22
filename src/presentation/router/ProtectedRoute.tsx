@@ -12,6 +12,7 @@ import { NewAlertPage } from '../features/notifications/pages/new_alert/NewAlert
 import { NewBellPage } from '../features/notifications/pages/new_bell/NewBellPage';
 import { HelpsPage } from '../features/helps/pages/helps/HelpsPage';
 import { NewSectionPage } from '../features/helps/pages/new_section/NewSectionPage';
+import { NewDynamicPagesPage } from '../features/dynamic-page/pages/new_page/NewDynamicPagesPage';
 
 
 export const ProtectedRoute = () => (
@@ -56,7 +57,7 @@ export const ProtectedRoute = () => (
      <Route
       path={NEW_DYNAMIC_PAGE.name}
       element={                  
-              <NewDynamicPagePage />          
+              <NewDynamicPagesPage />          
       }
     />
      <Route
