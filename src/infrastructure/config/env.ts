@@ -153,7 +153,7 @@ export const env = {
           version: 'v1'
         },
          status: {
-          endpoint: 'helps/{id}πen',   
+          endpoint: 'helps/{id}/status',   
           version: 'v1'
         }
       }
