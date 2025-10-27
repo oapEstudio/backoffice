@@ -15,7 +15,6 @@ export const ActionStep: React.FC<ActionStepProps> = ({
   handleNext,
   handleBack,
   isValid,
-  isLast,
   labelNext,
   labelBack  
 }) => {

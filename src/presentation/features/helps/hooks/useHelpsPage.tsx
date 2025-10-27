@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { IAction } from '../../../components/ui/table/table-actions/actions.interface';
 import type { IRow } from '../../../components/ui/table/table.interface';
 import type { IHelp } from '../../../../domain/entities/IHelp';
@@ -11,6 +11,8 @@ import type { IFilterHelpsResult } from '../pages/helps/components/filter-help-p
 import { SelectCreateHelp } from '../pages/helps/components/select-create-help/SelectHelp';
 import { eToast, Toast } from '../../../components/ui/toast/CustomToastService';
 import { useHelpCancellation } from './useCancellationHelp';
+import { useGetHelpsProfiles } from './useGetHelpsProfiles';
+import { HELP_INVISIBLE, HELP_SECTION } from '../shared/constants/helps';
 
 export const useHelpPage = () => {
   const { setParams, params, result, loading } = useGetHelps(INITIAL_PARAMS_TABLE);
@@ -21,6 +23,8 @@ export const useHelpPage = () => {
   const refresh = useCallback(() => setParams(p => ({ ...p })), [setParams]);
   const [openProfilesModal, setOpenProfilesModal] = useState(false);
   const [selectedProfiles, setSelectedProfiles] = useState<Array<{ id: string; name: string }>>([]);
+  const [leftSeedProfiles, setLeftSeedProfiles] = useState<Array<{ id: string; name: string }>>([]);
+  const [selectedHelpParentId, setSelectedHelpParentId] = useState<string>('');
   const [selectedHelpId, setSelectedHelpId] = useState<string>('');
   const [openDelete, setOpenDelete] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<string>('');
@@ -61,34 +65,35 @@ export const useHelpPage = () => {
   const callbackProfiles = useCallback((h: IHelp) => {
 
     setSelectedHelpId(String(h.id));
+    setSelectedHelpParentId(String(h.helpTypeId !== HELP_SECTION && h.helpTypeId !== HELP_INVISIBLE ? h.parentId : ''));
 
-    const profs = (h.profile ?? []).map(p => ({ id: String(p.profileId), name: p.profiles.description }));
+    const profs = (h.profile ?? []).map(p => ({ id: String(p.profileId), name: p.profiles.name }));
 
     setSelectedProfiles(profs);
     setOpenProfilesModal(true);
 
   }, []);
 
-    const confirmDelete = useCallback((id: string) => {
-      setPendingDeleteId(String(id));
-      setOpenDelete(true);
-    },[]);
+  const confirmDelete = useCallback((id: string) => {
+    setPendingDeleteId(String(id));
+    setOpenDelete(true);
+  }, []);
 
-    const doConfirmDelete = useCallback(async () => {
-      try {
-    
-        setOpenDelete(false);
-    
-        await cancellation(pendingDeleteId);
-    
-        Toast({ message: 'Item de ayuda dado de baja correctamente', type: eToast.Success })
-    
-        refresh();
-    
-      } catch {
-        Toast({ message: 'Error al dar de baja el item de ayuda', type: eToast.Error })
-      }
-    }, [cancellation, pendingDeleteId, refresh]);
+  const doConfirmDelete = useCallback(async () => {
+    try {
+
+      setOpenDelete(false);
+
+      await cancellation(pendingDeleteId);
+
+      Toast({ message: 'Item de ayuda dado de baja correctamente', type: eToast.Success })
+
+      refresh();
+
+    } catch {
+      Toast({ message: 'Error al dar de baja el item de ayuda', type: eToast.Error })
+    }
+  }, [cancellation, pendingDeleteId, refresh]);
 
   const callbackCancelled = useCallback((n: IHelp) => {
 
@@ -133,6 +138,16 @@ export const useHelpPage = () => {
     );
   }, [clearFilters, hasFilters, setOpenFilter]);
 
+  const { result: profiles, loading: isLoadingProfiles } = useGetHelpsProfiles(
+    selectedHelpParentId ? { parentFilter: { parentId: selectedHelpParentId }} : undefined);
+
+  useEffect(() => {
+    if (profiles && Array.isArray(profiles)) {
+      setLeftSeedProfiles(profiles);
+      setLeftSeedProfiles(profiles);
+    }
+  }, [profiles]);
+
   return {
     // State
     params,
@@ -143,9 +158,12 @@ export const useHelpPage = () => {
     editHelpId,
     editHelpType,
     selectedHelpId,
+    leftSeedProfiles,
     openEdit,
     selectedProfiles,
     pendingDeleteId,
+    isLoadingProfiles,
+
     // Computed
     currentFilters,
     hasFilters,

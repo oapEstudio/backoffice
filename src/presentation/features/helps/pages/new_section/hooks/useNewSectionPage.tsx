@@ -35,8 +35,8 @@ export function useNewSectionPage() {
   const navigate = useNavigate();
   const [isStepValid, setIsStepValid] = useState(false);
   const [state, dispatch] = useReducer(ActionStepReducer, getActionStepInitialState());
-  const { create, loading: creating, error: createError } = useCreateHelp();
-  const { result: statuses } = useGetHelpStatus({
+  const { create, loading: creating } = useCreateHelp();
+  const { result: statuses, loading: isLoadingStatus } = useGetHelpStatus({
     stateFilters: { forCreate: true }
   });
 
@@ -198,6 +198,7 @@ export function useNewSectionPage() {
     creating,
     selectItemsStatuses,
     contentStepRef,
+    isLoadingStatus,
     form,
     navSteps,
     state,

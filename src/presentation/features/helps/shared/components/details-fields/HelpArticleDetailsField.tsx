@@ -71,7 +71,7 @@ export const HelpArticleDetailsFields: React.FC<HelpArticleDetailsFieldsProps> =
         rules={{
           required: 'El título es obligatorio',
           minLength: { value: 3, message: 'Mínimo 3 caracteres' },
-          maxLength: 60,
+          maxLength: MAX_LENGTH_INPUT,
           validate: { minTrimmed: minTrimmed(3) },
         }}
         render={({ field }) => (
@@ -80,7 +80,7 @@ export const HelpArticleDetailsFields: React.FC<HelpArticleDetailsFieldsProps> =
             required
             label={titleLabel}
             type="text"
-            maxLength={60}
+            maxLength={MAX_LENGTH_INPUT}
             error={!!errors.title}
             helperText={errors.title?.message}
             disabled={disabledAll}
@@ -119,6 +119,7 @@ export const HelpArticleDetailsFields: React.FC<HelpArticleDetailsFieldsProps> =
           <CustomSelect
             {...field}
             label="Estado"
+            required
             options={selectItemsStatuses}
             error={!!errors.state}
             disabled={disabledState || disabledAll}

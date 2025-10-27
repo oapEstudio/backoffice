@@ -10,7 +10,7 @@ export function useGetHelpSections(search?: string) {
 
   useEffect(() => {
     setLoading(true);
-    getHelpSections.execute({ filters: { search: search, pageSize: 1000} })
+    getHelpSections.execute({ filters: { search: search, pageSize: 500} })
       .then(res => setResult(res.filter(r => r.description !== '')))
       .catch(err => setError(err instanceof Error ? err : new Error(String(err))))
       .finally(() => setLoading(false));

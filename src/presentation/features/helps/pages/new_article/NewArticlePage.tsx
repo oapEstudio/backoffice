@@ -15,9 +15,8 @@ import StepTwoNewAlert from "./components/StepTwoNewAlert/StepTwoNewAlert";
 
 export const NewArticlePage = () => {
 
-  const { contentStepRef, form, navSteps, state, onSubmit, handleBack, handleNext, creating, selectItemsStatuses, isStepValid } = useNewArticlePage();
+  const { contentStepRef, form, navSteps, state, onSubmit, handleBack, handleNext, creating, selectItemsStatuses, leftSeedProfiles, isLoadingProfiles, isLoadingStatus, isStepValid } = useNewArticlePage();
 
-  console.log("es valido",isStepValid)
   return (
     <ContainerPage description="NewSectionPage" title={`${HELP.title} - ${NEW_ARTICLE.title}`} titleSEO='Gestión de ayuda - Alta sección'>
       <div ref={contentStepRef} />
@@ -26,14 +25,14 @@ export const NewArticlePage = () => {
           <StepNavigationBackOffice steps={navSteps} />
         </StepperWrapperBackOfficeDefault>
         
-        {creating ? 
+        {creating || isLoadingStatus  ? 
            <CustomBox sx={{ p: '0 4rem', minHeight: 300, paddingTop: '10rem' }}>
               <center><Loading /></center> 
           </CustomBox>
         :
           <CustomBox sx={{ p: '0 4rem', minHeight: 300, paddingTop: '2rem' }}>
             {state.step == 1 ? <StepOneNewAlert selectItemsStatuses={selectItemsStatuses} /> : <></>}
-            {state.step == 2 ? <StepTwoNewAlert /> : <></>}
+            {state.step == 2 ? <StepTwoNewAlert leftSeedProfiles={leftSeedProfiles} isLoadingProfiles={isLoadingProfiles} /> : <></>}
           </CustomBox> }
         <CustomBox sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
           {false ? (

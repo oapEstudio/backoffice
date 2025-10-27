@@ -32,7 +32,7 @@ export const HelpSectionDetailsFields: React.FC<HelpSectionDetailsFieldsProps> =
         rules={{
           required: 'El título es obligatorio',
           minLength: { value: 3, message: 'Mínimo 3 caracteres' },
-          maxLength: 60,
+          maxLength: MAX_LENGTH_INPUT,
           validate: { minTrimmed: minTrimmed(3) }
         }}
         render={({ field }) => (
@@ -41,7 +41,7 @@ export const HelpSectionDetailsFields: React.FC<HelpSectionDetailsFieldsProps> =
             label={titleLabel}
             type="text"
             required
-            maxLength={60}
+            maxLength={MAX_LENGTH_INPUT}
             error={!!errors.title}
             helperText={errors.title?.message}
             disabled={disabledAll}

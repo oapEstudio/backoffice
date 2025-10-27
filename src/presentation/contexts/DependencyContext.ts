@@ -79,6 +79,7 @@ export interface IDependencies{
   updateHelpProfiles: UpdateHelpProfilesUseCase,
   updateHelp: UpdateHelpUseCase,
   cancellationHelp: CancellationHelpUseCase,
+  getHelpProfiles: GetDatasetFiltersUseCase,
 }
 
 const resourseDimDatasetProfile = env.resources.profiles.dim.dataset;
@@ -95,11 +96,11 @@ const urlNotificationStatus = resourseDimDatasetNotification.endpoint.replace('{
 const urlNotificationTypes = resourseDimDatasetNotification.endpoint.replace('{dataset}','types');
 const urlNotificationCommonTypes = resourseDimDatasetNotification.endpoint.replace('{dataset}','commontypes');
 
-// TODO REVISAR SI ESTA OK 
 /**Help Desk */
 const urlHelpStatus = resourseDimDatasetHelp.endpoint.replace('{dataset}','statuses');
 const urlHelpTypes = resourseDimDatasetHelp.endpoint.replace('{dataset}','types');
 const urlHelpsSections = resourseDimDatasetHelp.endpoint.replace('{dataset}','sections');
+const urlHelpsProfiles = resourseDimDatasetHelp.endpoint.replace('{dataset}','profiles');
 
 export const defaultDependencies: IDependencies = {
   getProfiles: new GetProfilesUseCase(profileRepo),
@@ -131,6 +132,7 @@ export const defaultDependencies: IDependencies = {
   getHelpTypes: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpTypes,resourseDimDatasetHelp.version)),
   getHelpSections: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpsSections,resourseDimDatasetHelp.version)),
   getHelpStatuses: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpStatus,resourseDimDatasetHelp.version)),
+  getHelpProfiles: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpsProfiles,resourseDimDatasetHelp.version)),
   createHelp: new CreateHelpUseCase(helpRepo),
   getHelpById: new GetHelpByIdUseCase(helpRepo),
   updateHelpProfiles: new UpdateHelpProfilesUseCase(helpRepo),

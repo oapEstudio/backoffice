@@ -15,7 +15,7 @@ import StepTwoNewAlert from "./components/StepTwoNewAlert/StepTwoNewAlert";
 
 export const NewSectionPage = () => {
 
-  const { contentStepRef, form, navSteps, state, onSubmit, handleBack, handleNext, creating, selectItemsStatuses, isStepValid } = useNewSectionPage();
+  const { contentStepRef, form, navSteps, state, onSubmit, handleBack, handleNext, creating, selectItemsStatuses, isLoadingStatus, isStepValid } = useNewSectionPage();
 
   return (
     <ContainerPage description="NewSectionPage" title={`${HELP.title} - ${NEW_SECTION.title}`} titleSEO='Gestión de ayuda - Alta sección'>
@@ -25,7 +25,7 @@ export const NewSectionPage = () => {
           <StepNavigationBackOffice steps={navSteps} />
         </StepperWrapperBackOfficeDefault>
         
-        {creating ? 
+        { creating || isLoadingStatus ? 
            <CustomBox sx={{ p: '0 4rem', minHeight: 300, paddingTop: '10rem' }}>
               <center><Loading /></center> 
           </CustomBox>
