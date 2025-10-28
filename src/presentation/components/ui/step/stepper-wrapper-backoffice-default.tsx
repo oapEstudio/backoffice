@@ -31,7 +31,6 @@ const StepperContainer = styled(
     paddingLeft: '5%',
     paddingRight: '5%',
     overflow: 'auto',
-    fontFamily: 'Roboto, Arial, Helvetica, sans-serif',
     fontStyle: 'normal',
     fontWeight: 'normal',
     width: width,

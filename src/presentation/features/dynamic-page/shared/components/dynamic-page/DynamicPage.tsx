@@ -3,51 +3,45 @@ import { CustomGrid } from '../../../../../components/ui/grid/CustomGrid'
 import { CustomBox } from '../../../../../components/ui/box/CustomBox'
 import { colors } from '../../../../../common/colors'
 import { CustomStack } from '../../../../../components/ui/stack/Stack'
+import { SectionsDynamicPage } from '../../../pages/new_page/components/sections-page/SectionsDynamicPage'
+import type { ISectionPage } from '../../../pages/new_page/components/section-page/SectionPage'
 
 
-interface IElement{
-    text: string;
-}
-interface ISection{
-    order: number;
-    elements: IElement[]; 
-
-}
 export interface IDynamicPageProps{
     isMenu: boolean;
-    sections: ISection[];
+    isEdit: boolean;
+    sections: ISectionPage[];
+    handleDeleteSections: (id: number) => void;
+    handleAddElement: (id: number) => void;
+    handleDeleteElement: (id: number) => void;
 }
 
-export const DynamicPage: React.FC<IDynamicPageProps> = ({isMenu,sections}) => {
-  return (
-    <>
-      <CustomGrid  container size={2} sx={{backgroundColor: colors.palette.primary.main}}>
-          <CustomBox sx={{margin: 2, width: '100%'}}>
-              <p>sizebar</p>
-          </CustomBox>
-      </CustomGrid>
-      <CustomGrid container size={isMenu? 10 : 12} sx={{justifyContent: 'center', backgroundColor: colors.palette.primary.generalBackgroundTwo}}>
-          <CustomStack direction='column' spacing={2} >
-               
-                 {
-                            sections.length>0? sections.map(section=>{
-                            
-                                return  <CustomBox sx={{ flexGrow: 1 }}>
-                                                <CustomGrid container spacing={1}>
-                                                    {section.elements.length>0? section.elements.map((element,index)=>{
-                                                        return <CustomGrid  sx={{backgroundColor: 'white'}} 
-                                                                            size={section.elements.length>6? 12 : (12/ section.elements.length) } >
-                                                                    <p>{element.text} posicion({index}) </p>
-                                                              </CustomGrid>
-                                                    }): <></>}
-                                                </CustomGrid>
-                                        </CustomBox>  
+export const DynamicPage: React.FC<IDynamicPageProps> = ({isEdit = true,isMenu,sections, handleDeleteSections, handleAddElement, handleDeleteElement}) => {
 
-                            }): <></>
-                }                   
-                          
-          </CustomStack>
-      </CustomGrid>
-    </>
+
+  return (
+   <CustomGrid container sx={{minHeight: 500}}>
+        <CustomGrid  container size={2} sx={{backgroundColor: colors.palette.primary.main}}>
+            <CustomBox sx={{margin: 2, width: '100%'}}>
+                <p>sizebar</p>
+            </CustomBox>
+        </CustomGrid>
+        <CustomGrid container size={isMenu? 10 : 12} sx={{ backgroundColor: colors.palette.primary.generalBackgroundTwo}}>
+            <CustomStack direction='column' spacing={2} sx={{width: '100%'}}>
+                
+                    {
+                        sections.length >0 ? 
+                                            <SectionsDynamicPage 
+                                                sections={sections} 
+                                                isEdit={isEdit} 
+                                                handleDeleteSections={handleDeleteSections} 
+                                                handleAddElement={handleAddElement} 
+                                                handleDeleteElement={handleDeleteElement} /> : 
+                                            <></>
+                    }                   
+                            
+            </CustomStack>
+        </CustomGrid>
+   </CustomGrid>
   )
 }

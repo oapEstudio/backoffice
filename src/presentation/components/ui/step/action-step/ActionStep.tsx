@@ -1,6 +1,6 @@
-import { CustomBox } from "../../../../../components/ui/box/CustomBox";
-import { Button } from "../../../../../components/ui/button";
-import { CustomStack } from "../../../../../components/ui/stack/Stack";
+import { CustomBox } from "../../box/CustomBox";
+import { Button } from "../../button";
+import { CustomStack } from "../../stack/Stack";
 
 interface ActionStepProps {
   handleNext: () => void;

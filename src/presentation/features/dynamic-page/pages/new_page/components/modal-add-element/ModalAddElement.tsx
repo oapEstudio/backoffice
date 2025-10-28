@@ -1,0 +1,123 @@
+import React, { useEffect, useReducer, useState } from 'react'
+import CustomModal from '../../../../../../components/ui/modal/modal.component'
+import StepperWrapperBackOfficeDefault from '../../../../../../components/ui/step/stepper-wrapper-backoffice-default';
+import StepNavigationBackOffice, { type StepType } from '../../../../../../components/ui/step/step-navigation-backoffice';
+import { InfoIcon } from '../../../../../../components/ui/icons';
+import { CustomBox } from '../../../../../../components/ui/box/CustomBox';
+import { ActionStepReducer, eStep, getActionStepInitialState } from '../../reducers/ActionStepReducer';
+import CustomSelect from '../../../../../../components/ui/inputs/select/select.component';
+import { FormProvider, useForm } from 'react-hook-form';
+import type { eTypeElement } from '../element-dynamic-page/ElementDynamicPage';
+import { StepOneDynamicPage } from '../step-one-dynamic-page/StepOneDynamicPage';
+import { StepTwoDynamicPage } from '../step-two-dynamic-page/StepTwoDynamicPage';
+import { navStepSelected } from '../../../../../../utils/navStepSelected';
+import { eToast, Toast } from '../../../../../../components/ui/toast/CustomToastService';
+
+interface ModalAddElementProps{
+    open: boolean;
+    onClose: ()=>void;
+    onCancel: ()=>void;
+    onOk: (element: IModalAddElementFormValues)=>void;
+}
+const navStepsInit: StepType[] = [{
+    active: true,
+    icon: <InfoIcon />,
+    show: true,
+    title: 'Componente'
+
+},{
+    active: false,
+    icon: <InfoIcon />,
+    show: true,
+    title: 'Configuracion'
+}];
+
+
+
+export interface IModalAddElementFormValues{
+    type: eTypeElement;
+    img: File;
+    height: string;
+}
+export const ModalAddElement: React.FC<ModalAddElementProps> = ({open, onClose, onCancel, onOk}) => {
+
+  const [navSteps,setNavSteps] = useState(navStepsInit);
+  const [state, dispatch] = useReducer(ActionStepReducer,getActionStepInitialState());
+  const form = useForm<IModalAddElementFormValues>({
+        defaultValues: {
+          type: undefined
+        },
+        mode: 'onChange',          
+        reValidateMode: 'onChange' 
+  });
+  
+
+  useEffect(()=>{
+        
+         form
+        .trigger(state.field as any);
+  
+  },[state]);
+
+
+  const handleBack = ()=>{
+
+  }
+
+  const handleNext = async ()=>{
+      
+     switch(state.step){
+         
+         case eStep.STEP_ONE: {
+ 
+           setNavSteps(navStepSelected(navSteps,state.step + 1));
+ 
+           dispatch({
+             type: 'STEP_TWO',
+             payload: ''
+           }); 
+ 
+           break;
+                     
+         }
+         
+    }
+ }
+   const onSubmit = async (data: IModalAddElementFormValues) => {
+         try {
+                 
+                      
+         onOk(data);
+           
+  
+         } catch(e) {          
+           Toast({
+             message: 'Error al agregar el elemento',
+             type: eToast.Error
+           });
+         }
+       }
+     
+  return <CustomModal 
+                open={open} 
+                onClose={onClose} 
+                onOk={state.step == eStep.STEP_TWO? form.handleSubmit(onSubmit) : handleNext}
+                onCancel={handleBack} 
+                labelCancel={state.labelPrev}
+                labelOk={state.labelNext}
+                maxWidth={'md'} 
+                disabled={!form.formState.isValid}>
+                    
+                <FormProvider {...form}>
+                        <StepperWrapperBackOfficeDefault width='40%'>
+                            <StepNavigationBackOffice steps={navSteps} />
+                        </StepperWrapperBackOfficeDefault>
+
+                        <CustomBox  sx={{ p: '0 4rem', minHeight: 100,paddingTop: '2rem' }}>
+                             {state.step == 1 ? <StepOneDynamicPage /> :<></>}
+                             {state.step == 2 ? <StepTwoDynamicPage /> :<></>}                        
+                        </CustomBox>
+                </FormProvider>
+                
+        </CustomModal>
+}

@@ -18,22 +18,22 @@ const mockDynamicPageProps: IDynamicPageProps = {
     {
       order: 1,
       elements: [
-        { text: "Primer elemento de la sección 1" },
-        { text: "Segundo elemento de la sección 1" }
+        { text: "Primer elemento de la sección 1",type: 2 },
+        { text: "Segundo elemento de la sección 1",type: 2 }
       ]
     },
     {
       order: 2,
       elements: [
-        { text: "Único elemento de la sección 2" }
+        { text: "Único elemento de la sección 2",type: 1 }
       ]
     }
   ]
 };
 export const ContentPage = () => {
   return (
-   <CustomGrid container sx={{ minHeight: 500}}>
+
       <DynamicPage isMenu={mockDynamicPageProps.isMenu} sections={mockDynamicPageProps.sections} />
-   </CustomGrid>  
+
   )
 }
