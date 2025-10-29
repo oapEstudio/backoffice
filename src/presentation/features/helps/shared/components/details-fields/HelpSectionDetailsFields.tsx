@@ -40,6 +40,7 @@ export const HelpSectionDetailsFields: React.FC<HelpSectionDetailsFieldsProps> =
             {...field}
             label={titleLabel}
             type="text"
+            required
             maxLength={MAX_LENGTH_INPUT}
             error={!!errors.title}
             helperText={errors.title?.message}

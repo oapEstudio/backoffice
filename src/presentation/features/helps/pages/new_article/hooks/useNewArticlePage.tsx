@@ -1,4 +1,4 @@
-import { useMemo, useReducer, useRef, useState } from "react";
+import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import type { StepType } from "../../../../../components/ui/step/step-navigation-backoffice";
 import { StepNumber } from "../../../shared/components/step-number/StepNumber";
 import { useForm } from "react-hook-form";
@@ -8,11 +8,12 @@ import { HELP } from "../../../../../router/routes";
 import { navStepSelected } from "../../../../../utils/navStepSelected";
 import { useScrollToTopOnStep } from "../../../../../utils/useScrollToTopOnStep";
 import type { IHelpFormValues } from "../../../shared/interface/IHelpFormValues";
-import { ActionStepReducer, getActionStepInitialState, eStep } from "../reducers/ActionStepReducer";
-import { HELP_ARTICLE, HELP_SECTION } from "../../../shared/constants/helps";
+import { HELP_ARTICLE } from "../../../shared/constants/helps";
 import { useCreateHelp } from "../../../hooks/useCreateHelp";
 import { useGetHelpStatus } from "../../../hooks/useGetHelpsState";
 import { toHelpSelect } from "../../../mappers/helpCreateMapper";
+import { ActionStepReducer, eStep, getActionStepInitialState } from "../reducers/ActionStepReducer";
+import { useGetHelpsProfiles } from "../../../hooks/useGetHelpsProfiles";
 
 
 const navStepsInit: StepType[] = [{
@@ -32,10 +33,14 @@ const navStepsInit: StepType[] = [{
 export function useNewArticlePage() {
   const contentStepRef = useRef<HTMLDivElement>(null);
   const [navSteps, setNavSteps] = useState(navStepsInit);
+  const [isStepValid, setIsStepValid] = useState(false);
+  const [leftSeedProfiles, setLeftSeedProfiles] = useState<Array<{ id: string; name: string }>>([]);
+  const [parentIdForProfiles, setParentIdForProfiles] = useState<string | null>(null);
+
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(ActionStepReducer, getActionStepInitialState());
-  const { create, loading: creating, error: createError } = useCreateHelp(); 
-  const { result: statuses } = useGetHelpStatus({
+  const { create, loading: creating } = useCreateHelp();
+  const { result: statuses, loading: isLoadingStatus } = useGetHelpStatus({
     stateFilters: { forCreate: true }
   });
 
@@ -44,14 +49,16 @@ export function useNewArticlePage() {
     [statuses]
   );
 
-  const { result: sectionItems } = useGetHelpStatus({
-    stateFilters: { forCreate: true }
-  });
-
-  const selectItemsSection = useMemo(
-    () => sectionItems.map(toHelpSelect),
-    [sectionItems]
+  const { result: profiles, loading: isLoadingProfiles } = useGetHelpsProfiles(
+    parentIdForProfiles ? { parentFilter: { parentId: parentIdForProfiles } } : undefined
   );
+
+  useEffect(() => {
+    if (profiles && Array.isArray(profiles)) {
+      setLeftSeedProfiles(profiles);
+    }
+  }, [profiles]);
+
 
   const form = useForm<IHelpFormValues>({
     defaultValues: {
@@ -76,6 +83,35 @@ export function useNewArticlePage() {
     offset: 72,
   });
 
+  useEffect(() => {
+    const validateCurrentStep = async () => {
+      const fieldsToCheck = state.field as Array<keyof IHelpFormValues>;
+
+      const isValid = fieldsToCheck.every(field => {
+        const fieldValue = form.getValues(field);
+
+        if (Array.isArray(fieldValue)) {
+          return fieldValue.length > 0;
+        }
+
+        return fieldValue !== '' && fieldValue !== null && fieldValue !== undefined;
+      });
+
+      setIsStepValid(isValid);
+    };
+
+    validateCurrentStep();
+
+    const subscription = form.watch((_, { name }) => {
+      const fieldsToCheck = state.field as Array<keyof IHelpFormValues>;
+      if (name && fieldsToCheck.includes(name as keyof IHelpFormValues)) {
+        validateCurrentStep();
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [form, state.field, state.step]);
+
   const onSubmit = async (data: IHelpFormValues) => {
     try {
 
@@ -92,7 +128,7 @@ export function useNewArticlePage() {
         title: data.title ? data.title : '',
         profiles: data.profiles.map(x => x.id),
         statusId: Number(data.state),
-        parentId: 'a6d0e767-30c0-4b44-843c-445b09444787',
+        parentId: data.parentId ?? '',
         link: '',
         helpTypeId: HELP_ARTICLE,
         helpDocumentTypeId: '',
@@ -120,11 +156,22 @@ export function useNewArticlePage() {
   }
 
   const handleNext = async () => {
+    // Validar solo los campos del paso actual
+    const fieldsToValidate = state.field as Array<keyof IHelpFormValues>;
+    const isValid = await form.trigger(fieldsToValidate);
 
+    if (!isValid) return;
     switch (state.step) {
 
       case eStep.STEP_ONE: {
-
+        const parentId = form.getValues('parentId');
+        
+        if (parentId && typeof parentId === 'string' && parentId.trim() !== '') {
+          setParentIdForProfiles(parentId);
+        } else {
+          setParentIdForProfiles(null);
+          setLeftSeedProfiles([]);
+        }
         setNavSteps(navStepSelected(navSteps, state.step + 1));
 
         dispatch({
@@ -136,16 +183,12 @@ export function useNewArticlePage() {
 
       }
       case eStep.STEP_CONFIRMATION: {
-
         setNavSteps(navStepSelected(navSteps, state.step + 1));
-
         dispatch({
           type: 'SUCCESS',
           payload: ''
         });
-
         break;
-
       }
     }
   }
@@ -179,13 +222,16 @@ export function useNewArticlePage() {
   return {
     creating,
     selectItemsStatuses,
-    selectItemsSection,
     contentStepRef,
     form,
     navSteps,
     state,
     handleBack,
+    isLoadingProfiles,
+    isLoadingStatus,
     onSubmit,
-    handleNext
+    handleNext,
+    isStepValid,
+    leftSeedProfiles
   }
 }

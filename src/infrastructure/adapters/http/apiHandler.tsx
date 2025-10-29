@@ -19,6 +19,12 @@ axios.interceptors.response.use(
       return Promise.reject(new Error("No se pudo conectar con el servidor. Verifica tu conexión."))
     }
 
+    const data = error.response.data as Record<string, any> | undefined
+
+    if (data && typeof data.errorUI === "string" && data.errorUI.trim() !== "") {
+      return Promise.reject(new Error(data.errorUI))
+    }
+
     // mapeo según status
     const status = error.response.status
     let msg = "Error desconocido"

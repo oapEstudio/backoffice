@@ -5,11 +5,13 @@ import { eToast, Toast } from "../../../../../../components/ui/toast/CustomToast
 import CustomModal from "../../../../../../components/ui/modal/modal.component";
 import DualProfileFetch from "../../../../../../components/widgets/dual-profile-add-fetch/DualProfileAddFetch";
 import { Typography } from "@mui/material";
+import Loading from "../../../../../../components/ui/loading";
+import { CustomBox } from "../../../../../../components/ui/box/CustomBox";
 
 interface UpdateHelpProfilesProps {
-  
   open: boolean;
   helpId: string;
+  isLoadingProfiles: boolean;
   selectedProfiles?: Array<{ id: string; name: string }>;
   leftSeedProfiles?: Array<{ id: string; name: string }>;
   onClose: () => void;
@@ -23,12 +25,13 @@ interface IFormValues {
 export const UpdateHelpProfile: React.FC<UpdateHelpProfilesProps> = ({
   open,
   helpId,
+  isLoadingProfiles,
   selectedProfiles,
   leftSeedProfiles,
   onClose,
   onSaved,
 }) => {
-  const { update, loading } = useUpdateHelpProfile()
+  const { update, loading } = useUpdateHelpProfile();
 
   const form = useForm<IFormValues>({
     defaultValues: {
@@ -57,15 +60,16 @@ export const UpdateHelpProfile: React.FC<UpdateHelpProfilesProps> = ({
   }
 
   const handleSave = handleSubmit(async (data) => {
-    try {
+      try {
       await update(helpId, { profiles: data.profiles })
-      Toast({ message: 'Perfiles actualizados con éxito', type: eToast.Success })
-      onSaved()
-      reset()
-      onClose()
-    } catch {
-      Toast({ message: 'Error al asignar perfiles', type: eToast.Error })
-    }
+        Toast({ message: 'Perfiles actualizados con éxito', type: eToast.Success });
+        onSaved();
+        reset();
+        onClose();
+       } catch (err: any) {
+        const message = err?.error?.message;
+        Toast({ message: message ? message : 'Error al actualizar los perfiles', type: eToast.Error });
+      }
   })
 
   return (
@@ -85,19 +89,26 @@ export const UpdateHelpProfile: React.FC<UpdateHelpProfilesProps> = ({
           rules={{ validate: (v) => (v?.length ?? 0) > 0 || 'Seleccione al menos un perfil' }}
           render={({ field, fieldState: { error } }) => (
             <>
-              <DualProfileFetch
-                remountKey={open ? 'open' : 'closed'}
-                selectedProfiles={selectedProfiles}
-                selectedFilters={field.value}
-                initialLeftProfiles={leftSeedProfiles}
-                onChange={field.onChange}
-              />
-              {error && (
-                <Typography color="error" variant="caption">
+              {isLoadingProfiles ? (
+                <CustomBox display="flex" justifyContent="center" my={2}>
+                  <Loading />
+                </CustomBox>
+              ) : (
+                <DualProfileFetch
+                  remountKey={open ? "open" : "closed"}
+                  selectedProfiles={selectedProfiles}
+                  initialLeftProfiles={leftSeedProfiles}
+                  selectedFilters={field.value}
+                  onChange={field.onChange}
+                />
+              )}
+              {!!error && (
+                <Typography color="error" variant="caption" sx={{ mt: 1, display: "block" }}>
                   {error.message}
                 </Typography>
               )}
             </>
+
           )}
         />
       </FormProvider>

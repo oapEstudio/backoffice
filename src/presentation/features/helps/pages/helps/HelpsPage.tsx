@@ -20,7 +20,9 @@ export const HelpsPage = () => {
     currentFilters,
     filterButtons,
     selectedHelpId,
+    leftSeedProfiles,
     selectedProfiles,
+    isLoadingProfiles,
     openDelete,
     count,
     rows,
@@ -50,7 +52,9 @@ export const HelpsPage = () => {
         onCancel={() => setOpenDelete(false)}/>
       <UpdateHelpProfile
         open={openProfilesModal}
+        isLoadingProfiles={isLoadingProfiles}
         helpId={selectedHelpId}
+        leftSeedProfiles={leftSeedProfiles}
         selectedProfiles={selectedProfiles}
         onClose={() => setOpenProfilesModal(false)}
         onSaved={() => {
