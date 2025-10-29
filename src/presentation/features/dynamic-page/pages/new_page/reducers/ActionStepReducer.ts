@@ -1,6 +1,7 @@
 export enum eStep {
     STEP_ONE = 1,
     STEP_TWO = 2,
+    RESET = 3,
 }
 
 export interface ActionStepState{        
@@ -12,7 +13,8 @@ export interface ActionStepState{
 
 
 export type ActionStepType = {type: 'STEP_ONE', payload: string} |
-                             {type: 'STEP_TWO', payload: string}  ;
+                             {type: 'STEP_TWO', payload: string} |
+                             { type: 'RESET' }; 
 
                              
 export const getActionStepInitialState = (): ActionStepState => {
@@ -51,9 +53,12 @@ export const getActionStepInitialState = (): ActionStepState => {
 
                 return step_two;   
             } 
-            
-           
-        
+
+            case 'RESET': {
+
+              return getActionStepInitialState();  
+            } 
+                    
             default:
                 return state;
         }

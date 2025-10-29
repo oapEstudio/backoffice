@@ -4,7 +4,7 @@ import { CustomGrid } from '../../../../../../components/ui/grid/CustomGrid';
 import BlankCard from '../../../../../../components/ui/card/blank';
 import { EmptySection } from '../empty-section/EmptySection';
 import { ToolbarSection } from '../toolbar-section/ToolbarSection';
-import { ElementDynamicPage, type IElementDynamicPage } from '../element-dynamic-page/ElementDynamicPage';
+import { ElementDynamicPage, eTypeElement, type IElementDynamicPage } from '../element-dynamic-page/ElementDynamicPage';
 
 
 export interface ISectionPage{
@@ -21,6 +21,13 @@ export interface ISectionPageProps{
     handleDeleteElement: (id: number) => void;
 }
 
+
+const calculedSize = (size: number, element: IElementDynamicPage): number=>{
+
+    if(element.type===eTypeElement.TITLE) return 12;
+
+    return size;
+}
 export const SectionPage: React.FC<ISectionPageProps> = ({section, handleAddElement,handleDeleteSections,handleDeleteElement, isEdit}) => {
 
 
@@ -59,7 +66,7 @@ export const SectionPage: React.FC<ISectionPageProps> = ({section, handleAddElem
 
                                                                  return <ElementDynamicPage 
                                                                             handleDeleteElement={handleDeleteElement}
-                                                                            size={size} 
+                                                                            size={calculedSize(size,element)} 
                                                                             element={element}
                                                                             sectionId={section.id}
                                                                             key={'element_'+index}                                                                            

@@ -37,6 +37,7 @@ const navStepsInit: StepType[] = [{
 export interface IModalAddElementFormValues{
     type: eTypeElement;
     img: File;
+    label: string;
     height: string;
 }
 export const ModalAddElement: React.FC<ModalAddElementProps> = ({open, onClose, onCancel, onOk}) => {
@@ -59,9 +60,30 @@ export const ModalAddElement: React.FC<ModalAddElementProps> = ({open, onClose, 
   
   },[state]);
 
+  useEffect(() => {
+      if (open) {
+ 
+        form.reset(
+          { type: undefined, img: undefined as any, label: '', height: '' },
+          { keepDefaultValues: false, keepErrors: false, keepDirty: false, keepTouched: false }
+        );
+        form.clearErrors();
+
+
+        dispatch({ type: 'RESET' });
+
+        setNavSteps([...navStepsInit]);
+      }
+    }, [open, form]);
 
   const handleBack = ()=>{
 
+     if (state.step === eStep.STEP_TWO) {
+        setNavSteps(navStepSelected([...navSteps], eStep.STEP_ONE));
+        dispatch({ type: 'STEP_ONE',payload:'' });
+        return;
+      }
+      onCancel();
   }
 
   const handleNext = async ()=>{
@@ -99,6 +121,7 @@ export const ModalAddElement: React.FC<ModalAddElementProps> = ({open, onClose, 
        }
      
   return <CustomModal 
+                key={open ? "open-modal-add-element" : "closed-modal-add-element"}
                 open={open} 
                 onClose={onClose} 
                 onOk={state.step == eStep.STEP_TWO? form.handleSubmit(onSubmit) : handleNext}

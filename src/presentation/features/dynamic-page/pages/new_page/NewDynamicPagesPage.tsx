@@ -46,7 +46,7 @@ export const NewDynamicPagesPage = () => {
                 ...sec,
                 elements: [
                   ...sec.elements,
-                  { text: 'pruebaadd', type: element.type, img: element.img }, 
+                  { label: element.label, type: element.type, img: element.img, }, 
                 ],
               }
             : sec
