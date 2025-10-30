@@ -19,7 +19,7 @@ export const StepOneDynamicPage = () => {
           <CustomSelect
             {...field}
             label={'Componente'} 
-            options={[{label: 'BackgroundImage', value: 1},{label: 'Title', value: 2}]}            
+            options={[{label: 'BackgroundImage', value: 1},{label: 'Title', value: 2},{label: 'Parrafo', value: 3}]}            
          />
         )}
       />   

@@ -7,6 +7,7 @@ import { eTypeElement } from '../element-dynamic-page/ElementDynamicPage';
 import { MAX_LENGTH_INPUT } from '../../../../../shared/constants/default-input';
 import { env } from '../../../../../../../infrastructure/config/env';
 import CustomTextInput from '../../../../../../components/ui/inputs/text-input/text-input.component';
+import { CustomRichTextEditor } from '../../../../../../components/ui/rich-text-editor/CustomRichTextEditor';
 
 
 interface StepTwoDynamicPageProps{
@@ -73,6 +74,29 @@ export const StepTwoDynamicPage: React.FC<StepTwoDynamicPageProps> = ({initialIm
                   />
                 )}
               />
+      </> : formValue.type===eTypeElement.PARAGRAPH? 
+      <>
+      <Controller
+              name="label"
+              control={control}
+              rules={{ 
+                  required: 'El texto es obligatorio', 
+                  minLength: 10
+                }}
+              render={({ field, fieldState: { error } }) => (
+                <>
+                  <CustomRichTextEditor                 
+                    change={field.onChange}
+                  />
+                  {error && (
+                    <Typography color="error" variant="caption">
+                      {error.message}
+                    </Typography>
+                  )}
+                </>
+              )}
+            />
+       
       </> : <></>
   )
 }

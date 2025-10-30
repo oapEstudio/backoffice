@@ -5,10 +5,13 @@ import { CustomBox } from '../../../../../../components/ui/box/CustomBox';
 import { CustomFab } from '../../../../../../components/ui/fab/CustomFab';
 import { DeleteActionIcon } from '../../../../../../components/ui/icons';
 import { TitlePages } from '../../../../../../components/widgets/title-page/TitlePages';
-
+import { CustomRichTextEditor } from '../../../../../../components/ui/rich-text-editor/CustomRichTextEditor';
+import { RichTextReadOnly } from 'mui-tiptap';
+import StarterKit from "@tiptap/starter-kit";
 export enum eTypeElement{
     BACKGROUND_IMAGE = 1,
-    TITLE = 2
+    TITLE = 2,
+    PARAGRAPH = 3
 }
 
 export interface IElementDynamicPage{
@@ -35,6 +38,9 @@ export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({size, el
                     {element.type === eTypeElement.TITLE?
                                     <TitlePages title={element.label} /> :
                                     <></>}                                                                            
+                    {element.type === eTypeElement.PARAGRAPH?
+                                    <RichTextReadOnly content={element.label} extensions={[StarterKit]} /> :
+                                    <></>}                                                                                                                
                 </CustomBox>                                                                            
         </CustomGrid>
 }
