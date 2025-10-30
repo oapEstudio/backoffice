@@ -1,14 +1,9 @@
-import type { SelectOption } from '../../../../../../components/ui/inputs/select/select.interface';
-import HelpSectionDetailsFields from '../../../../shared/components/details-fields/HelpSectionDetailsFields'
+import StepTwoGeneric from "../../../../shared/components/StepTwoGeneric";
 
-interface StepTwoNewAlertProps {
-  selectItemsStatuses: SelectOption[];
-}
-
-export const StepTwoNewAlert: React.FC<StepTwoNewAlertProps> = ({
-  selectItemsStatuses = []
-}) => {
+const StepTwoNewAlert = () => {
   return (
-    <HelpSectionDetailsFields selectItemsStatuses={selectItemsStatuses} />
+    <StepTwoGeneric nameLabel="Nombre de la sección" profilesLabel="Seleccione los perfiles que podrán ver esta sección" remountKey="open" />
   )
 }
+
+export default StepTwoNewAlert;

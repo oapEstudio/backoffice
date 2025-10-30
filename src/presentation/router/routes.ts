@@ -95,6 +95,13 @@ export const NEW_SECTION: IRoute = {
     children: [],
     viewNav: true
 }
+export const NEW_ARTICLE: IRoute = {
+    title: 'Nuevo Artículo',
+    order:  'HelpArticle',
+    name: '/new_article_help',
+    children: [],
+    viewNav: true
+}
 export const ROUTES: IRoute[] =[
     HOME, FATHER_PROFILE, NOTIFICATION, FUNTIONALITIES, NEW_DYNAMIC_PAGE, HELP
 ];

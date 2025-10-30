@@ -1,4 +1,4 @@
-import { useMemo, useReducer, useRef, useState } from "react";
+import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import type { StepType } from "../../../../../components/ui/step/step-navigation-backoffice";
 import { StepNumber } from "../../../shared/components/step-number/StepNumber";
 import { useForm } from "react-hook-form";
@@ -19,13 +19,13 @@ const navStepsInit: StepType[] = [{
   active: true,
   icon: <StepNumber number={1} />,
   show: true,
-  title: 'INT'
+  title: 'Sección'
 
 }, {
   active: false,
   icon: <StepNumber number={2} />,
   show: true,
-  title: 'Sección'
+  title: 'INT'
 },];
 
 
@@ -33,9 +33,10 @@ export function useNewSectionPage() {
   const contentStepRef = useRef<HTMLDivElement>(null);
   const [navSteps, setNavSteps] = useState(navStepsInit);
   const navigate = useNavigate();
+  const [isStepValid, setIsStepValid] = useState(false);
   const [state, dispatch] = useReducer(ActionStepReducer, getActionStepInitialState());
-  const { create, loading: creating, error: createError } = useCreateHelp(); 
-  const { result: statuses } = useGetHelpStatus({
+  const { create, loading: creating } = useCreateHelp();
+  const { result: statuses, loading: isLoadingStatus } = useGetHelpStatus({
     stateFilters: { forCreate: true }
   });
 
@@ -66,6 +67,36 @@ export function useNewSectionPage() {
     behavior: 'smooth',
     offset: 72,
   });
+
+  useEffect(() => {
+    const validateCurrentStep = async () => {
+      const fieldsToCheck = state.field as Array<keyof IHelpFormValues>;
+
+      const isValid = fieldsToCheck.every(field => {
+      const fieldValue = form.getValues(field);
+
+        if (Array.isArray(fieldValue)) {
+          return fieldValue.length > 0;
+        }
+
+        return fieldValue !== '' && fieldValue !== null && fieldValue !== undefined;
+      });
+
+      setIsStepValid(isValid);
+    };
+
+    validateCurrentStep();
+
+    const subscription = form.watch((_, { name }) => {
+      const fieldsToCheck = state.field as Array<keyof IHelpFormValues>;
+      if (name && fieldsToCheck.includes(name as keyof IHelpFormValues)) {
+        validateCurrentStep();
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [form, state.field, state.step]);
+
 
   const onSubmit = async (data: IHelpFormValues) => {
     try {
@@ -105,42 +136,38 @@ export function useNewSectionPage() {
 
       dispatch({
         type: 'STEP_CONFIRMATION',
-        payload: ''
+        payload: '',
       });
     }
   }
 
+
   const handleNext = async () => {
+    // Validar solo los campos del paso actual
+    const fieldsToValidate = state.field as Array<keyof IHelpFormValues>;
+    const isValid = await form.trigger(fieldsToValidate);
+
+    if (!isValid) return;
 
     switch (state.step) {
-
       case eStep.STEP_ONE: {
-
         setNavSteps(navStepSelected(navSteps, state.step + 1));
-
         dispatch({
           type: 'STEP_CONFIRMATION',
-          payload: ''
+          payload: '',
         });
-
         break;
-
       }
       case eStep.STEP_CONFIRMATION: {
-
         setNavSteps(navStepSelected(navSteps, state.step + 1));
-
         dispatch({
           type: 'SUCCESS',
-          payload: ''
+          payload: '',
         });
-
         break;
-
       }
     }
   }
-
 
   const handleBack = () => {
 
@@ -158,7 +185,7 @@ export function useNewSectionPage() {
 
         dispatch({
           type: 'STEP_ONE',
-          payload: ''
+          payload: '',
         });
 
         break;
@@ -171,11 +198,13 @@ export function useNewSectionPage() {
     creating,
     selectItemsStatuses,
     contentStepRef,
+    isLoadingStatus,
     form,
     navSteps,
     state,
     handleBack,
     onSubmit,
-    handleNext
+    handleNext,
+    isStepValid
   }
 }

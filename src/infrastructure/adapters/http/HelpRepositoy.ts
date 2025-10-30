@@ -41,6 +41,8 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
     form.append('name', String(dto.name ?? ''));
     form.append('title', String(dto.title ?? ''));
     form.append('helpTypeId', String(dto.helpTypeId ?? ''));
+    form.append('description', String(dto.description ?? ''));
+    form.append('parentId', String(dto.parentId ?? ''));
 
     if (dto.documents instanceof File) {
     }
@@ -61,15 +63,15 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
   }
 
   async updateHelp(id: string, dto: IHelpUpdateDto): Promise<IHelp> {
-    console.log(dto)
     const version = this.resource.edit.helps.version;
     const url = this.resource.edit.helps.endpoint.replace('{id}', id);
 
     const form = new FormData();
     form.append('name', String(dto.name ?? ''));
     form.append('title', String(dto.title ?? ''));
-    form.append('description', String(dto.description ?? ''));
     form.append('helpTypeId', String(dto.helpTypeId ?? ''));
+    form.append('description', String(dto.description ?? ''));
+    form.append('parentId', String(dto.parentId ?? ''));
 
     if (dto.documents instanceof File) {
     }
@@ -86,15 +88,17 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
     const url = this.resource.edit.profiles.endpoint.replace('{id}', id);
     const version = this.resource.edit.profiles.version;
 
-    const res = await apiHandler.put<any>(this.resolveURL(url, version), {}, payload);
-
-    return res.data;
+      try {
+        const res = await apiHandler.put<any>(this.resolveURL(url, version), {}, payload);
+        return res.data;
+      } catch (error: any) {
+        throw { error };
+      }
   }
 
   async updateHelpsStatus(id: string, statusId: string): Promise<IHelp> {
     const url = this.resource.edit.status.endpoint.replace('{id}', id);
 
-    console.log(url)
     const version = this.resource.edit.status.version;
 
     const res = await apiHandler.put<any>(this.resolveURL(url, version), {}, {

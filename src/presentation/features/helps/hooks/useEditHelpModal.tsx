@@ -12,6 +12,8 @@ import { useUpdateHelp } from './useUpdateHelp';
 import { toHelpSelect } from '../mappers/helpCreateMapper';
 import { useHelpFilterOptions } from './useHelpsFilterOptions';
 import { useGetHelpStatus } from './useGetHelpsState';
+import HelpArticleDetailsFields from '../shared/components/details-fields/HelpArticleDetailsField';
+import { useGetHelpSections } from './useGetHelpsSection';
 
 interface UseEditHelpModalProps {
   open: boolean;
@@ -30,9 +32,7 @@ export const useEditHelpModal = ({
 }: UseEditHelpModalProps) => {
   const { fetchById, loading: loadingFetch } = useGetHelpById();
   const { update, loading: loadingUpdate } = useUpdateHelp()
-  const { result: statuses } = useGetHelpStatus({
-    stateFilters: { forCreate: true }
-  });
+  const { result: statuses } = useGetHelpStatus({stateFilters: { forUpdate: true }});
 
   const selectItemsStatuses = useMemo(
     () => statuses.map(toHelpSelect),
@@ -66,8 +66,8 @@ export const useEditHelpModal = ({
         form.reset({
           name: help.name,
           state: String(help.statusId ?? ''),
-          description: help.description,
-          parentId: help.parentId,
+          description: help.description ?? '',
+          parentId: String(help.parentId ?? '').toUpperCase(),
           title: help.title,
           document: [],
           helpTypeId: String(help.helpTypeId),
@@ -88,13 +88,13 @@ export const useEditHelpModal = ({
 
     try {
       const payload: IHelpUpdateDto = {
-        description: data.title,
+        description: data.description ? data.description : '',
         name: data.name,
         title: data.title ? data.title : '',
         statusId: Number(data.state),
-        parentId: '',
+        parentId: String(data.parentId),
         link: '',
-        helpTypeId: HELP_SECTION,
+        helpTypeId: Number(data.helpTypeId),
         helpDocumentTypeId: '',
         documents: []
       };
@@ -120,19 +120,20 @@ export const useEditHelpModal = ({
       case HELP_SECTION:
         return <HelpSectionDetailsFields disabledState={false} selectItemsStatuses={selectItemsStatuses} />;
       case HELP_ARTICLE:
-        return null;
+        return <HelpArticleDetailsFields disabledState={false} selectItemsStatuses={selectItemsStatuses} />;
       case HELP_DOCUMENT:
         return null;
       default:
         return null;
     }
-  }, [helpType]);
+  }, [helpType, selectItemsStatuses]);
 
   const isLoading = loadingFetch || loadingUpdate;
   const isDisabled = !form.formState.isValid || isLoading;
 
   return {
     form,
+    helpType,
     shouldShowFields,
     isLoading,
     isDisabled,

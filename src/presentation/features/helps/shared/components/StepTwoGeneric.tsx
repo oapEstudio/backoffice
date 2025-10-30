@@ -3,7 +3,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import Typography from '@mui/material/Typography';
 import InputLabel from '@mui/material/InputLabel';
 import { CustomStack } from '../../../../components/ui/stack/Stack';
-import { MAX_LENGTH_INPUT } from '../../../shared/constants/default-input';
+import { MAX_LENGTH_INPUT_NAME } from '../../../shared/constants/default-input';
 import { minTrimmed } from '../../../../utils/minTrimmed';
 import { env } from '../../../../../infrastructure/config/env';
 import CustomTextInput from '../../../../components/ui/inputs/text-input/text-input.component';
@@ -11,22 +11,28 @@ import Required from '../../../../components/ui/required/required.component';
 import DualProfileFetch from '../../../../components/widgets/dual-profile-add-fetch/DualProfileAddFetch';
 import { styles } from '../../../../components/ui/inputs/styles';
 import type { IHelpFormValues } from '../interface/IHelpFormValues';
+import Loading from '../../../../components/ui/loading';
+import { CustomBox } from '../../../../components/ui/box/CustomBox';
 
 
-type StepOneGenericProps = {
+type StepTwoGenericProps = {
   remountKey?: string;
   nameLabel?: string;
   profilesLabel?: string;
+  isLoadingProfiles?: boolean;
   disabledAll?: boolean;
   requireProfiles?: boolean;
+  leftSeedProfiles?: Array<{ id: string; name: string }>;
 };
 
-export const StepOneGeneric: React.FC<StepOneGenericProps> = ({
+export const StepTwoGeneric: React.FC<StepTwoGenericProps> = ({
   remountKey,
   nameLabel = 'Nombre',
   profilesLabel = 'Seleccione los perfiles que podrán ver esta sección',
   disabledAll = false,
   requireProfiles = true,
+  leftSeedProfiles = [],
+  isLoadingProfiles = false
 }) => {
   const {
     control,
@@ -42,7 +48,7 @@ export const StepOneGeneric: React.FC<StepOneGenericProps> = ({
         rules={{
           required: 'El nombre es obligatorio',
           minLength: { value: 5, message: 'Mínimo 5 caracteres' },
-          maxLength: MAX_LENGTH_INPUT,
+          maxLength: MAX_LENGTH_INPUT_NAME,
           validate: { minTrimmed: minTrimmed(5) },
           pattern: {
             value: env.patternInputText,
@@ -55,7 +61,8 @@ export const StepOneGeneric: React.FC<StepOneGenericProps> = ({
             {...field}
             label={nameLabel}
             type="text"
-            maxLength={MAX_LENGTH_INPUT}
+            required
+            maxLength={MAX_LENGTH_INPUT_NAME}
             error={!!errors.name}
             helperText={errors.name?.message}
             disabled={disabledAll}
@@ -77,20 +84,27 @@ export const StepOneGeneric: React.FC<StepOneGenericProps> = ({
               {profilesLabel}
               {requireProfiles && <Required value="*" />}
             </InputLabel>
-
-            <DualProfileFetch
-              selectedProfiles={field.value ?? []}
-              selectedFilters={(field.value ?? []).map((p: any) => p.id)}
-              remountKey={remountKey}
-              onChange={() => {}}
-              onChangeProfiles={(profiles) => field.onChange(profiles)}
-            />
-
-            {error && (
-              <Typography color="error" variant="caption">
-                {error.message}
-              </Typography>
-            )}
+            <>
+              {isLoadingProfiles ? (
+                <CustomBox display="flex" justifyContent="center" my={2}>
+                  <Loading />
+                </CustomBox>
+              ) : (
+                <DualProfileFetch
+                  selectedProfiles={field.value ?? []}
+                  selectedFilters={(field.value ?? []).map((p: any) => p.id)}
+                  {...(leftSeedProfiles.length > 0 && { initialLeftProfiles: leftSeedProfiles })}
+                  remountKey={remountKey}
+                  onChange={() => { }}
+                  onChangeProfiles={(profiles) => field.onChange(profiles)}
+                />
+              )}
+              {!!error && (
+                <Typography color="error" variant="caption" sx={{ mt: 1, display: "block" }}>
+                  {error.message}
+                </Typography>
+              )}
+            </>
           </>
         )}
       />
@@ -98,4 +112,4 @@ export const StepOneGeneric: React.FC<StepOneGenericProps> = ({
   );
 };
 
-export default StepOneGeneric;
+export default StepTwoGeneric;

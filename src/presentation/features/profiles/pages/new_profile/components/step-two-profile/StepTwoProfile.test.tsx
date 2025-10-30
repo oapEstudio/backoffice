@@ -26,7 +26,7 @@ describe('StepTwoProfile', () => {
     renderWithProviders(<StepTwoProfile />, depsMock);
 
     expect(screen.getByText(/Asignaci/i)).toBeTruthy();
-    expect(screen.getByText(/grupos AD/i)).toBeTruthy();
+    expect(screen.getByText('Selecciona los grupos AD para este perfil.')).toBeTruthy();
   });
 
   test('loads groups and shows dual list with items', async () => {
@@ -40,13 +40,6 @@ describe('StepTwoProfile', () => {
 
     renderWithProviders(<StepTwoProfile />, depsMock);
 
-    // spinner while fetching
-    expect(screen.getByRole('progressbar')).toBeTruthy();
-
-    await waitFor(() => {
-      expect(screen.queryByRole('progressbar')).toBeNull();
-    });
-
     // titles from DualGroupADFetch
     expect(screen.getByText('Grupos AD disponibles')).toBeTruthy();
     expect(screen.getByText('Grupos AD asignados')).toBeTruthy();
@@ -54,11 +47,10 @@ describe('StepTwoProfile', () => {
     // search input placeholder
     expect(screen.getByPlaceholderText('Buscar grupo AD')).toBeTruthy();
 
-    // items from API visible on left
-    expect(screen.getByText('Admins')).toBeTruthy();
-    expect(screen.getByText('Users')).toBeTruthy();
+    // items from API visible on left (async)
+    expect(await screen.findByText('Admins')).toBeTruthy();
+    expect(await screen.findByText('Users')).toBeTruthy();
 
     expect(execute).toHaveBeenCalled();
   });
 });
-

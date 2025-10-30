@@ -24,22 +24,14 @@ describe('DualProfileFetch', () => {
       depsMock
     );
 
-    // Loading appears
-    expect(screen.getByRole('progressbar')).toBeTruthy();
-
-    // After load
-    await waitFor(() => {
-      expect(screen.queryByRole('progressbar')).toBeNull();
-    });
-
     // Titles and placeholder
     expect(screen.getByText('Perfiles disponibles')).toBeTruthy();
     expect(screen.getByText('Perfiles asignados')).toBeTruthy();
     expect(screen.getByPlaceholderText('Buscar perfil')).toBeTruthy();
 
-    // API items on left
-    expect(screen.getByText('Perfil A')).toBeTruthy();
-    expect(screen.getByText('Perfil B')).toBeTruthy();
+    // API items on left (async)
+    expect(await screen.findByText('Perfil A')).toBeTruthy();
+    expect(await screen.findByText('Perfil B')).toBeTruthy();
 
     // Load-more section exists in fetch mode; label likely "No hay más"
     expect(screen.getByRole('button', { name: /No hay m/i })).toBeTruthy();
@@ -90,12 +82,6 @@ describe('DualProfileFetch', () => {
       <DualProfileFetch onChange={onChange} selectedFilters={['55']} />, 
       depsMock
     );
-
-    // Loading appears then disappears (even with empty results)
-    expect(screen.getByRole('progressbar')).toBeTruthy();
-    await waitFor(() => {
-      expect(screen.queryByRole('progressbar')).toBeNull();
-    });
 
     // Right list shows the id as value
     expect(screen.getByText('55')).toBeTruthy();

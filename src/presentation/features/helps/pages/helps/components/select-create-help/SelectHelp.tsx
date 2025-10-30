@@ -7,7 +7,7 @@ import type { SelectOption } from '../../../../../../components/ui/inputs/select
 import { toHelpSelect } from '../../../../mappers/helpCreateMapper';
 import { useNavigate } from 'react-router-dom';
 import { HELP_ARTICLE, HELP_SECTION } from '../../../../shared/constants/helps';
-import { NEW_SECTION } from '../../../../../../router/routes';
+import { NEW_ARTICLE, NEW_SECTION } from '../../../../../../router/routes';
 import { useGetHelpType } from '../../../../hooks/useGetHelpsType';
 
 const styleCustomSelect = {
@@ -36,6 +36,8 @@ export const SelectCreateHelp = () => {
   const handlerHelps = (event: ChangeEvent<HTMLInputElement> | (Event & { target: { value: unknown; name: string; } })) => {
     setSelectedHelpType(String(event.target.value));
     if(event.target.value == HELP_SECTION) navigate(NEW_SECTION.name);
+    if(event.target.value == HELP_ARTICLE) navigate(NEW_ARTICLE.name);
+
   };
 
   return (

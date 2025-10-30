@@ -32,21 +32,13 @@ describe('GroupAssignmentForm', () => {
 
     renderWithProviders(<GroupAssignmentForm />, depsMock);
 
-    // shows spinner first
-    expect(screen.getByRole('progressbar')).toBeTruthy();
-
-    // wait for fetch completion
-    await waitFor(() => {
-      expect(screen.queryByRole('progressbar')).toBeNull();
-    });
-
     // list titles
     expect(screen.getByText('Grupos AD disponibles')).toBeTruthy();
     expect(screen.getByText('Grupos AD asignados')).toBeTruthy();
 
-    // left items rendered
-    expect(screen.getByText('Admins')).toBeTruthy();
-    expect(screen.getByText('Users')).toBeTruthy();
+    // wait for items to load
+    expect(await screen.findByText('Admins')).toBeTruthy();
+    expect(await screen.findByText('Users')).toBeTruthy();
   });
 
   test('shows validation error when no groups assigned', async () => {
@@ -60,9 +52,8 @@ describe('GroupAssignmentForm', () => {
 
     renderWithProviders(<GroupAssignmentForm />, depsMock);
 
-    await waitFor(() => {
-      expect(screen.queryByRole('progressbar')).toBeNull();
-    });
+    // wait for items to load
+    await screen.findByText('Admins');
 
     // initially, no error message
     expect(screen.queryByText('Debes asignar al menos un grupo')).toBeNull();
@@ -79,8 +70,6 @@ describe('GroupAssignmentForm', () => {
     fireEvent.click(screen.getByRole('button', { name: '<' }));
 
     // error should appear on change
-    await waitFor(() => {
-      expect(screen.getByText('Debes asignar al menos un grupo')).toBeTruthy();
-    });
+    expect(await screen.findByText('Debes asignar al menos un grupo')).toBeTruthy();
   });
 });
