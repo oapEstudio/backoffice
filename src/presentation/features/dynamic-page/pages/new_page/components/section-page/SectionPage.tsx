@@ -40,14 +40,7 @@ export const SectionPage: React.FC<ISectionPageProps> = ({section, handleAddElem
                                                 <EmptySection />
                                              </CustomBox>
 
-
-    if(section.elements.some(x=>x.type===1)) return <CustomBox>
-                                                        <CustomGrid size={12}>
-                                                            <CustomBox>                                                                           
-                                                                    <img width={'100%'} height={200} src={URL.createObjectURL(section.elements[0].img)} /> 
-                                                            </CustomBox> 
-                                                        </CustomGrid>
-                                                    </CustomBox>;
+   
                                                     
 
   return <CustomBox sx={{ px: 2, position: 'relative' }} >
@@ -64,6 +57,13 @@ export const SectionPage: React.FC<ISectionPageProps> = ({section, handleAddElem
 
                                                                 const size = 12 / section.elements.length;
 
+                                                                  if(section.elements.some(x=>x.type===1)) return  <ElementDynamicPage 
+                                                                                                                        handleDeleteElement={handleDeleteElement}
+                                                                                                                        size={12} 
+                                                                                                                        element={element}
+                                                                                                                        sectionId={section.id}
+                                                                                                                        key={'element_'+index}                                                                            
+                                                                                                                    />;
                                                                  return <ElementDynamicPage 
                                                                             handleDeleteElement={handleDeleteElement}
                                                                             size={calculedSize(size,element)} 

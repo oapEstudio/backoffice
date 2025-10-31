@@ -11,10 +11,10 @@ const WrapperTitle = styled('div')(({ theme }) => ({
   color: theme.palette.primary.main
 }));
 
-export const TitlePages: React.FC<ITitlePagesProp> = ({title}) => {
+export const TitlePages: React.FC<ITitlePagesProp> = ({title, style}) => {
   return (
       <WrapperTitle>
-              <H4 style={{margin:'0px'}}>{title}</H4>
+              <H4 style={{margin:'0px',...style}}>{title}</H4>
         </WrapperTitle>
   )
 }

@@ -17,14 +17,19 @@ export const NewDynamicPagesPage = () => {
 
     
   
-  const handleDeleteSection = (id: number) =>{
+  const handleDeleteSection = (sectionId: number) =>{
 
-     setPagesProps((previous)=>previous.filter(s=>s.id!==id));
+     setPagesProps((previous)=>previous.filter(s=>s.id!==sectionId));
   }
 
-  const handleDeleteElement = (id: number) =>{
+  const handleDeleteElement = (elementId: number) =>{
 
-     //setPagesProps((previous)=>previous.filter(s=>s.id!==id));
+     setPagesProps(prev =>
+        prev.map(sec => ({
+          ...sec,
+          elements: sec.elements.filter(el => el.id !== elementId),
+        }))
+      );
   }
 
   const handleCancelAddModal = ()=>{
@@ -46,7 +51,7 @@ export const NewDynamicPagesPage = () => {
                 ...sec,
                 elements: [
                   ...sec.elements,
-                  { label: element.label, type: element.type, img: element.img, }, 
+                  { id: Date.now() ,align: element.align, label: element.label, type: element.type, file: element.file, height: element.height }, 
                 ],
               }
             : sec

@@ -36,9 +36,10 @@ const navStepsInit: StepType[] = [{
 
 export interface IModalAddElementFormValues{
     type: eTypeElement;
-    img: File;
+    file: File;
     label: string;
-    height: string;
+    align: string;
+    height: number;
 }
 export const ModalAddElement: React.FC<ModalAddElementProps> = ({open, onClose, onCancel, onOk}) => {
 
@@ -64,7 +65,7 @@ export const ModalAddElement: React.FC<ModalAddElementProps> = ({open, onClose, 
       if (open) {
  
         form.reset(
-          { type: undefined, img: undefined as any, label: '', height: '' },
+          { type: undefined, file: undefined as any, label: '', height: 0 },
           { keepDefaultValues: false, keepErrors: false, keepDirty: false, keepTouched: false }
         );
         form.clearErrors();

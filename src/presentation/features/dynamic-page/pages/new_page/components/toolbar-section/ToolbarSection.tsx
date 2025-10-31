@@ -15,11 +15,11 @@ export const ToolbarSection: React.FC<IToolbarSectionProps> = ({isEdit,id, handl
   if(!isEdit) return <></>;
 
 
-  return <CustomStack spacing={1} direction='column' sx={{position: 'absolute',right:'-3rem'}}>                                                    
-                            <CustomFab onClick={()=>{handleDeleteSections(id)}}>
+  return <CustomStack spacing={1} direction='column' sx={{position: 'absolute',right: 0}}>                                                    
+                            <CustomFab style={{width: '30px' , height: '30px'}} onClick={()=>{handleDeleteSections(id)}}>
                                 <DeleteActionIcon />
                             </CustomFab>
-                            <CustomFab onClick={()=>{handleAddElements(id)}}>
+                            <CustomFab style={{width: '30px' , height: '30px'}} onClick={()=>{handleAddElements(id)}}>
                                     <AddActionIcon />
                             </CustomFab> 
             </CustomStack>;
