@@ -41,10 +41,18 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
     form.append('name', String(dto.name ?? ''));
     form.append('title', String(dto.title ?? ''));
     form.append('helpTypeId', String(dto.helpTypeId ?? ''));
+    form.append('helpDocumentTypeId', String(dto.helpDocumentTypeId ?? ''));
     form.append('description', String(dto.description ?? ''));
     form.append('parentId', String(dto.parentId ?? ''));
+    form.append('link', String(dto.link ?? ''));
 
-    if (dto.documents instanceof File) {
+    if (dto.documents) {
+      const files = Array.isArray(dto.documents) ? dto.documents : [dto.documents];
+      files.forEach((file) => {
+        if (file instanceof File) {
+          form.append('documents', file, file.name);
+        }
+      });
     }
 
     form.append('statusId', String(dto.statusId ?? ''));
@@ -70,10 +78,18 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
     form.append('name', String(dto.name ?? ''));
     form.append('title', String(dto.title ?? ''));
     form.append('helpTypeId', String(dto.helpTypeId ?? ''));
+    form.append('helpDocumentTypeId', String(dto.helpDocumentTypeId ?? ''));
     form.append('description', String(dto.description ?? ''));
     form.append('parentId', String(dto.parentId ?? ''));
+    form.append('link', String(dto.link ?? ''));
 
-    if (dto.documents instanceof File) {
+    if (dto.documents) {
+      const files = Array.isArray(dto.documents) ? dto.documents : [dto.documents];
+      files.forEach((file) => {
+        if (file instanceof File) {
+          form.append('documents', file, file.name);
+        }
+      });
     }
 
     form.append('statusId', String(dto.statusId ?? ''));

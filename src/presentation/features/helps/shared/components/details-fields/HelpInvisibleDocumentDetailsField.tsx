@@ -6,65 +6,26 @@ import { minTrimmed } from '../../../../../utils/minTrimmed';
 import type { IHelpFormValues } from '../../interface/IHelpFormValues';
 import { MAX_LENGTH_INPUT } from '../../../../shared/constants/default-input';
 import type { SelectOption } from '../../../../../components/ui/inputs/select/select.interface';
-import CustomTextAreaInput from '../../../../../components/ui/inputs/text-area-input/text-area-input.component';
-import { useGetHelpSections } from '../../../hooks/useGetHelpsSection';
-import CustomSearchSelect from '../custom-search-select/CustomSearchSelect';
+import FileDropzone from '../../../../../components/ui/file-drop-zone/FileDropzone';
+import { Typography } from '@mui/material';
 
-interface HelpArticleDetailsFieldsProps {
+interface HelpDocumentInvisibleDetailsFieldsProps {
   disabledAll?: boolean;
   titleLabel?: string;
   disabledState?: boolean;
   selectItemsStatuses: SelectOption[];
 }
 
-export const HelpArticleDetailsFields: React.FC<HelpArticleDetailsFieldsProps> = ({
-  titleLabel = 'Título del artículo',
+export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleDetailsFieldsProps> = ({
+  titleLabel = 'Título del documento invisible',
   disabledAll = false,
   disabledState = false,
   selectItemsStatuses = [],
 }) => {
   const { control, formState: { errors } } = useFormContext<IHelpFormValues>();
-  const [searchTerm, setSearchTerm] = useState('');
-  
-  // Pasa el término de búsqueda al hook
-  const { result: sectionItems, loading } = useGetHelpSections(searchTerm);
-
-  // Transforma los datos
-  const selectItemsSection = sectionItems
-    ? sectionItems.map((section) => ({
-        value: section.id,
-        label: section.description,
-      }))
-    : [];
-
-  const handleSearch = (term: string) => {
-    setSearchTerm(term);
-  };
 
   return (
     <>
-      <Controller
-        name="parentId"
-        control={control}
-        rules={{ required: 'Seleccionar una Sección es obligatorio' }}
-        render={({ field }) => (
-          <CustomSearchSelect
-            value={field.value || ''}
-            onChange={field.onChange}
-            onSearch={handleSearch} // ⬅️ Callback de búsqueda
-            options={selectItemsSection}
-            placeholder="Buscar sección..."
-            label="Sección a la que pertenecerá este artículo"
-            loading={loading}
-            disabled={disabledAll}
-            error={!!errors.parentId}
-            helperText={errors.parentId?.message} 
-            required={true}
-          />
-        )}
-      />
-      <br />
-      <br />
       <Controller
         name="title"
         control={control}
@@ -90,23 +51,43 @@ export const HelpArticleDetailsFields: React.FC<HelpArticleDetailsFieldsProps> =
       <br />
       <br />
       <Controller
-        name="description"
+        name="state"
+        control={control}
+        rules={{ required: 'El estado es obligatorio' }}
+        render={({ field }) => (
+          <CustomSelect
+            {...field}
+            label="Tipo de documento"
+            required
+            options={selectItemsStatuses}
+            error={!!errors.state}
+            disabled={disabledState || disabledAll}
+          />
+        )}
+      />
+      <br />
+      <br />
+      <Controller
+        name="document"
         control={control}
         rules={{
-          required: 'La descripción es obligatoria',
-          minLength: { value: 3, message: 'Mínimo 3 caracteres' },
-          maxLength: 300,
-          validate: { minTrimmed: minTrimmed(3) },
+          validate: (v) => (v !== undefined) || 'Debes agregar un documento',
         }}
-        render={({ field }) => (
-          <CustomTextAreaInput
-            {...field}
-            label="Descripción del artículo"
-            required
-            maxLength={300}
-            error={!!errors.description}
-            helperText={errors.description?.message}
-          />
+        render={({ field, fieldState: { error } }) => (
+          <>
+            <FileDropzone
+              multiple={false}
+              value={field.value ? field.value : []}
+              onFiles={(files) => {
+                if (files) field.onChange(files[0])
+              }}
+            />
+            {error && (
+              <Typography color="error" variant="caption">
+                {error.message}
+              </Typography>
+            )}
+          </>
         )}
       />
       <br />
@@ -130,4 +111,4 @@ export const HelpArticleDetailsFields: React.FC<HelpArticleDetailsFieldsProps> =
   );
 };
 
-export default HelpArticleDetailsFields;
+export default HelpInvisibleDocumentDetailsFields;

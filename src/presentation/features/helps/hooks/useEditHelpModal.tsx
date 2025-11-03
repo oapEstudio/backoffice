@@ -9,11 +9,15 @@ import HelpSectionDetailsFields from '../shared/components/details-fields/HelpSe
 import type { IHelpUpdateDto } from '../../../../application/dtos/IHelpUpdateDto';
 import { eToast, Toast } from '../../../components/ui/toast/CustomToastService';
 import { useUpdateHelp } from './useUpdateHelp';
-import { toHelpSelect } from '../mappers/helpCreateMapper';
+import { toHelpDocumentTypeSelectCommon, toHelpSelect } from '../mappers/helpCreateMapper';
 import { useHelpFilterOptions } from './useHelpsFilterOptions';
 import { useGetHelpStatus } from './useGetHelpsState';
 import HelpArticleDetailsFields from '../shared/components/details-fields/HelpArticleDetailsField';
 import { useGetHelpSections } from './useGetHelpsSection';
+import HelpDocumentDetailsFields from '../shared/components/details-fields/HelpDocumentDetailsField';
+import { useGetHelpDocumentType } from './useGetHelpsDocumentType';
+import React from 'react';
+import { dataUrlToFile } from '../../../utils/dataUrlToFile';
 
 interface UseEditHelpModalProps {
   open: boolean;
@@ -32,11 +36,20 @@ export const useEditHelpModal = ({
 }: UseEditHelpModalProps) => {
   const { fetchById, loading: loadingFetch } = useGetHelpById();
   const { update, loading: loadingUpdate } = useUpdateHelp()
-  const { result: statuses } = useGetHelpStatus({stateFilters: { forUpdate: true }});
+  const { result: statuses } = useGetHelpStatus({ stateFilters: { forUpdate: true } });
+  const existingFileRef = React.useRef<File>(null);
+
 
   const selectItemsStatuses = useMemo(
     () => statuses.map(toHelpSelect),
     [statuses]
+  );
+
+  const { result: documentTypes, loading: isLoadingDocumentTypes } = useGetHelpDocumentType();
+
+  const selectItemsDocumentType = useMemo(
+    () => documentTypes.map(toHelpDocumentTypeSelectCommon),
+    [documentTypes]
   );
 
   const form = useForm<IHelpFormValues>({
@@ -63,16 +76,28 @@ export const useEditHelpModal = ({
       try {
         const help = await fetchById(helpId);
 
+
+        if (help.document[0]?.link.startsWith('data:image/')) {
+
+          existingFileRef.current = dataUrlToFile(
+            help.document[0]?.link,
+            `help-${help.id}`
+          );
+
+        } else {
+          existingFileRef.current = null;
+        }
+        
         form.reset({
           name: help.name,
           state: String(help.statusId ?? ''),
           description: help.description ?? '',
           parentId: String(help.parentId ?? '').toUpperCase(),
           title: help.title,
-          document: [],
+          document: existingFileRef.current ? [existingFileRef.current] : null,
           helpTypeId: String(help.helpTypeId),
-          helpDocumentTypeId: '',
-          link: String(help.link),
+          helpDocumentTypeId: String(help.helpDocumentTypeId),
+          link: help.link,
         });
       } catch (error) {
         console.error('Error loading help data:', error);
@@ -93,9 +118,9 @@ export const useEditHelpModal = ({
         title: data.title ? data.title : '',
         statusId: Number(data.state),
         parentId: String(data.parentId),
-        link: '',
+        link: data.link,
         helpTypeId: Number(data.helpTypeId),
-        helpDocumentTypeId: '',
+        helpDocumentTypeId: data.helpDocumentTypeId,
         documents: []
       };
 
@@ -122,7 +147,7 @@ export const useEditHelpModal = ({
       case HELP_ARTICLE:
         return <HelpArticleDetailsFields disabledState={false} selectItemsStatuses={selectItemsStatuses} />;
       case HELP_DOCUMENT:
-        return null;
+        return <HelpDocumentDetailsFields disabledState={false} selectItemsStatuses={selectItemsStatuses} selectItemsDocumentType={selectItemsDocumentType} />;
       default:
         return null;
     }
