@@ -134,6 +134,7 @@ const CustomSearchSelect: React.FC<ICustomSearchSelect> = ({
             error={error}
             sx={{
               '& .MuiOutlinedInput-root': {
+                height: '53px',
                 backgroundColor: 'background.paper',
                 '&:hover': {
                   '& > fieldset': {
