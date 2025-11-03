@@ -81,6 +81,14 @@ export const NEW_DYNAMIC_PAGE: IRoute = {
     children: [],
     viewNav: true
 }
+
+export const PREVIEW_DYNAMIC_PAGE: IRoute = {
+    title: 'Previsualización',
+    order:  'Previsualización',
+    name: '/dynamic_page_preview',
+    children: [],
+    viewNav: false
+}
 export const HELP: IRoute = {
     title: 'Ayuda',
     order:  'Ayuda',

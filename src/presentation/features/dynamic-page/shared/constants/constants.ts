@@ -1,0 +1,2 @@
+export const KEY_STORAGE_PROPS_DYNAMIC_PAGE = 'KEY_STORAGE_PROPS_DYNAMIC_PAGE';
+export const DP_FILE_PREFIX = 'dp:file:';

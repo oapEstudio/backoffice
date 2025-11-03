@@ -8,12 +8,14 @@ import { TitlePages } from '../../../../../../components/widgets/title-page/Titl
 import { CustomRichTextEditor } from '../../../../../../components/ui/rich-text-editor/CustomRichTextEditor';
 import { RichTextReadOnly } from 'mui-tiptap';
 import StarterKit from "@tiptap/starter-kit";
+import { VideoPlayer } from '../step-two-dynamic-page/components/VideoFields';
 export enum eTypeElement{
     BACKGROUND_IMAGE = 1,
     TITLE = 2,
     PARAGRAPH = 3,
     FILE = 4,
-    IMG = 5
+    IMG = 5,
+    VIDEO = 6
 }
 
 export interface IElementDynamicPage{
@@ -29,22 +31,26 @@ export interface IElementDynamicPageProps{
     element: IElementDynamicPage,
     size: number;
     sectionId: number;
-    handleDeleteElement: (id: number)=>void;
+    handleDeleteElement?: (id: number)=>void;
 }
 export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({size, element,sectionId, handleDeleteElement}) => {
   return <CustomGrid  size={ size } >
-                <CustomFab style={{width: '30px' , height: '30px'}} sx={{position: 'absolute'}} onClick={()=>{handleDeleteElement(element.id)}}>
-                    <DeleteActionIcon />
-                </CustomFab>  
+                 <>{handleDeleteElement && <CustomFab style={{width: '30px' , height: '30px'}} sx={{position: 'absolute'}} onClick={()=>{handleDeleteElement(element.id)}}>
+                                                <DeleteActionIcon />
+                                            </CustomFab>  
+                   }                 
+                 </>
                 <CustomBox sx={{minHeight: 100, alignContent: 'center'}}>                                                                                         
                     {element.type === eTypeElement.BACKGROUND_IMAGE?
-                                    <img src={URL.createObjectURL(element.file)} /> :
+                                    <img width={'100%'} height={element.height} src={URL.createObjectURL(element.file)} /> :
                                     <></>}
                     {element.type === eTypeElement.TITLE?
                                     <TitlePages title={element.label} style={{padding: '0px 2rem', textAlign: element.align }} /> :
                                     <></>}                                                                            
                     {element.type === eTypeElement.PARAGRAPH?
-                                    <RichTextReadOnly content={element.label} extensions={[StarterKit]} /> :
+                                    <CustomBox sx={{px: '2rem'}}>
+                                        <RichTextReadOnly content={element.label} extensions={[StarterKit]} />
+                                    </CustomBox> :
                                     <></>}   
                    {element.type === eTypeElement.FILE?
                                     <a href={URL.createObjectURL(element.file)} target='_blank'>{element.file.name}</a> :
@@ -54,6 +60,11 @@ export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({size, el
                                         src={URL.createObjectURL(element.file)} 
                                         width={'100%'} 
                                         height={element.height>0?element.height : 50}/> :
+                                    <></>} 
+                    {element.type === eTypeElement.VIDEO?
+                                    <VideoPlayer 
+                                        file={element.file} 
+                                        height={element.height} /> :
                                     <></>}                                                                                                                                                   
                 </CustomBox>                                                                            
         </CustomGrid>

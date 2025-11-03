@@ -16,9 +16,9 @@ export interface ISectionPage{
 export interface ISectionPageProps{
     section: ISectionPage;
     isEdit: boolean;
-    handleDeleteSections: (id: number) => void;
-    handleAddElement: (id: number) => void;
-    handleDeleteElement: (id: number) => void;
+    handleDeleteSections?: (id: number) => void;
+    handleAddElement?: (id: number) => void;
+    handleDeleteElement?: (id: number) => void;
 }
 
 

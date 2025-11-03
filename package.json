@@ -33,6 +33,7 @@
     "apexcharts": "^4.7.0",
     "axios": "^1.10.0",
     "dayjs": "^1.11.13",
+    "idb-keyval": "^6.2.2",
     "lodash": "^4.17.21",
     "mui-tiptap": "^1.28.1",
     "react": "^19.1.0",

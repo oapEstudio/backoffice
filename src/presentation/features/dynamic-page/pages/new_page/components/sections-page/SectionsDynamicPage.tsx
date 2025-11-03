@@ -5,9 +5,9 @@ import { SectionPage, type ISectionPage } from '../section-page/SectionPage';
 interface ISectionsDynamicPageProps{
     sections: ISectionPage[];
     isEdit: boolean;
-    handleDeleteSections: (id: number) => void;
-    handleAddElement: (id: number) => void;
-    handleDeleteElement: (id: number) => void;
+    handleDeleteSections?: (id: number) => void;
+    handleAddElement?: (id: number) => void;
+    handleDeleteElement?: (id: number) => void;
 }
 export const SectionsDynamicPage: React.FC<ISectionsDynamicPageProps> = ({sections, isEdit, handleAddElement,handleDeleteSections, handleDeleteElement}) => {
 
