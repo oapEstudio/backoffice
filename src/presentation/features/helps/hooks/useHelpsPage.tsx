@@ -90,8 +90,9 @@ export const useHelpPage = () => {
 
       refresh();
 
-    } catch {
-      Toast({ message: 'Error al dar de baja el item de ayuda', type: eToast.Error })
+    } catch (err: any) {
+      const message = err?.error?.message;
+      Toast({ message: message ? message : 'Error al dar de baja el item de ayuda', type: eToast.Error });
     }
   }, [cancellation, pendingDeleteId, refresh]);
 

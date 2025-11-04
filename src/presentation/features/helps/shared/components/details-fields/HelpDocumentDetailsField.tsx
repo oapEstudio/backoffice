@@ -71,7 +71,9 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
     if (prevDocumentType.current !== watchDocumentType && prevDocumentType.current !== undefined) {
       if (Number(watchDocumentType) === HELP_DOCUMENT_LINK) {
         setValue('document', []);
+        setValue('link', '');
       } else {
+        setValue('document', []);
         setValue('link', '');
       }
     }

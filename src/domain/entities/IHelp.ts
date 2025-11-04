@@ -19,4 +19,5 @@ export interface IHelp {
      dateCreated: Date;
      dateUpdated: string;
      updatedBy: string;
+     isParentSection: boolean;
 }

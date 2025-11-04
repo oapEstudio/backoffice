@@ -57,7 +57,7 @@ export function useNewDocumentPage() {
     [documentTypes]
   );
 
-  const { result: profiles, loading: isLoadingProfiles } = useGetHelpsProfiles(
+  const { result: profiles, loading: isLoadingProfiles, error: errorCreate } = useGetHelpsProfiles(
     parentIdForProfiles ? { parentFilter: { parentId: parentIdForProfiles } } : undefined
   );
 
@@ -162,17 +162,14 @@ export function useNewDocumentPage() {
       });
 
       Toast({
-        message: 'Artículo creado correctamente',
+        message: 'Documento creado correctamente',
         type: eToast.Success
       });
 
       navigate(HELP.name);
-
-    } catch (e) {
-      Toast({
-        message: 'Error al crear el artículo',
-        type: eToast.Error
-      });
+    } catch (err: any) {
+      const message = err?.error?.message;
+      Toast({ message: message ? message : 'Error al crear documento', type: eToast.Error });
 
       dispatch({
         type: 'STEP_CONFIRMATION',
