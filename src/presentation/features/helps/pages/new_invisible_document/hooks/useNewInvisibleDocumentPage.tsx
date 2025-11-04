@@ -8,19 +8,19 @@ import { HELP } from "../../../../../router/routes";
 import { navStepSelected } from "../../../../../utils/navStepSelected";
 import { useScrollToTopOnStep } from "../../../../../utils/useScrollToTopOnStep";
 import type { IHelpFormValues } from "../../../shared/interface/IHelpFormValues";
-import { HELP_ARTICLE } from "../../../shared/constants/helps";
+import { HELP_DOCUMENT_LINK, HELP_INVISIBLE } from "../../../shared/constants/helps";
 import { useCreateHelp } from "../../../hooks/useCreateHelp";
-import { useGetHelpStatus } from "../../../hooks/useGetHelpsState";
-import { toHelpSelect } from "../../../mappers/helpCreateMapper";
+import { useGetHelpStatus } from "../../../shared/components/hooks/useGetHelpsState";
+import { toHelpDocumentTypeSelectCommon, toHelpSelect } from "../../../mappers/helpCreateMapper";
 import { ActionStepReducer, eStep, getActionStepInitialState } from "../reducers/ActionStepReducer";
-import { useGetHelpsProfiles } from "../../../hooks/useGetHelpsProfiles";
+import { useGetHelpDocumentType } from "../../../shared/components/hooks/useGetHelpsDocumentType";
 
 
 const navStepsInit: StepType[] = [{
   active: true,
   icon: <StepNumber number={1} />,
   show: true,
-  title: 'Documento'
+  title: 'Invisible'
 
 }, {
   active: false,
@@ -34,8 +34,6 @@ export function useNewInvisibleDocumentPage() {
   const contentStepRef = useRef<HTMLDivElement>(null);
   const [navSteps, setNavSteps] = useState(navStepsInit);
   const [isStepValid, setIsStepValid] = useState(false);
-  const [leftSeedProfiles, setLeftSeedProfiles] = useState<Array<{ id: string; name: string }>>([]);
-  const [parentIdForProfiles, setParentIdForProfiles] = useState<string | null>(null);
 
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(ActionStepReducer, getActionStepInitialState());
@@ -49,16 +47,13 @@ export function useNewInvisibleDocumentPage() {
     [statuses]
   );
 
-  const { result: profiles, loading: isLoadingProfiles } = useGetHelpsProfiles(
-    parentIdForProfiles ? { parentFilter: { parentId: parentIdForProfiles } } : undefined
+
+  const { result: documentTypes, loading: isLoadingDocumentTypes } = useGetHelpDocumentType();
+
+  const selectItemsDocumentType = useMemo(
+    () => documentTypes.map(toHelpDocumentTypeSelectCommon),
+    [documentTypes]
   );
-
-  useEffect(() => {
-    if (profiles && Array.isArray(profiles)) {
-      setLeftSeedProfiles(profiles);
-    }
-  }, [profiles]);
-
 
   const form = useForm<IHelpFormValues>({
     defaultValues: {
@@ -85,7 +80,19 @@ export function useNewInvisibleDocumentPage() {
 
   useEffect(() => {
     const validateCurrentStep = async () => {
-      const fieldsToCheck = state.field as Array<keyof IHelpFormValues>;
+      const currentDocType = Number(form.getValues('helpDocumentTypeId'));
+
+      const allFields = state.field as Array<keyof IHelpFormValues>;
+
+      const fieldsToCheck = allFields.filter(field => {
+        if (field === 'document' && currentDocType === HELP_DOCUMENT_LINK) {
+          return false;
+        }
+        if (field === 'link' && currentDocType !== HELP_DOCUMENT_LINK) {
+          return false;
+        }
+        return true;
+      });
 
       const isValid = fieldsToCheck.every(field => {
         const fieldValue = form.getValues(field);
@@ -94,7 +101,11 @@ export function useNewInvisibleDocumentPage() {
           return fieldValue.length > 0;
         }
 
-        return fieldValue !== '' && fieldValue !== null && fieldValue !== undefined;
+        if (typeof fieldValue === 'string') {
+          return fieldValue.trim() !== '';
+        }
+
+        return fieldValue !== null && fieldValue !== undefined;
       });
 
       setIsStepValid(isValid);
@@ -102,9 +113,9 @@ export function useNewInvisibleDocumentPage() {
 
     validateCurrentStep();
 
-    const subscription = form.watch((_, { name }) => {
-      const fieldsToCheck = state.field as Array<keyof IHelpFormValues>;
-      if (name && fieldsToCheck.includes(name as keyof IHelpFormValues)) {
+    const subscription = form.watch((values, { name }) => {
+      const allFields = state.field as Array<keyof IHelpFormValues>;
+      if (name && (allFields.includes(name as keyof IHelpFormValues) || name === 'helpDocumentTypeId')) {
         validateCurrentStep();
       }
     });
@@ -129,10 +140,10 @@ export function useNewInvisibleDocumentPage() {
         profiles: data.profiles.map(x => x.id),
         statusId: Number(data.state),
         parentId: data.parentId ?? '',
-        link: '',
-        helpTypeId: HELP_ARTICLE,
-        helpDocumentTypeId: '',
-        documents: []
+        link: data.link ?? '',
+        helpTypeId: HELP_INVISIBLE,
+        helpDocumentTypeId: data.helpDocumentTypeId?.toString(),
+        documents: data.document ?? null
       });
 
       Toast({
@@ -142,11 +153,9 @@ export function useNewInvisibleDocumentPage() {
 
       navigate(HELP.name);
 
-    } catch (e) {
-      Toast({
-        message: 'Error al crear el artículo',
-        type: eToast.Error
-      });
+    } catch (err: any) {
+      const message = err?.error?.message;
+      Toast({ message: message ? message : 'Error al crear documento invisible', type: eToast.Error });
 
       dispatch({
         type: 'STEP_CONFIRMATION',
@@ -156,7 +165,6 @@ export function useNewInvisibleDocumentPage() {
   }
 
   const handleNext = async () => {
-    // Validar solo los campos del paso actual
     const fieldsToValidate = state.field as Array<keyof IHelpFormValues>;
     const isValid = await form.trigger(fieldsToValidate);
 
@@ -164,14 +172,7 @@ export function useNewInvisibleDocumentPage() {
     switch (state.step) {
 
       case eStep.STEP_ONE: {
-        const parentId = form.getValues('parentId');
-        
-        if (parentId && typeof parentId === 'string' && parentId.trim() !== '') {
-          setParentIdForProfiles(parentId);
-        } else {
-          setParentIdForProfiles(null);
-          setLeftSeedProfiles([]);
-        }
+
         setNavSteps(navStepSelected(navSteps, state.step + 1));
 
         dispatch({
@@ -222,16 +223,16 @@ export function useNewInvisibleDocumentPage() {
   return {
     creating,
     selectItemsStatuses,
+    selectItemsDocumentType,
     contentStepRef,
     form,
     navSteps,
     state,
     handleBack,
-    isLoadingProfiles,
     isLoadingStatus,
+    isLoadingDocumentTypes,
     onSubmit,
     handleNext,
     isStepValid,
-    leftSeedProfiles
   }
 }

@@ -15,10 +15,10 @@ import StepTwoNewAlert from "./components/StepTwoNewAlert/StepTwoNewAlert";
 
 export const NewDocumentPage = () => {
 
-  const { contentStepRef, form, navSteps, state, onSubmit, handleBack, handleNext, creating, selectItemsStatuses, selectItemsDocumentType,  leftSeedProfiles, isLoadingProfiles, isLoadingStatus, isLoadingDocumentTypes, isStepValid } = useNewDocumentPage();
+  const { contentStepRef, form, navSteps, state, onSubmit, handleBack, handleNext, creating, selectItemsStatuses, selectItemsDocumentType, leftSeedProfiles, isLoadingProfiles, isLoadingStatus, isLoadingDocumentTypes, isStepValid } = useNewDocumentPage();
 
   return (
-    <ContainerPage description="NewSectionPage" title={`${HELP.title} - ${NEW_DOCUMENT.title}`} titleSEO='Gestión de ayuda - Alta sección'>
+    <ContainerPage description="NewSectionPage" title={`${HELP.title} - ${NEW_DOCUMENT.title}`} titleSEO='Gestión de ayuda - Alta documento'>
       <div ref={contentStepRef} />
       <FormProvider {...form}>
         <StepperWrapperBackOfficeDefault width='40%'>

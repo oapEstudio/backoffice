@@ -6,8 +6,8 @@ import type { SelectOption } from "../../../../../../components/ui/inputs/multis
 import CustomMultiselect from "../../../../../../components/ui/inputs/multiselect/multiselect.component";
 import ProfileMultiSelect from "../../../../../../components/widgets/multiselect-profile/MultiSelectProfile";
 import Loading from "../../../../../../components/ui/loading";
-import { useProfileFilterHelpOptions } from "../../../../hooks/useProfileFilterOptions";
-import { useHelpFilterOptions } from "../../../../hooks/useHelpsFilterOptions";
+import { useProfileFilterHelpOptions } from "../../../../shared/components/hooks/useProfileFilterOptions";
+import { useHelpFilterOptions } from "../../../../shared/components/hooks/useHelpsFilterOptions";
 
 export interface IFilterHelpsResult {
   profileIds: string[]

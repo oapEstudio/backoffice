@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { DependencyContext } from "../../../contexts/DependencyContext";
-import type { IFilter } from "../../../../domain/entities/IFilter";
+import { DependencyContext } from "../../../../../contexts/DependencyContext";
+import type { IFilter } from "../../../../../../domain/entities/IFilter";
 
 
 interface IUseHelpFilterOptionsProps {
@@ -38,7 +38,7 @@ export function useHelpFilterOptions(filters?: IUseHelpFilterOptionsProps) {
     return () => {
       mountedRef.current = false;
     };
-  }, []); // si las funciones son estables, está OK
+  }, []); 
 
   return { resultState, resultType, loading, error };
 }

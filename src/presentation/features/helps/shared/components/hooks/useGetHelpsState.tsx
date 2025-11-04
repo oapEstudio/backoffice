@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
-import { DependencyContext } from "../../../contexts/DependencyContext";
-import type { IFilter } from "../../../../domain/entities/IFilter";
+import { DependencyContext } from "../../../../../contexts/DependencyContext";
+import type { IFilter } from "../../../../../../domain/entities/IFilter";
 
 
 interface IUseHelpFilterStateProps {

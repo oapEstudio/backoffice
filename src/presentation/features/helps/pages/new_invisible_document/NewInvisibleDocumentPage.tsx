@@ -15,23 +15,23 @@ import { useNewInvisibleDocumentPage } from "./hooks/useNewInvisibleDocumentPage
 
 export const NewInvisibleDocumentPage = () => {
 
-  const { contentStepRef, form, navSteps, state, onSubmit, handleBack, handleNext, creating, selectItemsStatuses, isLoadingStatus, isStepValid } = useNewInvisibleDocumentPage();
+  const { contentStepRef, form, navSteps, state, onSubmit, handleBack, handleNext, creating, selectItemsStatuses, isLoadingStatus, isLoadingDocumentTypes, selectItemsDocumentType, isStepValid } = useNewInvisibleDocumentPage();
 
   return (
-    <ContainerPage description="NewInvisibleDocumentPage" title={`${HELP.title} - ${NEW_DOCUMENT_INVISIBLE.title}`} titleSEO='Gestión de ayuda - Alta sección'>
+    <ContainerPage description="NewInvisibleDocumentPage" title={`${HELP.title} - ${NEW_DOCUMENT_INVISIBLE.title}`} titleSEO='Gestión de ayuda - Alta documento invisible'>
       <div ref={contentStepRef} />
       <FormProvider {...form}>
         <StepperWrapperBackOfficeDefault width='40%'>
           <StepNavigationBackOffice steps={navSteps} />
         </StepperWrapperBackOfficeDefault>
         
-        {creating || isLoadingStatus  ? 
+        {creating || isLoadingStatus || isLoadingDocumentTypes  ? 
            <CustomBox sx={{ p: '0 4rem', minHeight: 300, paddingTop: '10rem' }}>
               <center><Loading /></center> 
           </CustomBox>
         :
           <CustomBox sx={{ p: '0 4rem', minHeight: 300, paddingTop: '2rem' }}>
-            {state.step == 1 ? <StepOneNewAlert selectItemsStatuses={selectItemsStatuses} /> : <></>}
+            {state.step == 1 ? <StepOneNewAlert selectItemsStatuses={selectItemsStatuses} selectItemsDocumentType={selectItemsDocumentType}/> : <></>}
             {state.step == 2 ? <StepTwoNewAlert /> : <></>}
           </CustomBox> }
         <CustomBox sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>

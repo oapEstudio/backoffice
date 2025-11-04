@@ -6,14 +6,13 @@ import { minTrimmed } from '../../../../../utils/minTrimmed';
 import type { IHelpFormValues } from '../../interface/IHelpFormValues';
 import { MAX_LENGTH_INPUT } from '../../../../shared/constants/default-input';
 import type { SelectOption } from '../../../../../components/ui/inputs/select/select.interface';
-import CustomTextAreaInput from '../../../../../components/ui/inputs/text-area-input/text-area-input.component';
-import { useGetHelpSections } from '../../../hooks/useGetHelpsSection';
+import { useGetHelpSections } from '../hooks/useGetHelpsSection';
 import CustomSearchSelect from '../custom-search-select/CustomSearchSelect';
 import FileDropzone from '../../../../../components/ui/file-drop-zone/FileDropzone';
 import { Typography } from '@mui/material';
 import CustomRadioButton from '../../../../../components/ui/inputs/radio-button/radio-button.component';
 import { HELP_ARTICLE, HELP_DOCUMENT_LINK, HELP_SECTION } from '../../constants/helps';
-import { useGetHelpArticles } from '../../../hooks/useGetHelpsArticles';
+import { useGetHelpArticles } from '../hooks/useGetHelpsArticles';
 
 interface HelpDocumentDetailsFieldsProps {
   disabledAll?: boolean;
@@ -43,7 +42,6 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
     selectedType === HELP_ARTICLE ? searchTerm : ''
   );
 
-  // Transforma los datos según el tipo seleccionado
   const selectItems = selectedType === HELP_SECTION
     ? (sectionItems?.map((section) => ({
       value: section.id,
@@ -67,7 +65,6 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
   const prevDocumentType = useRef(watchDocumentType);
 
   useEffect(() => {
-    // Solo limpiar si realmente cambió el tipo
     if (prevDocumentType.current !== watchDocumentType && prevDocumentType.current !== undefined) {
       if (Number(watchDocumentType) === HELP_DOCUMENT_LINK) {
         setValue('document', []);
@@ -210,6 +207,7 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
             validate: (v) => (v !== undefined) || 'Debes asignar un archivo',
           }}
           render={({ field, fieldState: { error } }) => (
+
             <>
               <FileDropzone
                 multiple={false}

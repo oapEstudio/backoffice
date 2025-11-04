@@ -1,4 +1,3 @@
-// search-select.component.tsx
 import React, { useState, useRef, useEffect, type ChangeEvent } from 'react';
 import {
   Box,
@@ -23,7 +22,7 @@ export interface ICustomSearchSelect {
   value: string | number;
   required: boolean;
   onChange: (value: string | number) => void;
-  onSearch?: (searchTerm: string) => void; // ⬅️ Nuevo
+  onSearch?: (searchTerm: string) => void;
   options: any[];
   placeholder?: string;
   disabled?: boolean;
@@ -49,17 +48,14 @@ const CustomSearchSelect: React.FC<ICustomSearchSelect> = ({
   const [showResults, setShowResults] = useState(false);
   const inputRef = useRef<HTMLDivElement>(null);
 
-  // Obtiene el label de la opción seleccionada
   const selectedLabel = options.find((option) => option.value === value)?.label || '';
 
-  // Actualiza el searchTerm cuando hay un valor seleccionado
   useEffect(() => {
     if (value && !showResults) {
       setSearchTerm(selectedLabel);
     }
   }, [value, selectedLabel, showResults]);
 
-  // Debounce para la búsqueda
   useEffect(() => {
     if (!showResults || !onSearch) return;
 

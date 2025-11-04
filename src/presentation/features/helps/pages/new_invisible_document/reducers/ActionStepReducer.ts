@@ -21,12 +21,14 @@ export type ActionStepType =
 export const getActionStepInitialState = (): ActionStepState => {
 
     return {
-        field: ['parentId', 'description', 'title', 'state'],
+        field: ['title', 'helpDocumentTypeId', 'document', 'link', 'state'],
         labelNext: 'Siguiente',
         labelPrev: 'Cancelar',
         step: 1
     }
 }
+
+
 
 export const ActionStepReducer = (state: ActionStepState, action: ActionStepType): ActionStepState => {
 
@@ -34,7 +36,7 @@ export const ActionStepReducer = (state: ActionStepState, action: ActionStepType
         case 'STEP_ONE': {
 
             const step_one: ActionStepState = {
-                field: ['parentId', 'description', 'title', 'state'],
+                field: ['title', 'helpDocumentTypeId', 'document', 'link', 'state'],
                 labelNext: 'Siguiente',
                 labelPrev: 'Cancelar',
                 step: 1
@@ -46,7 +48,7 @@ export const ActionStepReducer = (state: ActionStepState, action: ActionStepType
         case 'STEP_CONFIRMATION': {
 
             const step_two: ActionStepState = {
-                field: ['parentId', 'description', 'title', 'state', 'name', 'profiles'],
+                field: ['title', 'helpDocumentTypeId', 'document',  'link',  'state', 'name', 'profiles'],
                 labelNext: 'Confirmar',
                 labelPrev: 'Atrás',
                 step: 2
@@ -58,7 +60,7 @@ export const ActionStepReducer = (state: ActionStepState, action: ActionStepType
         case 'SUCCESS': {
 
             const step_three: ActionStepState = {
-                field: ['parentId', 'description', 'title', 'state', 'name', 'profiles'],
+                field: ['title', 'helpDocumentTypeId', 'document',  'link',  'state', 'name', 'profiles'],
                 labelNext: 'Guardando...',
                 labelPrev: 'Atrás',
                 step: 3

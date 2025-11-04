@@ -5,7 +5,7 @@ export interface IHelpFormValues {
   parentId?: string;
   profiles: {id: string,name: string}[],
   title: string;
-  document: File[] | null,
+  document?: File[] | null,
   state: string;
   helpTypeId: string;
   helpDocumentTypeId?: string;

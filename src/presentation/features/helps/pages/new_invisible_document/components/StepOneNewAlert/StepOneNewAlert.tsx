@@ -3,12 +3,14 @@ import HelpInvisibleDocumentDetailsFields from '../../../../shared/components/de
 
 interface StepOneNewAlertProps {
   selectItemsStatuses: SelectOption[];
+  selectItemsDocumentType: SelectOption[];
 }
 
 export const StepOneNewAlert: React.FC<StepOneNewAlertProps> = ({
   selectItemsStatuses = [],
+  selectItemsDocumentType = [],
 }) => {
   return (
-    <HelpInvisibleDocumentDetailsFields selectItemsStatuses={selectItemsStatuses} />
+    <HelpInvisibleDocumentDetailsFields selectItemsStatuses={selectItemsStatuses} selectItemsDocumentType={selectItemsDocumentType} />
   )
 }

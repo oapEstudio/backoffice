@@ -11,7 +11,7 @@ import type { IFilterHelpsResult } from '../pages/helps/components/filter-help-p
 import { SelectCreateHelp } from '../pages/helps/components/select-create-help/SelectHelp';
 import { eToast, Toast } from '../../../components/ui/toast/CustomToastService';
 import { useHelpCancellation } from './useCancellationHelp';
-import { useGetHelpsProfiles } from './useGetHelpsProfiles';
+import { useGetHelpsProfiles } from '../shared/components/hooks/useGetHelpsProfiles';
 import { HELP_INVISIBLE, HELP_SECTION } from '../shared/constants/helps';
 
 export const useHelpPage = () => {

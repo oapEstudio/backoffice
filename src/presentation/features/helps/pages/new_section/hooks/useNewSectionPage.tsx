@@ -11,7 +11,7 @@ import type { IHelpFormValues } from "../../../shared/interface/IHelpFormValues"
 import { ActionStepReducer, getActionStepInitialState, eStep } from "../reducers/ActionStepReducer";
 import { HELP_SECTION } from "../../../shared/constants/helps";
 import { useCreateHelp } from "../../../hooks/useCreateHelp";
-import { useGetHelpStatus } from "../../../hooks/useGetHelpsState";
+import { useGetHelpStatus } from "../../../shared/components/hooks/useGetHelpsState";
 import { toHelpSelect } from "../../../mappers/helpCreateMapper";
 
 
@@ -143,7 +143,6 @@ export function useNewSectionPage() {
 
 
   const handleNext = async () => {
-    // Validar solo los campos del paso actual
     const fieldsToValidate = state.field as Array<keyof IHelpFormValues>;
     const isValid = await form.trigger(fieldsToValidate);
 

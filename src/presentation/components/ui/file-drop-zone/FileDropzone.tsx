@@ -112,6 +112,12 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
   
   const previews = useMemo(() => {
     if (!showPreview) return [] as Array<{ file: File }>;
+    
+    if (!Array.isArray(files)) {
+      console.warn('⚠️ files no es un array:', files);
+      return [] as Array<{ file: File }>;
+    }
+    
     return files.map(f => ({ file: f }));
   }, [files, showPreview]);
 
