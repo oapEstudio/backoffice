@@ -93,7 +93,7 @@ export const HelpArticleDetailsFields: React.FC<HelpArticleDetailsFieldsProps> =
         rules={{
           required: 'La descripción es obligatoria',
           minLength: { value: 3, message: 'Mínimo 3 caracteres' },
-          maxLength: 300,
+          maxLength: 1000,
           validate: { minTrimmed: minTrimmed(3) },
         }}
         render={({ field }) => (
@@ -101,7 +101,7 @@ export const HelpArticleDetailsFields: React.FC<HelpArticleDetailsFieldsProps> =
             {...field}
             label="Descripción del artículo"
             required
-            maxLength={300}
+            maxLength={1000}
             error={!!errors.description}
             helperText={errors.description?.message}
           />

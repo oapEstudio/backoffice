@@ -123,7 +123,7 @@ export function useNewArticlePage() {
       });
 
       await create({
-        description: data.title,
+        description: data.description,
         name: data.name,
         title: data.title ? data.title : '',
         profiles: data.profiles.map(x => x.id),
@@ -142,11 +142,9 @@ export function useNewArticlePage() {
 
       navigate(HELP.name);
 
-    } catch (e) {
-      Toast({
-        message: 'Error al crear el artículo',
-        type: eToast.Error
-      });
+     } catch (err: any) {
+      const message = err?.error?.message;
+      Toast({ message: message ? message : 'Error al crear artículo', type: eToast.Error });
 
       dispatch({
         type: 'STEP_CONFIRMATION',

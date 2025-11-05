@@ -127,8 +127,9 @@ export const useEditHelpModal = ({
       Toast({ message: 'Item de ayuda actualizado', type: eToast.Success });
       onSuccess();
       onClose();
-    } catch {
-      Toast({ message: 'Error al actualizar el item de ayuda', type: eToast.Error });
+    } catch (err: any) {
+      const message = err?.error?.message;
+      Toast({ message: message ? message : 'Error al actualizar item de ayuda', type: eToast.Error });
     }
   });
 
