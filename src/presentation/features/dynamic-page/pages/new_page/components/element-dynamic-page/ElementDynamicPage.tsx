@@ -9,6 +9,10 @@ import { CustomRichTextEditor } from '../../../../../../components/ui/rich-text-
 import { RichTextReadOnly } from 'mui-tiptap';
 import StarterKit from "@tiptap/starter-kit";
 import { VideoPlayer } from '../step-two-dynamic-page/components/VideoFields';
+import { TextStyleKit } from '@tiptap/extension-text-style';
+import TextAlign from '@tiptap/extension-text-align';
+import Text from '@tiptap/extension-text';
+
 export enum eTypeElement{
     BACKGROUND_IMAGE = 1,
     TITLE = 2,
@@ -49,7 +53,9 @@ export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({size, el
                                     <></>}                                                                            
                     {element.type === eTypeElement.PARAGRAPH?
                                     <CustomBox sx={{px: '2rem'}}>
-                                        <RichTextReadOnly content={element.label} extensions={[StarterKit]} />
+                                        <RichTextReadOnly content={element.label} extensions={[StarterKit,TextStyleKit,Text, TextAlign.configure({
+                                                types: ['heading', 'paragraph']                                               
+                                              })]} />
                                     </CustomBox> :
                                     <></>}   
                    {element.type === eTypeElement.FILE?

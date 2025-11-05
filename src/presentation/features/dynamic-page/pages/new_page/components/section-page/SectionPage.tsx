@@ -55,7 +55,7 @@ export const SectionPage: React.FC<ISectionPageProps> = ({section, handleAddElem
                                                          {
                                                             section.elements.map((element,index)=>{
 
-                                                                const size = 12 / section.elements.length;
+                                                                const size = 12 / (section.elements.length);
 
                                                                   if(section.elements.some(x=>x.type===1)) return  <ElementDynamicPage 
                                                                                                                         handleDeleteElement={handleDeleteElement}

@@ -1,12 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 
 import StarterKit from "@tiptap/starter-kit";
+import { TextStyleKit } from '@tiptap/extension-text-style';
+import TextAlign from '@tiptap/extension-text-align';
+import Text from '@tiptap/extension-text';
+
 import {
+  FontSize,
   MenuButtonBold,
   MenuButtonItalic,
   MenuControlsContainer,
   MenuDivider,
+  MenuSelectFontSize,
   MenuSelectHeading,
+  MenuSelectTextAlign,
   RichTextEditor,
   type RichTextEditorRef,
 } from "mui-tiptap";
@@ -22,11 +29,12 @@ export const CustomRichTextEditor: React.FC<ICustomRichTextEditorProps> = ({chan
 
  const rteRef = useRef<RichTextEditorRef>(null);
 
- const [html, setHtml] = useState<string>("<p>Hello world</p>");
+ const [html, setHtml] = useState<string>("");
 
  
   useEffect(() => {
     const editor = rteRef.current?.editor;
+
     if (!editor || editor.isDestroyed) return;
 
     const handleUpdate = () => {
@@ -45,7 +53,9 @@ export const CustomRichTextEditor: React.FC<ICustomRichTextEditorProps> = ({chan
      <div>
       <RichTextEditor
         ref={rteRef}
-        extensions={[StarterKit]} 
+        extensions={[StarterKit, TextStyleKit, Text, TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),]} 
         content={html}       
         renderControls={() => (
           <MenuControlsContainer>
@@ -53,11 +63,12 @@ export const CustomRichTextEditor: React.FC<ICustomRichTextEditorProps> = ({chan
             <MenuDivider />
             <MenuButtonBold />
             <MenuButtonItalic />
+            <MenuSelectFontSize  />
+            <MenuSelectTextAlign />
           </MenuControlsContainer>
         )}
       />
 
-      <Button variant={'primary'} onClick={() => console.log(rteRef.current?.editor?.getHTML())}  title={'Log HTML'}/>
         
      
     </div>

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ContainerPage } from '../../../../components/containers/container-page/ContainerPage'
 import { CustomGrid } from '../../../../components/ui/grid/CustomGrid';
 import { CustomFab } from '../../../../components/ui/fab/CustomFab';
-import { AddActionIcon, EyeIcon } from '../../../../components/ui/icons';
+import { AddActionIcon, EyeIcon, GroupActionIcon } from '../../../../components/ui/icons';
 import { CustomBox } from '../../../../components/ui/box/CustomBox';
 import { DynamicPage, type IDynamicPageProps,  } from '../../shared/components/dynamic-page/DynamicPage';
 import type { ISectionPage } from './components/section-page/SectionPage';
@@ -14,6 +14,8 @@ import { PREVIEW_DYNAMIC_PAGE } from '../../../../router/routes';
 import { serializeSections } from '../../shared/utils/dynamicpage-serialize';
 import { saveDynamicPageToStorage } from '../../shared/storage/dp-save';
 import { resetDynamicPageStorage } from '../../shared/storage/dp-reset';
+import BlankCard from '../../../../components/ui/card/blank';
+import { colors } from '../../../../common/colors';
 
 
 export const NewDynamicPagesPage = () => {
@@ -99,36 +101,44 @@ export const NewDynamicPagesPage = () => {
         >
             <CustomGrid container sx={{minHeight: 500, width: '100%' }}>
                 <CustomGrid size={2}  justifyContent={'center'} alignContent={'flex-start'}>
-                        <CustomStack spacing={5} direction='column'  sx={{marginTop: 10}}>
-                          <CustomBox>
-                            <CustomFab variant='extended' onClick={handleAddSection}>
-                                <AddActionIcon  />
-                                Añadir sección
-                            </CustomFab>
-                        </CustomBox>
-                        <CustomBox >
-                            <CustomFab variant='extended' onClick={handlePreview}>
-                                <EyeIcon  />
-                                Previsualización
-                            </CustomFab>
-                        </CustomBox>
-                        </CustomStack>
+                      <CustomStack spacing={5} direction='column'  sx={{borderBottomRightRadius: '10px', borderTopRightRadius: '10px', borderRightStyle: 'solid', borderRightWidth: '1rem',borderRightColor: colors.palette.primary.main, padding: '1rem',  marginTop: 10, position: 'fixed'}}>
+                              <CustomBox>
+                                  <CustomFab variant='extended' onClick={handleAddSection}>
+                                      <AddActionIcon  />
+                                      Añadir sección
+                                  </CustomFab>
+                              </CustomBox>                             
+                              <CustomBox >
+                                  <CustomFab  variant='extended' onClick={handlePreview}>
+                                      <GroupActionIcon  />
+                                      Agregar perfiles
+                                  </CustomFab>
+                              </CustomBox>
+                               <CustomBox >
+                                  <CustomFab variant='extended' onClick={handlePreview}>
+                                      <EyeIcon  />
+                                      Previsualización
+                                  </CustomFab>
+                              </CustomBox>
+                      </CustomStack>                    
                 </CustomGrid>
-                <CustomGrid size={10}>
+                <CustomGrid size={10} sx={{px: '1rem'}}>
                    <ModalAddElement 
                         open={openAddElement} 
                         onClose={()=>setOpenAddElement(false)} 
                         onCancel={handleCancelAddModal} 
                         onOk={(element)=>{newElement(element)}} />
-                    <DynamicPage 
-                        isMenu={true}
-                        sections={pagesProps}
-                        handleDeleteSections={handleDeleteSection}
-                        handleAddElement={handleAddElement} 
-                        handleDeleteElement={handleDeleteElement}
+                   <BlankCard elevation={20}>
+                      <DynamicPage 
+                          isMenu={true}
+                          sections={pagesProps}
+                          handleDeleteSections={handleDeleteSection}
+                          handleAddElement={handleAddElement} 
+                          handleDeleteElement={handleDeleteElement}
 
-                        isEdit={true} 
-                    />
+                          isEdit={true} 
+                      />
+                   </BlankCard>
                 </CustomGrid>
             </CustomGrid>
     </ContainerPage>

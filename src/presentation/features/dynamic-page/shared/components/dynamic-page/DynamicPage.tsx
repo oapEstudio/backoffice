@@ -30,8 +30,7 @@ export const DynamicPage: React.FC<IDynamicPageProps> = ({isEdit = true,isMenu,s
    <CustomGrid container sx={{minHeight: 500}}>
         <>
             {isMenu && <CustomGrid  container size={2} 
-                                sx={{                       
-                                    height: '100%', 
+                                sx={{                                                          
                                     display: 'flex',}}>
 
                         <Paper sx={{width: '100%',minHeight: 500, height: '100%'}}>
@@ -42,7 +41,7 @@ export const DynamicPage: React.FC<IDynamicPageProps> = ({isEdit = true,isMenu,s
                                             </IconButton>
                                     </CustomBox>
                                     <CustomDivider />
-                                    <CustomStack direction='column' sx={{width: '100%',height: '20rem',justifyContent: 'space-between'}}>
+                                    <CustomStack direction='column' sx={{position: 'relative', width: '100%',height: '100%',justifyContent: 'space-between'}}>
                                         <CustomBox>
                                             <CustomBox sx={{width: '100%', height: '3rem'}}>
                                                 <Typography variant={'body2'} textAlign={'center'}>
@@ -50,7 +49,7 @@ export const DynamicPage: React.FC<IDynamicPageProps> = ({isEdit = true,isMenu,s
                                                 </Typography>
                                             </CustomBox>
                                         </CustomBox>
-                                        <CustomBox>
+                                        <CustomBox sx={{display: 'flex', justifyContent: 'center', marginBottom: '2rem'}}>
                                             <Button variant='secondary'  title='Salir'/>
                                         </CustomBox>
                                     </CustomStack>
