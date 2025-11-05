@@ -10,10 +10,10 @@ import { useScrollToTopOnStep } from "../../../../../utils/useScrollToTopOnStep"
 import type { IHelpFormValues } from "../../../shared/interface/IHelpFormValues";
 import { HELP_ARTICLE } from "../../../shared/constants/helps";
 import { useCreateHelp } from "../../../hooks/useCreateHelp";
-import { useGetHelpStatus } from "../../../hooks/useGetHelpsState";
+import { useGetHelpStatus } from "../../../shared/components/hooks/useGetHelpsState";
 import { toHelpSelect } from "../../../mappers/helpCreateMapper";
 import { ActionStepReducer, eStep, getActionStepInitialState } from "../reducers/ActionStepReducer";
-import { useGetHelpsProfiles } from "../../../hooks/useGetHelpsProfiles";
+import { useGetHelpsProfiles } from "../../../shared/components/hooks/useGetHelpsProfiles";
 
 
 const navStepsInit: StepType[] = [{
@@ -123,7 +123,7 @@ export function useNewArticlePage() {
       });
 
       await create({
-        description: data.title,
+        description: data.description,
         name: data.name,
         title: data.title ? data.title : '',
         profiles: data.profiles.map(x => x.id),
@@ -142,11 +142,9 @@ export function useNewArticlePage() {
 
       navigate(HELP.name);
 
-    } catch (e) {
-      Toast({
-        message: 'Error al crear el artículo',
-        type: eToast.Error
-      });
+     } catch (err: any) {
+      const message = err?.error?.message;
+      Toast({ message: message ? message : 'Error al crear artículo', type: eToast.Error });
 
       dispatch({
         type: 'STEP_CONFIRMATION',
@@ -156,7 +154,6 @@ export function useNewArticlePage() {
   }
 
   const handleNext = async () => {
-    // Validar solo los campos del paso actual
     const fieldsToValidate = state.field as Array<keyof IHelpFormValues>;
     const isValid = await form.trigger(fieldsToValidate);
 

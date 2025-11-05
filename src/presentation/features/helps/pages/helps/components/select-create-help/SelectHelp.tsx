@@ -6,9 +6,9 @@ import CustomSelect from '../../../../../../components/ui/inputs/select/select.c
 import type { SelectOption } from '../../../../../../components/ui/inputs/select/select.interface';
 import { toHelpSelect } from '../../../../mappers/helpCreateMapper';
 import { useNavigate } from 'react-router-dom';
-import { HELP_ARTICLE, HELP_SECTION } from '../../../../shared/constants/helps';
-import { NEW_ARTICLE, NEW_SECTION } from '../../../../../../router/routes';
-import { useGetHelpType } from '../../../../hooks/useGetHelpsType';
+import { HELP_ARTICLE, HELP_DOCUMENT, HELP_INVISIBLE, HELP_SECTION } from '../../../../shared/constants/helps';
+import { NEW_ARTICLE, NEW_DOCUMENT, NEW_DOCUMENT_INVISIBLE, NEW_SECTION } from '../../../../../../router/routes';
+import { useGetHelpType } from '../../../../shared/components/hooks/useGetHelpsType';
 
 const styleCustomSelect = {
   '& .MuiOutlinedInput-root': { height: 36 },
@@ -37,7 +37,8 @@ export const SelectCreateHelp = () => {
     setSelectedHelpType(String(event.target.value));
     if(event.target.value == HELP_SECTION) navigate(NEW_SECTION.name);
     if(event.target.value == HELP_ARTICLE) navigate(NEW_ARTICLE.name);
-
+    if(event.target.value == HELP_DOCUMENT) navigate(NEW_DOCUMENT.name);
+    if(event.target.value == HELP_INVISIBLE) navigate(NEW_DOCUMENT_INVISIBLE.name);
   };
 
   return (

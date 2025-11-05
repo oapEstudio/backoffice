@@ -46,6 +46,7 @@ import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 import DownloadIcon from '@mui/icons-material/Download';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import SvgIcon from '@mui/material/SvgIcon';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import type { ElementType } from "react";
 
 export interface IIconAction{
@@ -241,6 +242,10 @@ export const DownloaddIcon = () =>{
 export const WarningTriangleIcon = () =>{
   return <WarningAmberIcon />
 } 
+
+export const Visibility = () => {
+  return <VisibilityIcon />;
+};
 
 
 type SVGIconProps = {

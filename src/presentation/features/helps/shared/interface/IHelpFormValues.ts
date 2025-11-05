@@ -1,14 +1,13 @@
-import type { SelectOption } from "../../../../components/ui/inputs/multiselect/multiselect.interface";
-
 export interface IHelpFormValues {
   name: string;
+  typeSearch?: number; 
   description: string;
   parentId?: string;
   profiles: {id: string,name: string}[],
   title: string;
-  document: File[],
+  document?: File[] | null,
   state: string;
   helpTypeId: string;
-  helpDocumentTypeId: string | null;
+  helpDocumentTypeId?: string;
   link: string;
 }

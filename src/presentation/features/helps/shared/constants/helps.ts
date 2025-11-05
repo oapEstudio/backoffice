@@ -11,3 +11,8 @@ export const HELP_TYPES: Record<number, string> = {
 };
 
 export const STATE_HELP_CANCEL: number = 4;
+
+
+export const HELP_DOCUMENT_LINK = 1;
+export const HELP_DOCUMENT_DOWNLOAD = 2;
+export const HELP_DOCUMENT_PDF = 3;

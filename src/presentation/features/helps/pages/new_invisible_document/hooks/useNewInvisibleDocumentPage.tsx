@@ -8,18 +8,19 @@ import { HELP } from "../../../../../router/routes";
 import { navStepSelected } from "../../../../../utils/navStepSelected";
 import { useScrollToTopOnStep } from "../../../../../utils/useScrollToTopOnStep";
 import type { IHelpFormValues } from "../../../shared/interface/IHelpFormValues";
-import { ActionStepReducer, getActionStepInitialState, eStep } from "../reducers/ActionStepReducer";
-import { HELP_SECTION } from "../../../shared/constants/helps";
+import { HELP_DOCUMENT_LINK, HELP_INVISIBLE } from "../../../shared/constants/helps";
 import { useCreateHelp } from "../../../hooks/useCreateHelp";
 import { useGetHelpStatus } from "../../../shared/components/hooks/useGetHelpsState";
-import { toHelpSelect } from "../../../mappers/helpCreateMapper";
+import { toHelpDocumentTypeSelectCommon, toHelpSelect } from "../../../mappers/helpCreateMapper";
+import { ActionStepReducer, eStep, getActionStepInitialState } from "../reducers/ActionStepReducer";
+import { useGetHelpDocumentType } from "../../../shared/components/hooks/useGetHelpsDocumentType";
 
 
 const navStepsInit: StepType[] = [{
   active: true,
   icon: <StepNumber number={1} />,
   show: true,
-  title: 'Sección'
+  title: 'Invisible'
 
 }, {
   active: false,
@@ -29,11 +30,12 @@ const navStepsInit: StepType[] = [{
 },];
 
 
-export function useNewSectionPage() {
+export function useNewInvisibleDocumentPage() {
   const contentStepRef = useRef<HTMLDivElement>(null);
   const [navSteps, setNavSteps] = useState(navStepsInit);
-  const navigate = useNavigate();
   const [isStepValid, setIsStepValid] = useState(false);
+
+  const navigate = useNavigate();
   const [state, dispatch] = useReducer(ActionStepReducer, getActionStepInitialState());
   const { create, loading: creating } = useCreateHelp();
   const { result: statuses, loading: isLoadingStatus } = useGetHelpStatus({
@@ -43,6 +45,14 @@ export function useNewSectionPage() {
   const selectItemsStatuses = useMemo(
     () => statuses.map(toHelpSelect),
     [statuses]
+  );
+
+
+  const { result: documentTypes, loading: isLoadingDocumentTypes } = useGetHelpDocumentType();
+
+  const selectItemsDocumentType = useMemo(
+    () => documentTypes.map(toHelpDocumentTypeSelectCommon),
+    [documentTypes]
   );
 
   const form = useForm<IHelpFormValues>({
@@ -70,16 +80,32 @@ export function useNewSectionPage() {
 
   useEffect(() => {
     const validateCurrentStep = async () => {
-      const fieldsToCheck = state.field as Array<keyof IHelpFormValues>;
+      const currentDocType = Number(form.getValues('helpDocumentTypeId'));
+
+      const allFields = state.field as Array<keyof IHelpFormValues>;
+
+      const fieldsToCheck = allFields.filter(field => {
+        if (field === 'document' && currentDocType === HELP_DOCUMENT_LINK) {
+          return false;
+        }
+        if (field === 'link' && currentDocType !== HELP_DOCUMENT_LINK) {
+          return false;
+        }
+        return true;
+      });
 
       const isValid = fieldsToCheck.every(field => {
-      const fieldValue = form.getValues(field);
+        const fieldValue = form.getValues(field);
 
         if (Array.isArray(fieldValue)) {
           return fieldValue.length > 0;
         }
 
-        return fieldValue !== '' && fieldValue !== null && fieldValue !== undefined;
+        if (typeof fieldValue === 'string') {
+          return fieldValue.trim() !== '';
+        }
+
+        return fieldValue !== null && fieldValue !== undefined;
       });
 
       setIsStepValid(isValid);
@@ -87,16 +113,15 @@ export function useNewSectionPage() {
 
     validateCurrentStep();
 
-    const subscription = form.watch((_, { name }) => {
-      const fieldsToCheck = state.field as Array<keyof IHelpFormValues>;
-      if (name && fieldsToCheck.includes(name as keyof IHelpFormValues)) {
+    const subscription = form.watch((values, { name }) => {
+      const allFields = state.field as Array<keyof IHelpFormValues>;
+      if (name && (allFields.includes(name as keyof IHelpFormValues) || name === 'helpDocumentTypeId')) {
         validateCurrentStep();
       }
     });
 
     return () => subscription.unsubscribe();
   }, [form, state.field, state.step]);
-
 
   const onSubmit = async (data: IHelpFormValues) => {
     try {
@@ -114,59 +139,61 @@ export function useNewSectionPage() {
         title: data.title ? data.title : '',
         profiles: data.profiles.map(x => x.id),
         statusId: Number(data.state),
-        parentId: '',
-        link: '',
-        helpTypeId: HELP_SECTION,
-        helpDocumentTypeId: '',
-        documents: []
+        parentId: data.parentId ?? '',
+        link: data.link ?? '',
+        helpTypeId: HELP_INVISIBLE,
+        helpDocumentTypeId: data.helpDocumentTypeId?.toString(),
+        documents: data.document ?? null
       });
 
       Toast({
-        message: 'Sección creada correctamente',
+        message: 'Artículo creado correctamente',
         type: eToast.Success
       });
 
       navigate(HELP.name);
 
-    } catch (e) {
-      Toast({
-        message: 'Error al crear la sección',
-        type: eToast.Error
-      });
+    } catch (err: any) {
+      const message = err?.error?.message;
+      Toast({ message: message ? message : 'Error al crear documento invisible', type: eToast.Error });
 
       dispatch({
         type: 'STEP_CONFIRMATION',
-        payload: '',
+        payload: ''
       });
     }
   }
-
 
   const handleNext = async () => {
     const fieldsToValidate = state.field as Array<keyof IHelpFormValues>;
     const isValid = await form.trigger(fieldsToValidate);
 
     if (!isValid) return;
-
     switch (state.step) {
+
       case eStep.STEP_ONE: {
+
         setNavSteps(navStepSelected(navSteps, state.step + 1));
+
         dispatch({
           type: 'STEP_CONFIRMATION',
-          payload: '',
+          payload: ''
         });
+
         break;
+
       }
       case eStep.STEP_CONFIRMATION: {
         setNavSteps(navStepSelected(navSteps, state.step + 1));
         dispatch({
           type: 'SUCCESS',
-          payload: '',
+          payload: ''
         });
         break;
       }
     }
   }
+
 
   const handleBack = () => {
 
@@ -184,7 +211,7 @@ export function useNewSectionPage() {
 
         dispatch({
           type: 'STEP_ONE',
-          payload: '',
+          payload: ''
         });
 
         break;
@@ -196,14 +223,16 @@ export function useNewSectionPage() {
   return {
     creating,
     selectItemsStatuses,
+    selectItemsDocumentType,
     contentStepRef,
-    isLoadingStatus,
     form,
     navSteps,
     state,
     handleBack,
+    isLoadingStatus,
+    isLoadingDocumentTypes,
     onSubmit,
     handleNext,
-    isStepValid
+    isStepValid,
   }
 }

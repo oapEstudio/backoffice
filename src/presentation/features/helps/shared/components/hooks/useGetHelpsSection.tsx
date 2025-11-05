@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
-import { DependencyContext } from "../../../contexts/DependencyContext";
-import type { IFilter } from "../../../../domain/entities/IFilter";
+import { DependencyContext } from "../../../../../contexts/DependencyContext";
+import type { IFilter } from "../../../../../../domain/entities/IFilter";
 
 export function useGetHelpSections(search?: string) {
   const { getHelpSections } = useContext(DependencyContext);
@@ -14,7 +14,7 @@ export function useGetHelpSections(search?: string) {
       .then(res => setResult(res.filter(r => r.description !== '')))
       .catch(err => setError(err instanceof Error ? err : new Error(String(err))))
       .finally(() => setLoading(false));
-  }, [getHelpSections, search]); // ⬅️ Agregué 'filters' aquí
+  }, [getHelpSections, search]);
 
   return { result, loading, error };
 }

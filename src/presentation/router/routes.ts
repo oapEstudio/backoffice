@@ -102,6 +102,23 @@ export const NEW_ARTICLE: IRoute = {
     children: [],
     viewNav: true
 }
+
+export const NEW_DOCUMENT: IRoute = {
+    title: 'Nuevo Documento',
+    order:  'HelpDocument',
+    name: '/new_document_help',
+    children: [],
+    viewNav: true
+}
+
+export const NEW_DOCUMENT_INVISIBLE: IRoute = {
+    title: 'Nuevo Documento Invisible',
+    order:  'HelpDocumentInvisible',
+    name: '/new_document_invisible_help',
+    children: [],
+    viewNav: true
+}
+
 export const ROUTES: IRoute[] =[
     HOME, FATHER_PROFILE, NOTIFICATION, FUNTIONALITIES, NEW_DYNAMIC_PAGE, HELP
 ];

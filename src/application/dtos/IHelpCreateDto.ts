@@ -11,6 +11,6 @@ export interface IHelpCreateDto {
   status?: string;
   helpDocumentTypeId?: string;
   helpDocumentType?: string;
-  documents?: File[];
+  documents?: File[] | null;
   profiles?: string[];
 }

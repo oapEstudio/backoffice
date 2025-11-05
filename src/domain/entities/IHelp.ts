@@ -14,9 +14,10 @@ export interface IHelp {
      statusColor: string;
      helpDocumentTypeId: number;
      helpDocumentType: string;
-     document: File[];
+     document: any[];   
      profile: any[];  
      dateCreated: Date;
      dateUpdated: string;
      updatedBy: string;
+     isParentSection: boolean;
 }
