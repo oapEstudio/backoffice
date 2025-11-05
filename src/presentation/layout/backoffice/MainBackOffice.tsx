@@ -4,6 +4,7 @@ import NavBar from '../../components/widgets/nav-bar';
 import { styled } from '@mui/material/styles';
 import Footer from '../../components/ui/footer/Footer';
 import { CustomToast } from '../../components/ui/toast/CustomToast';
+import { Outlet } from 'react-router-dom';
 
 const MainWrapper = styled("div")(() => ({
   display: "flex",
@@ -24,13 +25,13 @@ const ContentWrapper = styled('div')({
   paddingBottom: '10%',
    minHeight: '56.25rem',
 })
-export const MainBackOffice: React.FC<LayoutProps> = ({ children }) => {
+export const MainBackOffice: React.FC = () => {
   return (
     <MainWrapper>
         <PageWrapper>
             <NavBar />
             <ContentWrapper>
-                {children}
+                <Outlet />
             </ContentWrapper>
             <Footer />
         </PageWrapper>
