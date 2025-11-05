@@ -30,7 +30,7 @@ export const FilterHelpsPage: React.FC<FilterHelpPageProps> = ({
 }) => {
 
   const { resultState, resultType, loading } = useHelpFilterOptions({
-    stateFilters: { forCreate: true }
+    stateFilters: { forUpdate: true }
   });
   const { profiles: profileFilters, loading: loadingProfiles } = useProfileFilterHelpOptions()
 
