@@ -5,18 +5,18 @@ import type { IHelpCreateDto } from '../../../../application/dtos/IHelpCreateDto
 export function useCreateHelp() {
   const { createHelp } = useContext(DependencyContext)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
   const create = useCallback(
     async (dto: IHelpCreateDto) => {
       setLoading(true)
-      setError(null)
       try {
         const newId = await createHelp.execute(dto);
         return newId
       } catch (err: any) {
-        setError(err.message || 'Error al crear')
-        throw err
+        if (err instanceof Error) {
+          throw new Error(`${err.message}`)
+        }
+        throw err;
       } finally {
         setLoading(false)
       }
@@ -24,5 +24,5 @@ export function useCreateHelp() {
     [createHelp]
   )
 
-  return { create, loading, error }
+  return { create, loading }
 }

@@ -11,7 +11,7 @@ import type { IFilterHelpsResult } from '../pages/helps/components/filter-help-p
 import { SelectCreateHelp } from '../pages/helps/components/select-create-help/SelectHelp';
 import { eToast, Toast } from '../../../components/ui/toast/CustomToastService';
 import { useHelpCancellation } from './useCancellationHelp';
-import { useGetHelpsProfiles } from './useGetHelpsProfiles';
+import { useGetHelpsProfiles } from '../shared/components/hooks/useGetHelpsProfiles';
 import { HELP_INVISIBLE, HELP_SECTION } from '../shared/constants/helps';
 
 export const useHelpPage = () => {
@@ -90,8 +90,9 @@ export const useHelpPage = () => {
 
       refresh();
 
-    } catch {
-      Toast({ message: 'Error al dar de baja el item de ayuda', type: eToast.Error })
+    } catch (err: any) {
+      const message = err?.error?.message;
+      Toast({ message: message ? message : 'Error al dar de baja el item de ayuda', type: eToast.Error });
     }
   }, [cancellation, pendingDeleteId, refresh]);
 

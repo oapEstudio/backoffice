@@ -18,7 +18,7 @@ export const NewArticlePage = () => {
   const { contentStepRef, form, navSteps, state, onSubmit, handleBack, handleNext, creating, selectItemsStatuses, leftSeedProfiles, isLoadingProfiles, isLoadingStatus, isStepValid } = useNewArticlePage();
 
   return (
-    <ContainerPage description="NewSectionPage" title={`${HELP.title} - ${NEW_ARTICLE.title}`} titleSEO='Gestión de ayuda - Alta sección'>
+    <ContainerPage description="NewSectionPage" title={`${HELP.title} - ${NEW_ARTICLE.title}`} titleSEO='Gestión de ayuda - Alta artículo'>
       <div ref={contentStepRef} />
       <FormProvider {...form}>
         <StepperWrapperBackOfficeDefault width='40%'>

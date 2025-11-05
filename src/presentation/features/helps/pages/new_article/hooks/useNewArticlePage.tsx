@@ -10,10 +10,10 @@ import { useScrollToTopOnStep } from "../../../../../utils/useScrollToTopOnStep"
 import type { IHelpFormValues } from "../../../shared/interface/IHelpFormValues";
 import { HELP_ARTICLE } from "../../../shared/constants/helps";
 import { useCreateHelp } from "../../../hooks/useCreateHelp";
-import { useGetHelpStatus } from "../../../hooks/useGetHelpsState";
+import { useGetHelpStatus } from "../../../shared/components/hooks/useGetHelpsState";
 import { toHelpSelect } from "../../../mappers/helpCreateMapper";
 import { ActionStepReducer, eStep, getActionStepInitialState } from "../reducers/ActionStepReducer";
-import { useGetHelpsProfiles } from "../../../hooks/useGetHelpsProfiles";
+import { useGetHelpsProfiles } from "../../../shared/components/hooks/useGetHelpsProfiles";
 
 
 const navStepsInit: StepType[] = [{
@@ -156,7 +156,6 @@ export function useNewArticlePage() {
   }
 
   const handleNext = async () => {
-    // Validar solo los campos del paso actual
     const fieldsToValidate = state.field as Array<keyof IHelpFormValues>;
     const isValid = await form.trigger(fieldsToValidate);
 

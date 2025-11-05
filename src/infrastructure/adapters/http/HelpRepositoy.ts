@@ -62,12 +62,17 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
       for (const p of dto.profiles) form.append('profiles', String(p));
     }
 
-    const res = await apiHandler.post<{ id: string }, FormData>(
-      this.resolveURL(url, version),
-      {},
-      form
-    );
-    return res.data.id;
+    try {
+      const res = await apiHandler.post<{ id: string }, FormData>(
+        this.resolveURL(url, version),
+        {},
+        form
+      );
+
+      return res.data.id;
+    } catch (error: any) {
+      throw { error };
+    }
   }
 
   async updateHelp(id: string, dto: IHelpUpdateDto): Promise<IHelp> {
@@ -95,8 +100,12 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
     form.append('statusId', String(dto.statusId ?? ''));
 
 
-    const res = await apiHandler.put<IHelp, FormData>(this.resolveURL(url, version), {}, form);
-    return res.data;
+    try {
+      const res = await apiHandler.put<IHelp, FormData>(this.resolveURL(url, version), {}, form);
+      return res.data;
+    } catch (error: any) {
+      throw { error };
+    }
   }
 
   async updateHelpProfiles(id: string, payload: IHelpUpdateProfiles) {
@@ -104,12 +113,12 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
     const url = this.resource.edit.profiles.endpoint.replace('{id}', id);
     const version = this.resource.edit.profiles.version;
 
-      try {
-        const res = await apiHandler.put<any>(this.resolveURL(url, version), {}, payload);
-        return res.data;
-      } catch (error: any) {
-        throw { error };
-      }
+    try {
+      const res = await apiHandler.put<any>(this.resolveURL(url, version), {}, payload);
+      return res.data;
+    } catch (error: any) {
+      throw { error };
+    }
   }
 
   async updateHelpsStatus(id: string, statusId: string): Promise<IHelp> {
@@ -117,12 +126,15 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
 
     const version = this.resource.edit.status.version;
 
-    const res = await apiHandler.put<any>(this.resolveURL(url, version), {}, {
-      statusId
-    });
+    try {
+      const res = await apiHandler.put<any>(this.resolveURL(url, version), {}, {
+        statusId
+      });
 
-    return res.data;
-
+      return res.data;
+    } catch (error: any) {
+      throw { error };
+    }
   }
 }
 

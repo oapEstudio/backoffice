@@ -7,7 +7,7 @@ import type { IHelpFormValues } from '../../interface/IHelpFormValues';
 import { MAX_LENGTH_INPUT } from '../../../../shared/constants/default-input';
 import type { SelectOption } from '../../../../../components/ui/inputs/select/select.interface';
 import CustomTextAreaInput from '../../../../../components/ui/inputs/text-area-input/text-area-input.component';
-import { useGetHelpSections } from '../../../hooks/useGetHelpsSection';
+import { useGetHelpSections } from '../hooks/useGetHelpsSection';
 import CustomSearchSelect from '../custom-search-select/CustomSearchSelect';
 
 interface HelpArticleDetailsFieldsProps {
@@ -26,10 +26,8 @@ export const HelpArticleDetailsFields: React.FC<HelpArticleDetailsFieldsProps> =
   const { control, formState: { errors } } = useFormContext<IHelpFormValues>();
   const [searchTerm, setSearchTerm] = useState('');
   
-  // Pasa el término de búsqueda al hook
   const { result: sectionItems, loading } = useGetHelpSections(searchTerm);
 
-  // Transforma los datos
   const selectItemsSection = sectionItems
     ? sectionItems.map((section) => ({
         value: section.id,
@@ -51,7 +49,7 @@ export const HelpArticleDetailsFields: React.FC<HelpArticleDetailsFieldsProps> =
           <CustomSearchSelect
             value={field.value || ''}
             onChange={field.onChange}
-            onSearch={handleSearch} // ⬅️ Callback de búsqueda
+            onSearch={handleSearch} 
             options={selectItemsSection}
             placeholder="Buscar sección..."
             label="Sección a la que pertenecerá este artículo"

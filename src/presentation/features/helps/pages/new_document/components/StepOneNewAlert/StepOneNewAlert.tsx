@@ -11,6 +11,6 @@ export const StepOneNewAlert: React.FC<StepOneNewAlertProps> = ({
   selectItemsDocumentType = [],
 }) => {
   return (
-    <HelpDocumentDetailsFields selectItemsStatuses={selectItemsStatuses}  selectItemsDocumentType={selectItemsDocumentType} />
+    <HelpDocumentDetailsFields selectItemsStatuses={selectItemsStatuses} selectItemsDocumentType={selectItemsDocumentType} />
   )
 }

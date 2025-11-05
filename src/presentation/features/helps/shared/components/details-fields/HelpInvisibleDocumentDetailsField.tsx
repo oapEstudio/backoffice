@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import CustomTextInput from '../../../../../components/ui/inputs/text-input/text-input.component';
 import CustomSelect from '../../../../../components/ui/inputs/select/select.component';
@@ -8,12 +8,14 @@ import { MAX_LENGTH_INPUT } from '../../../../shared/constants/default-input';
 import type { SelectOption } from '../../../../../components/ui/inputs/select/select.interface';
 import FileDropzone from '../../../../../components/ui/file-drop-zone/FileDropzone';
 import { Typography } from '@mui/material';
+import { HELP_DOCUMENT_LINK } from '../../constants/helps';
 
 interface HelpDocumentInvisibleDetailsFieldsProps {
   disabledAll?: boolean;
   titleLabel?: string;
   disabledState?: boolean;
   selectItemsStatuses: SelectOption[];
+  selectItemsDocumentType: SelectOption[];
 }
 
 export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleDetailsFieldsProps> = ({
@@ -21,8 +23,25 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
   disabledAll = false,
   disabledState = false,
   selectItemsStatuses = [],
+  selectItemsDocumentType = [],
 }) => {
-  const { control, formState: { errors } } = useFormContext<IHelpFormValues>();
+  const { control, formState: { errors }, watch, setValue } = useFormContext<IHelpFormValues>();
+  const watchDocumentType = watch('helpDocumentTypeId');
+  const prevDocumentType = useRef(watchDocumentType);
+
+  useEffect(() => {
+    if (prevDocumentType.current !== watchDocumentType && prevDocumentType.current !== undefined) {
+      if (Number(watchDocumentType) === HELP_DOCUMENT_LINK) {
+        setValue('document', []);
+        setValue('link', '');
+      } else {
+        setValue('document', []);
+        setValue('link', '');
+      }
+    }
+
+    prevDocumentType.current = watchDocumentType;
+  }, [watchDocumentType, setValue]);
 
   return (
     <>
@@ -51,15 +70,15 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
       <br />
       <br />
       <Controller
-        name="state"
+        name="helpDocumentTypeId"
         control={control}
-        rules={{ required: 'El estado es obligatorio' }}
+        rules={{ required: 'El tipo de documento es obligatorio' }}
         render={({ field }) => (
           <CustomSelect
             {...field}
             label="Tipo de documento"
             required
-            options={selectItemsStatuses}
+            options={selectItemsDocumentType}
             error={!!errors.state}
             disabled={disabledState || disabledAll}
           />
@@ -67,29 +86,69 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
       />
       <br />
       <br />
-      <Controller
-        name="document"
-        control={control}
-        rules={{
-          validate: (v) => (v !== undefined) || 'Debes agregar un documento',
-        }}
-        render={({ field, fieldState: { error } }) => (
-          <>
-            <FileDropzone
-              multiple={false}
-              value={field.value ? field.value : []}
-              onFiles={(files) => {
-                if (files) field.onChange(files[0])
-              }}
+      {Number(watchDocumentType) === HELP_DOCUMENT_LINK ? (
+        <Controller
+          name="link"
+          control={control}
+          rules={{
+            required: 'La URL es obligatoria',
+            validate: {
+              validUrl: (value) => {
+                if (!value) return true;
+                try {
+                  new URL(value);
+                  return true;
+                } catch {
+                  return 'Debe ser una URL válida (ej: https://ejemplo.com)';
+                }
+              },
+              validProtocol: (value) => {
+                if (!value) return true;
+                return value.startsWith('http://') || value.startsWith('https://')
+                  || 'La URL debe comenzar con http:// o https://';
+              }
+            }
+          }}
+          render={({ field }) => (
+            <CustomTextInput
+              {...field}
+              required
+              label="URL del documento"
+              type="url"
+              placeholder="https://ejemplo.com/documento"
+              error={!!errors.link}
+              helperText={errors.link?.message}
+              disabled={disabledAll}
             />
-            {error && (
-              <Typography color="error" variant="caption">
-                {error.message}
-              </Typography>
-            )}
-          </>
-        )}
-      />
+          )}
+        />
+      ) : (
+
+        <Controller
+          name="document"
+          control={control}
+          rules={{
+            validate: (v) => (v !== undefined) || 'Debes asignar un archivo',
+          }}
+          render={({ field, fieldState: { error } }) => {
+            return (
+              <>
+                <FileDropzone
+                  multiple={false}
+                  value={(field.value ? field.value : [])}
+                  onFiles={(files) => field.onChange(files)}
+                  disabled={disabledAll}
+                />
+                {error && (
+                  <Typography color="error" variant="caption">
+                    {error.message}
+                  </Typography>
+                )}
+              </>
+            );
+          }}
+        />
+      )}
       <br />
       <br />
       <Controller

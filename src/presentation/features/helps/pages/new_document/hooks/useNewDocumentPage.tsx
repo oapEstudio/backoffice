@@ -10,11 +10,11 @@ import { useScrollToTopOnStep } from "../../../../../utils/useScrollToTopOnStep"
 import type { IHelpFormValues } from "../../../shared/interface/IHelpFormValues";
 import { HELP_ARTICLE, HELP_DOCUMENT, HELP_DOCUMENT_LINK } from "../../../shared/constants/helps";
 import { useCreateHelp } from "../../../hooks/useCreateHelp";
-import { useGetHelpStatus } from "../../../hooks/useGetHelpsState";
+import { useGetHelpStatus } from "../../../shared/components/hooks/useGetHelpsState";
 import { toHelpDocumentTypeSelectCommon, toHelpSelect } from "../../../mappers/helpCreateMapper";
 import { ActionStepReducer, eStep, getActionStepInitialState } from "../reducers/ActionStepReducer";
-import { useGetHelpsProfiles } from "../../../hooks/useGetHelpsProfiles";
-import { useGetHelpDocumentType } from "../../../hooks/useGetHelpsDocumentType";
+import { useGetHelpsProfiles } from "../../../shared/components/hooks/useGetHelpsProfiles";
+import { useGetHelpDocumentType } from "../../../shared/components/hooks/useGetHelpsDocumentType";
 
 
 const navStepsInit: StepType[] = [{
@@ -57,7 +57,7 @@ export function useNewDocumentPage() {
     [documentTypes]
   );
 
-  const { result: profiles, loading: isLoadingProfiles } = useGetHelpsProfiles(
+  const { result: profiles, loading: isLoadingProfiles, error: errorCreate } = useGetHelpsProfiles(
     parentIdForProfiles ? { parentFilter: { parentId: parentIdForProfiles } } : undefined
   );
 
@@ -97,11 +97,9 @@ export function useNewDocumentPage() {
       const allFields = state.field as Array<keyof IHelpFormValues>;
 
       const fieldsToCheck = allFields.filter(field => {
-        // Excluir 'document' si es tipo LINK
         if (field === 'document' && currentDocType === HELP_DOCUMENT_LINK) {
           return false;
         }
-        // Excluir 'link' si NO es tipo LINK
         if (field === 'link' && currentDocType !== HELP_DOCUMENT_LINK) {
           return false;
         }
@@ -122,7 +120,6 @@ export function useNewDocumentPage() {
         return fieldValue !== null && fieldValue !== undefined;
       });
 
-      console.log(isValid)
       setIsStepValid(isValid);
     };
 
@@ -162,17 +159,14 @@ export function useNewDocumentPage() {
       });
 
       Toast({
-        message: 'Artículo creado correctamente',
+        message: 'Documento creado correctamente',
         type: eToast.Success
       });
 
       navigate(HELP.name);
-
-    } catch (e) {
-      Toast({
-        message: 'Error al crear el artículo',
-        type: eToast.Error
-      });
+    } catch (err: any) {
+      const message = err?.error?.message;
+      Toast({ message: message ? message : 'Error al crear documento', type: eToast.Error });
 
       dispatch({
         type: 'STEP_CONFIRMATION',
