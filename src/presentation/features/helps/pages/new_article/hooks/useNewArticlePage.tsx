@@ -5,16 +5,14 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { eToast, Toast } from "../../../../../components/ui/toast/CustomToastService";
 import { HELP } from "../../../../../router/routes";
-import { navStepSelected } from "../../../../../utils/navStepSelected";
 import { useScrollToTopOnStep } from "../../../../../utils/useScrollToTopOnStep";
 import type { IHelpFormValues } from "../../../shared/interface/IHelpFormValues";
 import { HELP_ARTICLE } from "../../../shared/constants/helps";
 import { useCreateHelp } from "../../../hooks/useCreateHelp";
-import { useGetHelpStatus } from "../../../shared/components/hooks/useGetHelpsState";
-import { toHelpSelect } from "../../../mappers/helpCreateMapper";
 import { ActionStepReducer, eStep, getActionStepInitialState } from "../reducers/ActionStepReducer";
-import { useGetHelpsProfiles } from "../../../shared/components/hooks/useGetHelpsProfiles";
-import { useHelpFilters } from "../../../shared/components/hooks/useHelpFilters";
+import { useHelpFilters } from "../../../shared/hooks/useHelpFilters";
+import { useStepperNavigation } from "../../../shared/hooks/useStepperNavigation";
+
 
 
 const navStepsInit: StepType[] = [{
@@ -42,15 +40,32 @@ export function useNewArticlePage() {
     isLoadingStatus,
     setParentIdForProfiles,
   } = useHelpFilters();
-  
+
   const [isStepValid, setIsStepValid] = useState(false);
-
-
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(ActionStepReducer, getActionStepInitialState());
   const { create, loading: creating } = useCreateHelp();
 
-
+  const { handleNext, handleBack } = useStepperNavigation({
+    state,
+    navSteps,
+    setNavSteps,
+    dispatch,
+    stepEnum: eStep,
+    onStepCallbacks: {
+      [eStep.STEP_ONE]: async () => {
+        const parentId = form.getValues("parentId");
+        const cleanParent =
+          parentId && typeof parentId === "string" && parentId.trim() !== ""
+            ? parentId
+            : null;
+        setParentIdForProfiles(cleanParent);
+      },
+    },
+    backRoutes: {
+      [eStep.STEP_ONE]: HELP.name,
+    },
+  });
 
   const form = useForm<IHelpFormValues>({
     defaultValues: {
@@ -133,44 +148,10 @@ export function useNewArticlePage() {
     } catch (err: any) {
       const message = err?.error?.message;
       Toast({ message: message ? message : 'Error al crear artículo', type: eToast.Error });
-      dispatch({ type: 'STEP_CONFIRMATION',payload: '' });
+      dispatch({ type: 'STEP_CONFIRMATION', payload: '' });
     }
   }
 
-  const handleNext = async () => {
-    switch (state.step) {
-      case eStep.STEP_ONE: {
-        const parentId = form.getValues("parentId");
-        const cleanParent =
-          parentId && typeof parentId === "string" && parentId.trim() !== "" ? parentId : null;
-
-        setParentIdForProfiles(cleanParent);
-
-        setNavSteps(navStepSelected(navSteps, state.step + 1));
-        dispatch({ type: "STEP_CONFIRMATION", payload: "" });
-        break;
-      }
-      case eStep.STEP_CONFIRMATION: {
-        setNavSteps(navStepSelected(navSteps, state.step + 1));
-        dispatch({ type: "SUCCESS", payload: "" });
-        break;
-      }
-    }
-  };
-
-  const handleBack = () => {
-    switch (state.step) {
-      case eStep.STEP_ONE: {
-        navigate(HELP.name);
-        break;
-      }
-      case eStep.STEP_CONFIRMATION: {
-        setNavSteps(navStepSelected(navSteps, state.step - 1));
-        dispatch({ type: "STEP_ONE", payload: "" });
-        break;
-      }
-    }
-  };
 
   return {
     creating,

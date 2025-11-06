@@ -1,6 +1,6 @@
 import { ContainerPage } from "../../../../components/containers/container-page/ContainerPage";
-import { HELP, NEW_ARTICLE, NEW_DOCUMENT } from "../../../../router/routes";
-import { FormProvider, useForm } from "react-hook-form";
+import { HELP, NEW_DOCUMENT } from "../../../../router/routes";
+import { FormProvider } from "react-hook-form";
 import StepperWrapperBackOfficeDefault from "../../../../components/ui/step/stepper-wrapper-backoffice-default";
 import StepNavigationBackOffice from "../../../../components/ui/step/step-navigation-backoffice";
 import { CustomBox } from "../../../../components/ui/box/CustomBox";

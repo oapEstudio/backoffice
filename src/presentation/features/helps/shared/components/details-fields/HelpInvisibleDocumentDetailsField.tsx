@@ -9,6 +9,7 @@ import type { SelectOption } from '../../../../../components/ui/inputs/select/se
 import FileDropzone from '../../../../../components/ui/file-drop-zone/FileDropzone';
 import { Typography } from '@mui/material';
 import { HELP_DOCUMENT_LINK } from '../../constants/helps';
+import { useDocumentAccept } from '../../hooks/useDocumentAccept';
 
 interface HelpDocumentInvisibleDetailsFieldsProps {
   disabledAll?: boolean;
@@ -26,12 +27,13 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
   selectItemsDocumentType = [],
 }) => {
   const { control, formState: { errors }, watch, setValue } = useFormContext<IHelpFormValues>();
-  const watchDocumentType = watch('helpDocumentTypeId');
-  const prevDocumentType = useRef(watchDocumentType);
+  const { accept, docTypeNum } = useDocumentAccept();
+  
+  const prevDocumentType = useRef(docTypeNum);
 
   useEffect(() => {
-    if (prevDocumentType.current !== watchDocumentType && prevDocumentType.current !== undefined) {
-      if (Number(watchDocumentType) === HELP_DOCUMENT_LINK) {
+    if (prevDocumentType.current !== docTypeNum && prevDocumentType.current !== undefined) {
+      if (Number(docTypeNum) === HELP_DOCUMENT_LINK) {
         setValue('document', []);
         setValue('link', '');
       } else {
@@ -40,8 +42,8 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
       }
     }
 
-    prevDocumentType.current = watchDocumentType;
-  }, [watchDocumentType, setValue]);
+    prevDocumentType.current = docTypeNum;
+  }, [docTypeNum, setValue]);
 
   return (
     <>
@@ -86,7 +88,7 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
       />
       <br />
       <br />
-      {Number(watchDocumentType) === HELP_DOCUMENT_LINK ? (
+      {Number(docTypeNum) === HELP_DOCUMENT_LINK ? (
         <Controller
           name="link"
           control={control}
@@ -134,6 +136,7 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
             return (
               <>
                 <FileDropzone
+                  accept={accept}
                   multiple={false}
                   value={(field.value ? field.value : [])}
                   onFiles={(files) => field.onChange(files)}

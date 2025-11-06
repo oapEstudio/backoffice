@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { useGetHelpStatus } from "../../../shared/components/hooks/useGetHelpsState";
-import { useGetHelpsProfiles } from "../../../shared/components/hooks/useGetHelpsProfiles";
-import { useGetHelpDocumentType } from "../../../shared/components/hooks/useGetHelpsDocumentType";
-import { toHelpDocumentTypeSelectCommon, toHelpSelect } from "../../../mappers/helpCreateMapper";
+import { toHelpDocumentTypeSelectCommon, toHelpSelect } from "../../mappers/helpCreateMapper";
+import { useGetHelpsProfiles } from "./useGetHelpsProfiles";
+import { useGetHelpDocumentType } from "./useGetHelpsDocumentType";
+import { useGetHelpStatus } from "./useGetHelpsState";
+
 
 type Profile = { id: string; name: string };
 

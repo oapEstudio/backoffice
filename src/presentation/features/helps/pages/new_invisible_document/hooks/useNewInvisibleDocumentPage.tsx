@@ -12,8 +12,10 @@ import { HELP_DOCUMENT_LINK, HELP_INVISIBLE } from "../../../shared/constants/he
 import { useCreateHelp } from "../../../hooks/useCreateHelp";
 import { toHelpDocumentTypeSelectCommon } from "../../../mappers/helpCreateMapper";
 import { ActionStepReducer, eStep, getActionStepInitialState } from "../reducers/ActionStepReducer";
-import { useGetHelpDocumentType } from "../../../shared/components/hooks/useGetHelpsDocumentType";
-import { useHelpFilters } from "../../../shared/components/hooks/useHelpFilters";
+import { useGetHelpDocumentType } from "../../../shared/hooks/useGetHelpsDocumentType";
+import { useHelpFilters } from "../../../shared/hooks/useHelpFilters";
+import { useStepperNavigation } from "../../../shared/hooks/useStepperNavigation";
+
 
 
 const navStepsInit: StepType[] = [{
@@ -38,7 +40,17 @@ export function useNewInvisibleDocumentPage() {
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(ActionStepReducer, getActionStepInitialState());
   const { create, loading: creating } = useCreateHelp();
-
+  const { handleNext, handleBack } = useStepperNavigation({
+    state,
+    navSteps,
+    setNavSteps,
+    dispatch,
+    stepEnum: eStep,  
+    backRoutes: {
+      [eStep.STEP_ONE]: HELP.name,
+    },
+  });
+  
   const { result: documentTypes, loading: isLoadingDocumentTypes } = useGetHelpDocumentType();
 
   const selectItemsDocumentType = useMemo(
@@ -143,35 +155,6 @@ export function useNewInvisibleDocumentPage() {
       dispatch({ type: 'STEP_CONFIRMATION', payload: '' });
     }
   }
-
-  const handleNext = async () => {
-    switch (state.step) {
-      case eStep.STEP_ONE: {
-        setNavSteps(navStepSelected(navSteps, state.step + 1));
-        dispatch({ type: "STEP_CONFIRMATION", payload: "" });
-        break;
-      }
-      case eStep.STEP_CONFIRMATION: {
-        setNavSteps(navStepSelected(navSteps, state.step + 1));
-        dispatch({ type: "SUCCESS", payload: "" });
-        break;
-      }
-    }
-  };
-
-  const handleBack = () => {
-    switch (state.step) {
-      case eStep.STEP_ONE: {
-        navigate(HELP.name);
-        break;
-      }
-      case eStep.STEP_CONFIRMATION: {
-        setNavSteps(navStepSelected(navSteps, state.step - 1));
-        dispatch({ type: "STEP_ONE", payload: "" });
-        break;
-      }
-    }
-  };
 
   return {
     creating,

@@ -7,8 +7,8 @@ import type { IHelpFormValues } from '../../interface/IHelpFormValues';
 import { MAX_LENGTH_INPUT } from '../../../../shared/constants/default-input';
 import type { SelectOption } from '../../../../../components/ui/inputs/select/select.interface';
 import CustomTextAreaInput from '../../../../../components/ui/inputs/text-area-input/text-area-input.component';
-import { useGetHelpSections } from '../hooks/useGetHelpsSection';
 import CustomSearchSelect from '../custom-search-select/CustomSearchSelect';
+import { useGetHelpSections } from '../../hooks/useGetHelpsSection';
 
 interface HelpArticleDetailsFieldsProps {
   disabledAll?: boolean;

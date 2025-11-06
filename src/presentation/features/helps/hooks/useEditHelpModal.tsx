@@ -9,13 +9,13 @@ import type { IHelpUpdateDto } from '../../../../application/dtos/IHelpUpdateDto
 import { eToast, Toast } from '../../../components/ui/toast/CustomToastService';
 import { useUpdateHelp } from './useUpdateHelp';
 import { toHelpDocumentTypeSelectCommon, toHelpSelect } from '../mappers/helpCreateMapper';
-import { useGetHelpStatus } from '../shared/components/hooks/useGetHelpsState';
 import HelpArticleDetailsFields from '../shared/components/details-fields/HelpArticleDetailsField';
 import HelpDocumentDetailsFields from '../shared/components/details-fields/HelpDocumentDetailsField';
-import { useGetHelpDocumentType } from '../shared/components/hooks/useGetHelpsDocumentType';
 import React from 'react';
 import { dataUrlToFile } from '../../../utils/dataUrlToFile';
 import HelpInvisibleDocumentDetailsFields from '../shared/components/details-fields/HelpInvisibleDocumentDetailsField';
+import { useGetHelpDocumentType } from '../shared/hooks/useGetHelpsDocumentType';
+import { useGetHelpStatus } from '../shared/hooks/useGetHelpsState';
 
 interface UseEditHelpModalProps {
   open: boolean;
@@ -110,6 +110,7 @@ export const useEditHelpModal = ({
 
     if (!helpId) return;
 
+    console.log('Submitting form data:', data);
     try {
       const payload: IHelpUpdateDto = {
         description: data.description ?? '',

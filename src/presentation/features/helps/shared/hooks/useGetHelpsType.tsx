@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import { DependencyContext } from "../../../../../contexts/DependencyContext";
-import type { IFilter } from "../../../../../../domain/entities/IFilter";
+import { DependencyContext } from "../../../../contexts/DependencyContext";
+import type { IFilter } from "../../../../../domain/entities/IFilter";
 
-export function useGetHelpDocumentType() {
+export function useGetHelpType() {
 
-  const { getHelpDocumentTypes } = useContext(DependencyContext);
+  const { getHelpTypes } = useContext(DependencyContext);
 
   const [result, setResult] = useState<IFilter[]>([]);
 
@@ -13,11 +13,11 @@ export function useGetHelpDocumentType() {
   
   useEffect(() => {
       setLoading(true);
-      getHelpDocumentTypes.execute()
+      getHelpTypes.execute()
         .then(res => setResult(res))
         .catch(err => setError(err instanceof Error ? err : new Error(String(err))))
         .finally(() => setLoading(false));
-  }, [getHelpDocumentTypes]);
+  }, [getHelpTypes]);
   
     return { result, loading, error };
 }

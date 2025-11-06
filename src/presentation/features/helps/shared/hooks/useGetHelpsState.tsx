@@ -1,10 +1,15 @@
 import { useContext, useEffect, useState } from "react";
-import { DependencyContext } from "../../../../../contexts/DependencyContext";
-import type { IFilter } from "../../../../../../domain/entities/IFilter";
+import { DependencyContext } from "../../../../contexts/DependencyContext";
+import type { IFilter } from "../../../../../domain/entities/IFilter";
 
-export function useGetHelpType() {
 
-  const { getHelpTypes } = useContext(DependencyContext);
+interface IUseHelpFilterStateProps {
+  stateFilters?: Record<string, any>
+}
+
+export function useGetHelpStatus(filters?: IUseHelpFilterStateProps) {
+
+  const { getHelpStatuses } = useContext(DependencyContext);
 
   const [result, setResult] = useState<IFilter[]>([]);
 
@@ -13,11 +18,11 @@ export function useGetHelpType() {
   
   useEffect(() => {
       setLoading(true);
-      getHelpTypes.execute()
+      getHelpStatuses.execute(filters?.stateFilters? {filters: filters.stateFilters}: undefined)
         .then(res => setResult(res))
         .catch(err => setError(err instanceof Error ? err : new Error(String(err))))
         .finally(() => setLoading(false));
-  }, [getHelpTypes]);
+  }, [getHelpStatuses]);
   
     return { result, loading, error };
 }

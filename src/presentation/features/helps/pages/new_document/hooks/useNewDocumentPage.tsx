@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import type { StepType } from "../../../../../components/ui/step/step-navigation-backoffice";
 import { StepNumber } from "../../../shared/components/step-number/StepNumber";
 import { useForm } from "react-hook-form";
@@ -11,7 +11,8 @@ import type { IHelpFormValues } from "../../../shared/interface/IHelpFormValues"
 import { HELP_DOCUMENT, HELP_DOCUMENT_LINK } from "../../../shared/constants/helps";
 import { useCreateHelp } from "../../../hooks/useCreateHelp";
 import { ActionStepReducer, eStep, getActionStepInitialState } from "../reducers/ActionStepReducer";
-import { useHelpFilters } from "../../../shared/components/hooks/useHelpFilters";
+import { useHelpFilters } from "../../../shared/hooks/useHelpFilters";
+import { useStepperNavigation } from "../../../shared/hooks/useStepperNavigation";
 
 
 const navStepsInit: StepType[] = [{
@@ -29,7 +30,7 @@ const navStepsInit: StepType[] = [{
 
 
 export function useNewDocumentPage() {
- const contentStepRef = useRef<HTMLDivElement>(null);
+  const contentStepRef = useRef<HTMLDivElement>(null);
   const [navSteps, setNavSteps] = useState(navStepsInit);
   const [isStepValid, setIsStepValid] = useState(false);
 
@@ -42,10 +43,31 @@ export function useNewDocumentPage() {
     isLoadingDocumentTypes,
     setParentIdForProfiles,
   } = useHelpFilters();
-
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(ActionStepReducer, getActionStepInitialState());
   const { create, loading: creating } = useCreateHelp();
+
+  const { handleNext, handleBack } = useStepperNavigation({
+    state,
+    navSteps,
+    setNavSteps,
+    dispatch,
+    stepEnum: eStep,
+    onStepCallbacks: {
+      [eStep.STEP_ONE]: async () => {
+        const parentId = form.getValues("parentId");
+        const cleanParent =
+          parentId && typeof parentId === "string" && parentId.trim() !== ""
+            ? parentId
+            : null;
+        setParentIdForProfiles(cleanParent);
+      },
+    },
+    backRoutes: {
+      [eStep.STEP_ONE]: HELP.name,
+    },
+  });
+
 
   const form = useForm<IHelpFormValues>({
     defaultValues: {
@@ -127,42 +149,6 @@ export function useNewDocumentPage() {
       const message = err?.error?.message;
       Toast({ message: message || "Error al crear documento", type: eToast.Error });
       dispatch({ type: "STEP_CONFIRMATION", payload: "" });
-    }
-  };
-
-  const handleNext = async () => {
-    switch (state.step) {
-      case eStep.STEP_ONE: {
-        const parentId = form.getValues("parentId");
-        const cleanParent =
-          parentId && typeof parentId === "string" && parentId.trim() !== "" ? parentId : null;
-
-        // Actualiza el filtro de perfiles cuando avanzás
-        setParentIdForProfiles(cleanParent);
-
-        setNavSteps(navStepSelected(navSteps, state.step + 1));
-        dispatch({ type: "STEP_CONFIRMATION", payload: "" });
-        break;
-      }
-      case eStep.STEP_CONFIRMATION: {
-        setNavSteps(navStepSelected(navSteps, state.step + 1));
-        dispatch({ type: "SUCCESS", payload: "" });
-        break;
-      }
-    }
-  };
-
-  const handleBack = () => {
-    switch (state.step) {
-      case eStep.STEP_ONE: {
-        navigate(HELP.name);
-        break;
-      }
-      case eStep.STEP_CONFIRMATION: {
-        setNavSteps(navStepSelected(navSteps, state.step - 1));
-        dispatch({ type: "STEP_ONE", payload: "" });
-        break;
-      }
     }
   };
 

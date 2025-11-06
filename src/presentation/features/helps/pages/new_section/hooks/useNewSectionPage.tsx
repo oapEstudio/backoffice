@@ -11,8 +11,9 @@ import type { IHelpFormValues } from "../../../shared/interface/IHelpFormValues"
 import { ActionStepReducer, getActionStepInitialState, eStep } from "../reducers/ActionStepReducer";
 import { HELP_SECTION } from "../../../shared/constants/helps";
 import { useCreateHelp } from "../../../hooks/useCreateHelp";
-import { useGetHelpStatus } from "../../../shared/components/hooks/useGetHelpsState";
 import { toHelpSelect } from "../../../mappers/helpCreateMapper";
+import { useGetHelpStatus } from "../../../shared/hooks/useGetHelpsState";
+import { useStepperNavigation } from "../../../shared/hooks/useStepperNavigation";
 
 
 const navStepsInit: StepType[] = [{
@@ -36,6 +37,18 @@ export function useNewSectionPage() {
   const [isStepValid, setIsStepValid] = useState(false);
   const [state, dispatch] = useReducer(ActionStepReducer, getActionStepInitialState());
   const { create, loading: creating } = useCreateHelp();
+  const { handleNext, handleBack } = useStepperNavigation({
+    state,
+    navSteps,
+    setNavSteps,
+    dispatch,
+    stepEnum: eStep,  
+    backRoutes: {
+      [eStep.STEP_ONE]: HELP.name,
+    },
+  });
+
+
   const { result: statuses, loading: isLoadingStatus } = useGetHelpStatus({
     stateFilters: { forCreate: true }
   });
@@ -126,35 +139,6 @@ export function useNewSectionPage() {
       dispatch({ type: 'STEP_CONFIRMATION', payload: '' });
     }
   }
-
-  const handleNext = async () => {
-    switch (state.step) {
-      case eStep.STEP_ONE: {
-        setNavSteps(navStepSelected(navSteps, state.step + 1));
-        dispatch({ type: "STEP_CONFIRMATION", payload: "" });
-        break;
-      }
-      case eStep.STEP_CONFIRMATION: {
-        setNavSteps(navStepSelected(navSteps, state.step + 1));
-        dispatch({ type: "SUCCESS", payload: "" });
-        break;
-      }
-    }
-  };
-
-  const handleBack = () => {
-    switch (state.step) {
-      case eStep.STEP_ONE: {
-        navigate(HELP.name);
-        break;
-      }
-      case eStep.STEP_CONFIRMATION: {
-        setNavSteps(navStepSelected(navSteps, state.step - 1));
-        dispatch({ type: "STEP_ONE", payload: "" });
-        break;
-      }
-    }
-  };
 
   return {
     creating,

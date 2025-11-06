@@ -1,9 +1,9 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { toSelectOption } from '../mappers/filterHelpsMapper';
-import { useProfileFilterHelpOptions } from '../shared/components/hooks/useProfileFilterOptions';
-import { useHelpFilterOptions } from '../shared/components/hooks/useHelpsFilterOptions';
 import type { SelectOption } from '../../../components/ui/inputs/multiselect/multiselect.interface';
 import { arraysEqual } from '../../../utils/arrayToEquals';
+import { useHelpFilterOptions } from '../shared/hooks/useHelpsFilterOptions';
+import { useProfileFilterHelpOptions } from '../shared/hooks/useProfileFilterOptions';
 
 interface UseFilterHelpsPageProps {
   open: boolean;
