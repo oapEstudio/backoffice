@@ -100,13 +100,8 @@ export function useNewSectionPage() {
 
   const onSubmit = async (data: IHelpFormValues) => {
     try {
-
       if (false || state.step == eStep.SUCCESS || !data.state) return;
-
-      dispatch({
-        type: 'SUCCESS',
-        payload: ''
-      });
+      dispatch({ type: 'SUCCESS', payload: '' });
 
       await create({
         description: data.title,
@@ -121,77 +116,45 @@ export function useNewSectionPage() {
         documents: []
       });
 
-      Toast({
-        message: 'Sección creada correctamente',
-        type: eToast.Success
-      });
+      Toast({ message: 'Sección creada correctamente', type: eToast.Success});
 
       navigate(HELP.name);
 
-    } catch (e) {
-      Toast({
-        message: 'Error al crear la sección',
-        type: eToast.Error
-      });
-
-      dispatch({
-        type: 'STEP_CONFIRMATION',
-        payload: '',
-      });
+    } catch (err: any) {
+      const message = err?.error?.message;
+      Toast({ message: message ? message : 'Error al crear sección', type: eToast.Error });
+      dispatch({ type: 'STEP_CONFIRMATION', payload: '' });
     }
   }
-
 
   const handleNext = async () => {
-    const fieldsToValidate = state.field as Array<keyof IHelpFormValues>;
-    const isValid = await form.trigger(fieldsToValidate);
-
-    if (!isValid) return;
-
     switch (state.step) {
       case eStep.STEP_ONE: {
         setNavSteps(navStepSelected(navSteps, state.step + 1));
-        dispatch({
-          type: 'STEP_CONFIRMATION',
-          payload: '',
-        });
+        dispatch({ type: "STEP_CONFIRMATION", payload: "" });
         break;
       }
       case eStep.STEP_CONFIRMATION: {
         setNavSteps(navStepSelected(navSteps, state.step + 1));
-        dispatch({
-          type: 'SUCCESS',
-          payload: '',
-        });
+        dispatch({ type: "SUCCESS", payload: "" });
         break;
       }
     }
-  }
+  };
 
   const handleBack = () => {
-
     switch (state.step) {
-
       case eStep.STEP_ONE: {
-
-        navigate(HELP.name)
+        navigate(HELP.name);
         break;
-
       }
       case eStep.STEP_CONFIRMATION: {
-
         setNavSteps(navStepSelected(navSteps, state.step - 1));
-
-        dispatch({
-          type: 'STEP_ONE',
-          payload: '',
-        });
-
+        dispatch({ type: "STEP_ONE", payload: "" });
         break;
-
       }
     }
-  }
+  };
 
   return {
     creating,

@@ -14,6 +14,7 @@ import { useGetHelpStatus } from "../../../shared/components/hooks/useGetHelpsSt
 import { toHelpSelect } from "../../../mappers/helpCreateMapper";
 import { ActionStepReducer, eStep, getActionStepInitialState } from "../reducers/ActionStepReducer";
 import { useGetHelpsProfiles } from "../../../shared/components/hooks/useGetHelpsProfiles";
+import { useHelpFilters } from "../../../shared/components/hooks/useHelpFilters";
 
 
 const navStepsInit: StepType[] = [{
@@ -33,31 +34,22 @@ const navStepsInit: StepType[] = [{
 export function useNewArticlePage() {
   const contentStepRef = useRef<HTMLDivElement>(null);
   const [navSteps, setNavSteps] = useState(navStepsInit);
+
+  const {
+    selectItemsStatuses,
+    leftSeedProfiles,
+    isLoadingProfiles,
+    isLoadingStatus,
+    setParentIdForProfiles,
+  } = useHelpFilters();
+  
   const [isStepValid, setIsStepValid] = useState(false);
-  const [leftSeedProfiles, setLeftSeedProfiles] = useState<Array<{ id: string; name: string }>>([]);
-  const [parentIdForProfiles, setParentIdForProfiles] = useState<string | null>(null);
+
 
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(ActionStepReducer, getActionStepInitialState());
   const { create, loading: creating } = useCreateHelp();
-  const { result: statuses, loading: isLoadingStatus } = useGetHelpStatus({
-    stateFilters: { forCreate: true }
-  });
 
-  const selectItemsStatuses = useMemo(
-    () => statuses.map(toHelpSelect),
-    [statuses]
-  );
-
-  const { result: profiles, loading: isLoadingProfiles } = useGetHelpsProfiles(
-    parentIdForProfiles ? { parentFilter: { parentId: parentIdForProfiles } } : undefined
-  );
-
-  useEffect(() => {
-    if (profiles && Array.isArray(profiles)) {
-      setLeftSeedProfiles(profiles);
-    }
-  }, [profiles]);
 
 
   const form = useForm<IHelpFormValues>({
@@ -114,13 +106,9 @@ export function useNewArticlePage() {
 
   const onSubmit = async (data: IHelpFormValues) => {
     try {
+      if (state.step === eStep.SUCCESS || !data.state) return;
 
-      if (false || state.step == eStep.SUCCESS || !data.state) return;
-
-      dispatch({
-        type: 'SUCCESS',
-        payload: ''
-      });
+      dispatch({ type: "SUCCESS", payload: "" });
 
       await create({
         description: data.description,
@@ -142,79 +130,47 @@ export function useNewArticlePage() {
 
       navigate(HELP.name);
 
-     } catch (err: any) {
+    } catch (err: any) {
       const message = err?.error?.message;
       Toast({ message: message ? message : 'Error al crear artículo', type: eToast.Error });
-
-      dispatch({
-        type: 'STEP_CONFIRMATION',
-        payload: ''
-      });
+      dispatch({ type: 'STEP_CONFIRMATION',payload: '' });
     }
   }
 
   const handleNext = async () => {
-    const fieldsToValidate = state.field as Array<keyof IHelpFormValues>;
-    const isValid = await form.trigger(fieldsToValidate);
-
-    if (!isValid) return;
     switch (state.step) {
-
       case eStep.STEP_ONE: {
-        const parentId = form.getValues('parentId');
-        
-        if (parentId && typeof parentId === 'string' && parentId.trim() !== '') {
-          setParentIdForProfiles(parentId);
-        } else {
-          setParentIdForProfiles(null);
-          setLeftSeedProfiles([]);
-        }
+        const parentId = form.getValues("parentId");
+        const cleanParent =
+          parentId && typeof parentId === "string" && parentId.trim() !== "" ? parentId : null;
+
+        setParentIdForProfiles(cleanParent);
+
         setNavSteps(navStepSelected(navSteps, state.step + 1));
-
-        dispatch({
-          type: 'STEP_CONFIRMATION',
-          payload: ''
-        });
-
+        dispatch({ type: "STEP_CONFIRMATION", payload: "" });
         break;
-
       }
       case eStep.STEP_CONFIRMATION: {
         setNavSteps(navStepSelected(navSteps, state.step + 1));
-        dispatch({
-          type: 'SUCCESS',
-          payload: ''
-        });
+        dispatch({ type: "SUCCESS", payload: "" });
         break;
       }
     }
-  }
-
+  };
 
   const handleBack = () => {
-
     switch (state.step) {
-
       case eStep.STEP_ONE: {
-
-        navigate(HELP.name)
+        navigate(HELP.name);
         break;
-
       }
       case eStep.STEP_CONFIRMATION: {
-
         setNavSteps(navStepSelected(navSteps, state.step - 1));
-
-        dispatch({
-          type: 'STEP_ONE',
-          payload: ''
-        });
-
+        dispatch({ type: "STEP_ONE", payload: "" });
         break;
-
       }
     }
-  }
+  };
 
   return {
     creating,

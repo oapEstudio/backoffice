@@ -7,6 +7,7 @@ import DualProfileFetch from "../../../../../../components/widgets/dual-profile-
 import { Typography } from "@mui/material";
 import Loading from "../../../../../../components/ui/loading";
 import { CustomBox } from "../../../../../../components/ui/box/CustomBox";
+import { useUpdateHelpProfileForm } from "../../../../hooks/useUpdateHelpProfileForm";
 
 interface UpdateHelpProfilesProps {
   open: boolean;
@@ -31,46 +32,22 @@ export const UpdateHelpProfile: React.FC<UpdateHelpProfilesProps> = ({
   onClose,
   onSaved,
 }) => {
-  const { update, loading } = useUpdateHelpProfile();
-
-  const form = useForm<IFormValues>({
-    defaultValues: {
-      profiles: (selectedProfiles ?? []).map((p) => String(p.id)),
-    },
-    mode: 'onChange',
-    reValidateMode: 'onChange',
-  })
 
   const {
+    form,
     control,
-    formState: { errors, isValid },
-    reset,
-    handleSubmit,
-  } = form
-
-  useEffect(() => {
-    if (open) {
-      reset({ profiles: (selectedProfiles ?? []).map((p) => String(p.id)) })
-    }
-  }, [open, selectedProfiles, reset])
-
-  const onCancel = () => {
-    reset()
-    onClose()
-  }
-
-  const handleSave = handleSubmit(async (data) => {
-      try {
-      await update(helpId, { profiles: data.profiles })
-        Toast({ message: 'Perfiles actualizados con éxito', type: eToast.Success });
-        onSaved();
-        reset();
-        onClose();
-       } catch (err: any) {
-        const message = err?.error?.message;
-        Toast({ message: message ? message : 'Error al actualizar los perfiles', type: eToast.Error });
-      }
-  })
+    isValid,
+    loading,
+    onCancel,
+    handleSave,
+    profileValidator,
+  } = useUpdateHelpProfileForm({
+    open,
+    helpId,
+    selectedProfiles,
+    onClose,
+    onSaved,
+  });
 
   return (
     <CustomModal
@@ -86,7 +63,7 @@ export const UpdateHelpProfile: React.FC<UpdateHelpProfilesProps> = ({
         <Controller
           name="profiles"
           control={control}
-          rules={{ validate: (v) => (v?.length ?? 0) > 0 || 'Seleccione al menos un perfil' }}
+          rules={{ validate: profileValidator }}
           render={({ field, fieldState: { error } }) => (
             <>
               {isLoadingProfiles ? (

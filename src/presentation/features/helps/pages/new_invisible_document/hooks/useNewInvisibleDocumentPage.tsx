@@ -10,10 +10,10 @@ import { useScrollToTopOnStep } from "../../../../../utils/useScrollToTopOnStep"
 import type { IHelpFormValues } from "../../../shared/interface/IHelpFormValues";
 import { HELP_DOCUMENT_LINK, HELP_INVISIBLE } from "../../../shared/constants/helps";
 import { useCreateHelp } from "../../../hooks/useCreateHelp";
-import { useGetHelpStatus } from "../../../shared/components/hooks/useGetHelpsState";
-import { toHelpDocumentTypeSelectCommon, toHelpSelect } from "../../../mappers/helpCreateMapper";
+import { toHelpDocumentTypeSelectCommon } from "../../../mappers/helpCreateMapper";
 import { ActionStepReducer, eStep, getActionStepInitialState } from "../reducers/ActionStepReducer";
 import { useGetHelpDocumentType } from "../../../shared/components/hooks/useGetHelpsDocumentType";
+import { useHelpFilters } from "../../../shared/components/hooks/useHelpFilters";
 
 
 const navStepsInit: StepType[] = [{
@@ -34,19 +34,10 @@ export function useNewInvisibleDocumentPage() {
   const contentStepRef = useRef<HTMLDivElement>(null);
   const [navSteps, setNavSteps] = useState(navStepsInit);
   const [isStepValid, setIsStepValid] = useState(false);
-
+  const {selectItemsStatuses, isLoadingStatus} = useHelpFilters();
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(ActionStepReducer, getActionStepInitialState());
   const { create, loading: creating } = useCreateHelp();
-  const { result: statuses, loading: isLoadingStatus } = useGetHelpStatus({
-    stateFilters: { forCreate: true }
-  });
-
-  const selectItemsStatuses = useMemo(
-    () => statuses.map(toHelpSelect),
-    [statuses]
-  );
-
 
   const { result: documentTypes, loading: isLoadingDocumentTypes } = useGetHelpDocumentType();
 
@@ -128,10 +119,7 @@ export function useNewInvisibleDocumentPage() {
 
       if (false || state.step == eStep.SUCCESS || !data.state) return;
 
-      dispatch({
-        type: 'SUCCESS',
-        payload: ''
-      });
+      dispatch({ type: 'SUCCESS', payload: ''});
 
       await create({
         description: data.title,
@@ -146,79 +134,44 @@ export function useNewInvisibleDocumentPage() {
         documents: data.document ?? null
       });
 
-      Toast({
-        message: 'Artículo creado correctamente',
-        type: eToast.Success
-      });
-
+      Toast({ message: 'Artículo creado correctamente', type: eToast.Success});
       navigate(HELP.name);
 
     } catch (err: any) {
       const message = err?.error?.message;
       Toast({ message: message ? message : 'Error al crear documento invisible', type: eToast.Error });
-
-      dispatch({
-        type: 'STEP_CONFIRMATION',
-        payload: ''
-      });
+      dispatch({ type: 'STEP_CONFIRMATION', payload: '' });
     }
   }
 
   const handleNext = async () => {
-    const fieldsToValidate = state.field as Array<keyof IHelpFormValues>;
-    const isValid = await form.trigger(fieldsToValidate);
-
-    if (!isValid) return;
     switch (state.step) {
-
       case eStep.STEP_ONE: {
-
         setNavSteps(navStepSelected(navSteps, state.step + 1));
-
-        dispatch({
-          type: 'STEP_CONFIRMATION',
-          payload: ''
-        });
-
+        dispatch({ type: "STEP_CONFIRMATION", payload: "" });
         break;
-
       }
       case eStep.STEP_CONFIRMATION: {
         setNavSteps(navStepSelected(navSteps, state.step + 1));
-        dispatch({
-          type: 'SUCCESS',
-          payload: ''
-        });
+        dispatch({ type: "SUCCESS", payload: "" });
         break;
       }
     }
-  }
-
+  };
 
   const handleBack = () => {
-
     switch (state.step) {
-
       case eStep.STEP_ONE: {
-
-        navigate(HELP.name)
+        navigate(HELP.name);
         break;
-
       }
       case eStep.STEP_CONFIRMATION: {
-
         setNavSteps(navStepSelected(navSteps, state.step - 1));
-
-        dispatch({
-          type: 'STEP_ONE',
-          payload: ''
-        });
-
+        dispatch({ type: "STEP_ONE", payload: "" });
         break;
-
       }
     }
-  }
+  };
 
   return {
     creating,

@@ -8,13 +8,10 @@ import { HELP } from "../../../../../router/routes";
 import { navStepSelected } from "../../../../../utils/navStepSelected";
 import { useScrollToTopOnStep } from "../../../../../utils/useScrollToTopOnStep";
 import type { IHelpFormValues } from "../../../shared/interface/IHelpFormValues";
-import { HELP_ARTICLE, HELP_DOCUMENT, HELP_DOCUMENT_LINK } from "../../../shared/constants/helps";
+import { HELP_DOCUMENT, HELP_DOCUMENT_LINK } from "../../../shared/constants/helps";
 import { useCreateHelp } from "../../../hooks/useCreateHelp";
-import { useGetHelpStatus } from "../../../shared/components/hooks/useGetHelpsState";
-import { toHelpDocumentTypeSelectCommon, toHelpSelect } from "../../../mappers/helpCreateMapper";
 import { ActionStepReducer, eStep, getActionStepInitialState } from "../reducers/ActionStepReducer";
-import { useGetHelpsProfiles } from "../../../shared/components/hooks/useGetHelpsProfiles";
-import { useGetHelpDocumentType } from "../../../shared/components/hooks/useGetHelpsDocumentType";
+import { useHelpFilters } from "../../../shared/components/hooks/useHelpFilters";
 
 
 const navStepsInit: StepType[] = [{
@@ -32,91 +29,61 @@ const navStepsInit: StepType[] = [{
 
 
 export function useNewDocumentPage() {
-  const contentStepRef = useRef<HTMLDivElement>(null);
+ const contentStepRef = useRef<HTMLDivElement>(null);
   const [navSteps, setNavSteps] = useState(navStepsInit);
   const [isStepValid, setIsStepValid] = useState(false);
-  const [leftSeedProfiles, setLeftSeedProfiles] = useState<Array<{ id: string; name: string }>>([]);
-  const [parentIdForProfiles, setParentIdForProfiles] = useState<string | null>(null);
+
+  const {
+    selectItemsStatuses,
+    selectItemsDocumentType,
+    leftSeedProfiles,
+    isLoadingProfiles,
+    isLoadingStatus,
+    isLoadingDocumentTypes,
+    setParentIdForProfiles,
+  } = useHelpFilters();
 
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(ActionStepReducer, getActionStepInitialState());
   const { create, loading: creating } = useCreateHelp();
-  const { result: statuses, loading: isLoadingStatus } = useGetHelpStatus({
-    stateFilters: { forCreate: true }
-  });
-
-  const selectItemsStatuses = useMemo(
-    () => statuses.map(toHelpSelect),
-    [statuses]
-  );
-
-  const { result: documentTypes, loading: isLoadingDocumentTypes } = useGetHelpDocumentType();
-
-  const selectItemsDocumentType = useMemo(
-    () => documentTypes.map(toHelpDocumentTypeSelectCommon),
-    [documentTypes]
-  );
-
-  const { result: profiles, loading: isLoadingProfiles, error: errorCreate } = useGetHelpsProfiles(
-    parentIdForProfiles ? { parentFilter: { parentId: parentIdForProfiles } } : undefined
-  );
-
-  useEffect(() => {
-    if (profiles && Array.isArray(profiles)) {
-      setLeftSeedProfiles(profiles);
-    }
-  }, [profiles]);
-
 
   const form = useForm<IHelpFormValues>({
     defaultValues: {
-      name: '',
-      parentId: '',
+      name: "",
+      parentId: "",
       profiles: [],
-      title: '',
+      title: "",
       document: [],
-      state: '1',
-      helpTypeId: '',
-      helpDocumentTypeId: '',
-      link: '',
+      state: "1",
+      helpTypeId: "",
+      helpDocumentTypeId: "",
+      link: "",
     },
-    mode: 'onChange',
-    reValidateMode: 'onChange'
+    mode: "onChange",
+    reValidateMode: "onChange",
   });
 
   useScrollToTopOnStep(state.step, {
     targetRef: contentStepRef,
-    behavior: 'smooth',
+    behavior: "smooth",
     offset: 72,
   });
 
   useEffect(() => {
     const validateCurrentStep = async () => {
-      const currentDocType = Number(form.getValues('helpDocumentTypeId'));
-
+      const currentDocType = Number(form.getValues("helpDocumentTypeId"));
       const allFields = state.field as Array<keyof IHelpFormValues>;
 
-      const fieldsToCheck = allFields.filter(field => {
-        if (field === 'document' && currentDocType === HELP_DOCUMENT_LINK) {
-          return false;
-        }
-        if (field === 'link' && currentDocType !== HELP_DOCUMENT_LINK) {
-          return false;
-        }
+      const fieldsToCheck = allFields.filter((field) => {
+        if (field === "document" && currentDocType === HELP_DOCUMENT_LINK) return false;
+        if (field === "link" && currentDocType !== HELP_DOCUMENT_LINK) return false;
         return true;
       });
 
-      const isValid = fieldsToCheck.every(field => {
+      const isValid = fieldsToCheck.every((field) => {
         const fieldValue = form.getValues(field);
-
-        if (Array.isArray(fieldValue)) {
-          return fieldValue.length > 0;
-        }
-
-        if (typeof fieldValue === 'string') {
-          return fieldValue.trim() !== '';
-        }
-
+        if (Array.isArray(fieldValue)) return fieldValue.length > 0;
+        if (typeof fieldValue === "string") return fieldValue.trim() !== "";
         return fieldValue !== null && fieldValue !== undefined;
       });
 
@@ -125,9 +92,9 @@ export function useNewDocumentPage() {
 
     validateCurrentStep();
 
-    const subscription = form.watch((values, { name }) => {
+    const subscription = form.watch((_, { name }) => {
       const allFields = state.field as Array<keyof IHelpFormValues>;
-      if (name && (allFields.includes(name as keyof IHelpFormValues) || name === 'helpDocumentTypeId')) {
+      if (name && (allFields.includes(name as keyof IHelpFormValues) || name === "helpDocumentTypeId")) {
         validateCurrentStep();
       }
     });
@@ -137,119 +104,83 @@ export function useNewDocumentPage() {
 
   const onSubmit = async (data: IHelpFormValues) => {
     try {
+      if (state.step === eStep.SUCCESS || !data.state) return;
 
-      if (false || state.step == eStep.SUCCESS || !data.state) return;
-
-      dispatch({
-        type: 'SUCCESS',
-        payload: ''
-      });
+      dispatch({ type: "SUCCESS", payload: "" });
 
       await create({
         description: data.title,
         name: data.name,
-        title: data.title ? data.title : '',
-        profiles: data.profiles.map(x => x.id),
+        title: data.title || "",
+        profiles: data.profiles.map((x) => x.id),
         statusId: Number(data.state),
-        parentId: data.parentId ?? '',
-        link: data.link ?? '',
+        parentId: data.parentId ?? "",
+        link: data.link ?? "",
         helpTypeId: HELP_DOCUMENT,
         helpDocumentTypeId: data.helpDocumentTypeId?.toString(),
-        documents: data.document ?? null
+        documents: data.document ?? null,
       });
 
-      Toast({
-        message: 'Documento creado correctamente',
-        type: eToast.Success
-      });
-
+      Toast({ message: "Documento creado correctamente", type: eToast.Success });
       navigate(HELP.name);
     } catch (err: any) {
       const message = err?.error?.message;
-      Toast({ message: message ? message : 'Error al crear documento', type: eToast.Error });
-
-      dispatch({
-        type: 'STEP_CONFIRMATION',
-        payload: ''
-      });
+      Toast({ message: message || "Error al crear documento", type: eToast.Error });
+      dispatch({ type: "STEP_CONFIRMATION", payload: "" });
     }
-  }
+  };
 
   const handleNext = async () => {
-
     switch (state.step) {
-
       case eStep.STEP_ONE: {
-        const parentId = form.getValues('parentId');
+        const parentId = form.getValues("parentId");
+        const cleanParent =
+          parentId && typeof parentId === "string" && parentId.trim() !== "" ? parentId : null;
 
-        if (parentId && typeof parentId === 'string' && parentId.trim() !== '') {
-          setParentIdForProfiles(parentId);
-        } else {
-          setParentIdForProfiles(null);
-          setLeftSeedProfiles([]);
-        }
+        // Actualiza el filtro de perfiles cuando avanzás
+        setParentIdForProfiles(cleanParent);
+
         setNavSteps(navStepSelected(navSteps, state.step + 1));
-
-        dispatch({
-          type: 'STEP_CONFIRMATION',
-          payload: ''
-        });
-
+        dispatch({ type: "STEP_CONFIRMATION", payload: "" });
         break;
-
       }
       case eStep.STEP_CONFIRMATION: {
         setNavSteps(navStepSelected(navSteps, state.step + 1));
-        dispatch({
-          type: 'SUCCESS',
-          payload: ''
-        });
+        dispatch({ type: "SUCCESS", payload: "" });
         break;
       }
     }
-  }
-
+  };
 
   const handleBack = () => {
-
     switch (state.step) {
-
       case eStep.STEP_ONE: {
-
-        navigate(HELP.name)
+        navigate(HELP.name);
         break;
-
       }
       case eStep.STEP_CONFIRMATION: {
-
         setNavSteps(navStepSelected(navSteps, state.step - 1));
-
-        dispatch({
-          type: 'STEP_ONE',
-          payload: ''
-        });
-
+        dispatch({ type: "STEP_ONE", payload: "" });
         break;
-
       }
     }
-  }
+  };
 
   return {
-    creating,
     selectItemsStatuses,
     selectItemsDocumentType,
+    leftSeedProfiles,
+    isLoadingProfiles,
+    isLoadingStatus,
+    isLoadingDocumentTypes,
+    creating,
     contentStepRef,
     form,
     navSteps,
     state,
     handleBack,
-    isLoadingProfiles,
-    isLoadingStatus,
-    isLoadingDocumentTypes,
     onSubmit,
     handleNext,
     isStepValid,
-    leftSeedProfiles
-  }
+  };
 }
