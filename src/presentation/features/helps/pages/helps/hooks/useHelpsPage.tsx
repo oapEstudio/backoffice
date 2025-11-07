@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { IAction } from '../../../components/ui/table/table-actions/actions.interface';
-import type { IRow } from '../../../components/ui/table/table.interface';
-import type { IHelp } from '../../../../domain/entities/IHelp';
-import { useGetHelps } from './useGetHelps';
-import { INITIAL_PARAMS_TABLE } from '../../shared/constants/initialsParamTable';
-import Button from '../../../components/ui/button/button.component';
-import TableFilterBar from '../../../components/widgets/table-filter-bar/TableFilterBar';
-import { toHelpsRow, type IHelpRow } from '../mappers/helpMapper';
-import type { IFilterHelpsResult } from '../pages/helps/components/filter-help-page/FilterHelpsPage';
-import { SelectCreateHelp } from '../pages/helps/components/select-create-help/SelectHelp';
-import { eToast, Toast } from '../../../components/ui/toast/CustomToastService';
-import { useHelpCancellation } from './useCancellationHelp';
-import { HELP_INVISIBLE, HELP_SECTION } from '../shared/constants/helps';
-import { useGetHelpsProfiles } from '../shared/hooks/useGetHelpsProfiles';
+import type { IAction } from '../../../../../components/ui/table/table-actions/actions.interface';
+import type { IRow } from '../../../../../components/ui/table/table.interface';
+import type { IHelp } from '../../../../../../domain/entities/IHelp';
+import { useGetHelps } from '../../../hooks/useGetHelps';
+import { INITIAL_PARAMS_TABLE } from '../../../../shared/constants/initialsParamTable';
+import Button from '../../../../../components/ui/button/button.component';
+import TableFilterBar from '../../../../../components/widgets/table-filter-bar/TableFilterBar';
+import { toHelpsRow, type IHelpRow } from '../../../mappers/helpMapper';
+import type { IFilterHelpsResult } from '../components/filter-help-page/FilterHelpsPage';
+import { SelectCreateHelp } from '../components/select-create-help/SelectHelp';
+import { eToast, Toast } from '../../../../../components/ui/toast/CustomToastService';
+import { useHelpCancellation } from '../../../hooks/useCancellationHelp';
+import { HELP_INVISIBLE, HELP_SECTION } from '../../../shared/constants/helps';
+import { useGetHelpsProfiles } from '../../../shared/hooks/useGetHelpsProfiles';
 
 export const useHelpPage = () => {
   const { setParams, params, result, loading } = useGetHelps(INITIAL_PARAMS_TABLE);

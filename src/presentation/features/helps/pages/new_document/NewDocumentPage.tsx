@@ -9,8 +9,9 @@ import { eStep } from "./reducers/ActionStepReducer";
 import { ActionStep } from "../../shared/components/action-step/ActionStep";
 import { useNewDocumentPage } from "./hooks/useNewDocumentPage";
 import Loading from "../../../../components/ui/loading";
-import { StepOneNewAlert } from "./components/StepOneNewAlert/StepOneNewAlert";
-import StepTwoNewAlert from "./components/StepTwoNewAlert/StepTwoNewAlert";
+import StepTwoNewAlert from "./components/StepTwoNewDocument/StepTwoNewDocument";
+import { StepOneNewDocument } from "./components/StepOneNewDocument/StepOneNewDocument";
+import StepTwoNewDocument from "./components/StepTwoNewDocument/StepTwoNewDocument";
 
 
 export const NewDocumentPage = () => {
@@ -31,8 +32,8 @@ export const NewDocumentPage = () => {
           </CustomBox>
         :
           <CustomBox sx={{ p: '0 4rem', minHeight: 300, paddingTop: '2rem' }}>
-            {state.step == 1 ? <StepOneNewAlert selectItemsStatuses={selectItemsStatuses} selectItemsDocumentType={selectItemsDocumentType}  /> : <></>}
-            {state.step == 2 ? <StepTwoNewAlert leftSeedProfiles={leftSeedProfiles} isLoadingProfiles={isLoadingProfiles} /> : <></>}
+            {state.step == 1 ? <StepOneNewDocument selectItemsStatuses={selectItemsStatuses} selectItemsDocumentType={selectItemsDocumentType}  /> : <></>}
+            {state.step == 2 ? <StepTwoNewDocument leftSeedProfiles={leftSeedProfiles} isLoadingProfiles={isLoadingProfiles} /> : <></>}
           </CustomBox> }
         <CustomBox sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
           {false ? (

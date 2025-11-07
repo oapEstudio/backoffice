@@ -1,12 +1,12 @@
 import type { SelectOption } from '../../../../../../components/ui/inputs/select/select.interface';
 import HelpDocumentDetailsFields from '../../../../shared/components/details-fields/HelpDocumentDetailsField';
 
-interface StepOneNewAlertProps {
+interface StepOneNewDocumentProps {
   selectItemsStatuses: SelectOption[];
   selectItemsDocumentType: SelectOption[];
 }
 
-export const StepOneNewAlert: React.FC<StepOneNewAlertProps> = ({
+export const StepOneNewDocument: React.FC<StepOneNewDocumentProps> = ({
   selectItemsStatuses = [],
   selectItemsDocumentType = [],
 }) => {

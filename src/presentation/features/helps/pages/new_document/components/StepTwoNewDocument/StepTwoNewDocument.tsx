@@ -1,11 +1,11 @@
 import StepTwoGeneric from "../../../../shared/components/StepTwoGeneric";
 
-interface StepTwoNewAlertProps {
+interface StepTwoNewDocumentProps {
   leftSeedProfiles: Array<{ id: string; name: string }>;
   isLoadingProfiles: boolean
 }
 
-const StepTwoNewAlert : React.FC<StepTwoNewAlertProps> = ({
+const StepTwoNewDocument : React.FC<StepTwoNewDocumentProps> = ({
   leftSeedProfiles = [],
   isLoadingProfiles = true
 }) => {
@@ -14,4 +14,4 @@ const StepTwoNewAlert : React.FC<StepTwoNewAlertProps> = ({
   )
 }
 
-export default StepTwoNewAlert;
+export default StepTwoNewDocument;

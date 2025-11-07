@@ -8,9 +8,9 @@ import Button from "../../../../components/ui/button/button.component";
 import { eStep } from "./reducers/ActionStepReducer";
 import { ActionStep } from "../../shared/components/action-step/ActionStep";
 import Loading from "../../../../components/ui/loading";
-import { StepOneNewAlert } from "./components/StepOneNewAlert/StepOneNewAlert";
-import StepTwoNewAlert from "./components/StepTwoNewAlert/StepTwoNewAlert";
 import { useNewInvisibleDocumentPage } from "./hooks/useNewInvisibleDocumentPage";
+import { StepOneNewInvisibleDocument } from "./components/StepOneNewInvisibleDocument/StepOneNewInvisibleDocument";
+import StepTwoNewInvisibleDocument from "./components/StepTwoNewInvisibleDocument/StepTwoNewInvisibleDocument";
 
 
 export const NewInvisibleDocumentPage = () => {
@@ -31,8 +31,8 @@ export const NewInvisibleDocumentPage = () => {
           </CustomBox>
         :
           <CustomBox sx={{ p: '0 4rem', minHeight: 300, paddingTop: '2rem' }}>
-            {state.step == 1 ? <StepOneNewAlert selectItemsStatuses={selectItemsStatuses} selectItemsDocumentType={selectItemsDocumentType}/> : <></>}
-            {state.step == 2 ? <StepTwoNewAlert /> : <></>}
+            {state.step == 1 ? <StepOneNewInvisibleDocument selectItemsStatuses={selectItemsStatuses} selectItemsDocumentType={selectItemsDocumentType}/> : <></>}
+            {state.step == 2 ? <StepTwoNewInvisibleDocument /> : <></>}
           </CustomBox> }
         <CustomBox sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
           {false ? (
