@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react';
 import { CustomBox } from '../../../../../../components/ui/box/CustomBox';
 import { CustomGrid } from '../../../../../../components/ui/grid/CustomGrid';
 import BlankCard from '../../../../../../components/ui/card/blank';
@@ -7,74 +7,105 @@ import { ToolbarSection } from '../toolbar-section/ToolbarSection';
 import { ElementDynamicPage, eTypeElement, type IElementDynamicPage } from '../element-dynamic-page/ElementDynamicPage';
 
 
+const ROW_MAX_SIZE: number = 12;
+
 export interface ISectionPage{
-    order: number;
-    elements: IElementDynamicPage[]; 
-    id: number;
+  order: number;
+  elements: IElementDynamicPage[];
+  id: number;
 }
 
 export interface ISectionPageProps{
-    section: ISectionPage;
-    isEdit: boolean;
-    handleDeleteSections?: (id: number) => void;
-    handleAddElement?: (id: number) => void;
-    handleDeleteElement?: (id: number) => void;
+  section: ISectionPage;
+  isEdit: boolean;
+  handleDeleteSections?: (id: number) => void;
+  handleAddElement?: (id: number) => void;
+  handleDeleteElement?: (id: number) => void;
 }
 
 
-const calculedSize = (size: number, element: IElementDynamicPage): number=>{
-
-    if(element.type===eTypeElement.TITLE) return 12;
-
-    return size;
-}
-export const SectionPage: React.FC<ISectionPageProps> = ({section, handleAddElement,handleDeleteSections,handleDeleteElement, isEdit}) => {
+const isFullWidth = (el: IElementDynamicPage) =>
+  el.type === eTypeElement.TITLE || el.type === eTypeElement.BACKGROUND_IMAGE;
 
 
-    if(section.elements.length === 0) return <CustomBox sx={{ px: 2, position: 'relative' }}>
-                                                <ToolbarSection 
-                                                    id={section.id} 
-                                                    isEdit={isEdit} 
-                                                    handleDeleteSections={handleDeleteSections} 
-                                                    handleAddElements={handleAddElement} />
-                                                <EmptySection />
-                                             </CustomBox>
+const buildRows = (elements: IElementDynamicPage[]) => {
+  const rows: IElementDynamicPage[][] = [];
+  let auxRows: IElementDynamicPage[] = [];
 
-   
-                                                    
+  for (const element of elements) {
+    if (isFullWidth(element)) {
+      if (auxRows.length) {
+        rows.push(auxRows);
+        auxRows = [];
+      }
+      rows.push([element]); 
+    } else {
+      auxRows.push(element);
+    }
+  }
+  if (auxRows.length) rows.push(auxRows);
 
-  return <CustomBox sx={{ px: 2, position: 'relative' }} >
-                                              <ToolbarSection 
-                                                    id={section.id} 
-                                                    isEdit={isEdit} 
-                                                    handleDeleteSections={handleDeleteSections} 
-                                                    handleAddElements={handleAddElement} />
+  return rows;
+};
 
-                                              <BlankCard>
-                                                   <CustomGrid container spacing={1}>
-                                                         {
-                                                            section.elements.map((element,index)=>{
 
-                                                                const size = 12 / (section.elements.length);
+const sizeForItemInRow = (row: IElementDynamicPage[], index: number) => {
 
-                                                                  if(section.elements.some(x=>x.type===1)) return  <ElementDynamicPage 
-                                                                                                                        handleDeleteElement={handleDeleteElement}
-                                                                                                                        size={12} 
-                                                                                                                        element={element}
-                                                                                                                        sectionId={section.id}
-                                                                                                                        key={'element_'+index}                                                                            
-                                                                                                                    />;
-                                                                 return <ElementDynamicPage 
-                                                                            handleDeleteElement={handleDeleteElement}
-                                                                            size={calculedSize(size,element)} 
-                                                                            element={element}
-                                                                            sectionId={section.id}
-                                                                            key={'element_'+index}                                                                            
-                                                                        />;
-                                                            }) 
-                                                         }
-                                                  </CustomGrid>
-                                            </BlankCard>
-                                       </CustomBox> 
+  if (row.length === 1 && isFullWidth(row[0])) return ROW_MAX_SIZE; 
+
+  const nonFull = row.filter(e => !isFullWidth(e));
+  const n = nonFull.length || 1; 
+  const base = Math.floor(ROW_MAX_SIZE / n);
+  const remainder = ROW_MAX_SIZE - base * n;
   
-}
+  return base + (index < remainder ? 1 : 0);
+};
+
+export const SectionPage: React.FC<ISectionPageProps> = ({
+  section, handleAddElement, handleDeleteSections, handleDeleteElement, isEdit
+}) => {
+  if (section.elements.length === 0) {
+    return (
+      <CustomBox sx={{ px: 2, position: 'relative' }}>
+        <ToolbarSection
+          id={section.id}
+          isEdit={isEdit}
+          handleDeleteSections={handleDeleteSections}
+          handleAddElements={handleAddElement}
+        />
+        <EmptySection />
+      </CustomBox>
+    );
+  }
+
+  const rows = useMemo(() => buildRows(section.elements), [section.elements]);
+
+  return (
+    <CustomBox sx={{ px: 2, position: 'relative' }}>
+      <ToolbarSection
+        id={section.id}
+        isEdit={isEdit}
+        handleDeleteSections={handleDeleteSections}
+        handleAddElements={handleAddElement}
+      />
+      <BlankCard>    
+        {rows.map((row, rIdx) => (
+          <CustomGrid container spacing={1} key={`row_${section.id}_${rIdx}`}>
+            {
+              row                          
+              .map((element, i) => (
+                    <ElementDynamicPage
+                      key={`el_${section.id}_${element.id}_${i}`}
+                      sectionId={section.id}
+                      element={element}
+                      size={sizeForItemInRow(row, i)}
+                      handleDeleteElement={handleDeleteElement}
+                    />
+                  ))
+            }
+          </CustomGrid>
+        ))}
+      </BlankCard>
+    </CustomBox>
+  );
+};

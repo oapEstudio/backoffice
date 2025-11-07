@@ -1,5 +1,6 @@
 import React from 'react'
 import { SectionPage, type ISectionPage } from '../section-page/SectionPage';
+import { ID_SECTION_ITEM_MENU } from '../../../../shared/constants/constants';
 
 
 interface ISectionsDynamicPageProps{
@@ -12,7 +13,9 @@ interface ISectionsDynamicPageProps{
 export const SectionsDynamicPage: React.FC<ISectionsDynamicPageProps> = ({sections, isEdit, handleAddElement,handleDeleteSections, handleDeleteElement}) => {
 
 
-     return sections.map(section=><SectionPage 
+     return sections
+            .filter(section=>section.id!==ID_SECTION_ITEM_MENU)
+            .map(section=><SectionPage 
                                         section={section} 
                                         isEdit={isEdit} 
                                         handleDeleteSections={handleDeleteSections} 

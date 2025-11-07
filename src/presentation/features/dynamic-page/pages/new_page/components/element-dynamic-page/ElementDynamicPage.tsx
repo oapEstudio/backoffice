@@ -5,13 +5,12 @@ import { CustomBox } from '../../../../../../components/ui/box/CustomBox';
 import { CustomFab } from '../../../../../../components/ui/fab/CustomFab';
 import { DeleteActionIcon } from '../../../../../../components/ui/icons';
 import { TitlePages } from '../../../../../../components/widgets/title-page/TitlePages';
-import { CustomRichTextEditor } from '../../../../../../components/ui/rich-text-editor/CustomRichTextEditor';
 import { RichTextReadOnly } from 'mui-tiptap';
 import StarterKit from "@tiptap/starter-kit";
-import { VideoPlayer } from '../step-two-dynamic-page/components/VideoFields';
+
 import { TextStyleKit } from '@tiptap/extension-text-style';
 import TextAlign from '@tiptap/extension-text-align';
-import Text from '@tiptap/extension-text';
+import { VideoPlayer } from '../step-two-dynamic-page/components/VideoFields';
 
 export enum eTypeElement{
     BACKGROUND_IMAGE = 1,
@@ -19,7 +18,8 @@ export enum eTypeElement{
     PARAGRAPH = 3,
     FILE = 4,
     IMG = 5,
-    VIDEO = 6
+    VIDEO = 6,
+    ITEM_MENU = 7
 }
 
 export interface IElementDynamicPage{
@@ -29,6 +29,7 @@ export interface IElementDynamicPage{
     file: File;
     height: number;
     align: string;
+    link: string;
 }
 
 export interface IElementDynamicPageProps{
@@ -52,8 +53,8 @@ export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({size, el
                                     <TitlePages title={element.label} style={{padding: '0px 2rem', textAlign: element.align }} /> :
                                     <></>}                                                                            
                     {element.type === eTypeElement.PARAGRAPH?
-                                    <CustomBox sx={{px: '2rem'}}>
-                                        <RichTextReadOnly content={element.label} extensions={[StarterKit,TextStyleKit,Text, TextAlign.configure({
+                                    <CustomBox sx={{padding: '2rem'}}>
+                                        <RichTextReadOnly content={element.label} extensions={[StarterKit,TextStyleKit, TextAlign.configure({
                                                 types: ['heading', 'paragraph']                                               
                                               })]} />
                                     </CustomBox> :

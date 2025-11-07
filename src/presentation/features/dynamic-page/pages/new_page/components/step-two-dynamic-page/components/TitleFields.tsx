@@ -16,16 +16,14 @@ export const TitleFields: React.FC = () => {
         control={control}
         rules={{
           required: 'El titulo es obligatorio',
-          minLength: { value: 10, message: 'Mínimo 10 caracteres' },
-          maxLength: MAX_LENGTH_INPUT,
+          minLength: { value: 10, message: 'Mínimo 10 caracteres' },         
           validate: { minTrimmed: minTrimmed(10) },
         }}
         render={({ field }) => (
           <CustomTextInput
             {...field}
             label="Título"
-            type="text"
-            maxLength={MAX_LENGTH_INPUT}
+            type="text"           
             error={!!errors.label}
             helperText={errors.label?.message}
           />

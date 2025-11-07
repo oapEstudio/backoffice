@@ -40,6 +40,7 @@ export interface IModalAddElementFormValues{
     label: string;
     align: string;
     height: number;
+    link: string;
 }
 export const ModalAddElement: React.FC<ModalAddElementProps> = ({open, onClose, onCancel, onOk}) => {
 

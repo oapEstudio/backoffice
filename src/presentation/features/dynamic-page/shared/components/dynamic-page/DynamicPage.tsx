@@ -10,8 +10,10 @@ import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import IconButton from '@mui/material/IconButton'
 import LogoYPF from '../../../../../components/ui/icons/ypf-logo/logo-ypf.svg?react';
-import { Button } from '../../../../../components/ui/button'
-import { SVGIcon } from '../../../../../components/ui/icons'
+import { AddActionIcon, SVGIcon } from '../../../../../components/ui/icons';
+import { CustomFab } from '../../../../../components/ui/fab/CustomFab'
+import { eTypeElement } from '../../../pages/new_page/components/element-dynamic-page/ElementDynamicPage'
+import { ID_SECTION_ITEM_MENU } from '../../constants/constants'
 
 
 export interface IDynamicPageProps{
@@ -21,9 +23,16 @@ export interface IDynamicPageProps{
     handleDeleteSections?: (id: number) => void;
     handleAddElement?: (id: number) => void;
     handleDeleteElement?: (id: number) => void;
+    handleAddMenu: () => void;
 }
 
-export const DynamicPage: React.FC<IDynamicPageProps> = ({isEdit = true,isMenu,sections, handleDeleteSections, handleAddElement, handleDeleteElement}) => {
+export const DynamicPage: React.FC<IDynamicPageProps> = ({handleAddMenu, 
+                                                          isEdit = true,
+                                                          isMenu,
+                                                          sections, 
+                                                          handleDeleteSections, 
+                                                          handleAddElement, 
+                                                          handleDeleteElement}) => {
 
 
   return (
@@ -31,7 +40,10 @@ export const DynamicPage: React.FC<IDynamicPageProps> = ({isEdit = true,isMenu,s
         <>
             {isMenu && <CustomGrid  container size={2} 
                                 sx={{                                                          
-                                    display: 'flex',}}>
+                                    display: 'flex',
+                                    position: 'relative',
+                                    boxShadow: '5px 0 10px rgba(0, 0, 0, 0.3)'
+                                    }}>
 
                         <Paper sx={{width: '100%',minHeight: 500, height: '100%'}}>
                             <CustomStack sx={{width: '100%', height: '100%'}}>                
@@ -42,16 +54,29 @@ export const DynamicPage: React.FC<IDynamicPageProps> = ({isEdit = true,isMenu,s
                                     </CustomBox>
                                     <CustomDivider />
                                     <CustomStack direction='column' sx={{position: 'relative', width: '100%',height: '100%',justifyContent: 'space-between'}}>
+                                        <>
+                                            {isEdit && <CustomFab   style={{width: '30px' , height: '30px'}} sx={{position: 'absolute'}} onClick={()=>{handleAddMenu();}}>
+                                                            <AddActionIcon />
+                                                        </CustomFab>
+                                            }
+                                        </>
                                         <CustomBox>
-                                            <CustomBox sx={{width: '100%', height: '3rem'}}>
-                                                <Typography variant={'body2'} textAlign={'center'}>
-                                                    Prueba
-                                                </Typography>
-                                            </CustomBox>
-                                        </CustomBox>
-                                        <CustomBox sx={{display: 'flex', justifyContent: 'center', marginBottom: '2rem'}}>
-                                            <Button variant='secondary'  title='Salir'/>
-                                        </CustomBox>
+                                            {sections && sections
+                                                         .filter(section=>section.id === ID_SECTION_ITEM_MENU)
+                                                         .map(section=>{
+                                                               
+                                                                return section
+                                                                        .elements                                                               
+                                                                        .map(element=>{
+
+                                                                                return  <CustomBox sx={{width: '100%', height: '3rem'}}>
+                                                                                            <Typography variant={'body2'} textAlign={'center'}>
+                                                                                                {element.label}
+                                                                                            </Typography>
+                                                                                        </CustomBox>
+                                                                        })
+                                            })}                                           
+                                        </CustomBox>                                       
                                     </CustomStack>
                                             
                             </CustomStack>

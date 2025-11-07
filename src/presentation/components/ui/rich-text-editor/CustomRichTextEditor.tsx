@@ -53,7 +53,7 @@ export const CustomRichTextEditor: React.FC<ICustomRichTextEditorProps> = ({chan
      <div>
       <RichTextEditor
         ref={rteRef}
-        extensions={[StarterKit, TextStyleKit, Text, TextAlign.configure({
+        extensions={[StarterKit, TextStyleKit, TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),]} 
         content={html}       

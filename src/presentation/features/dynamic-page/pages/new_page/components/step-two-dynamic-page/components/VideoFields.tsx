@@ -4,16 +4,31 @@ import type { IModalAddElementFormValues } from '../../modal-add-element/ModalAd
 import Typography from '@mui/material/Typography';
 import CustomTextInput from '../../../../../../../components/ui/inputs/text-input/text-input.component';
 import FileDropzone from '../../../../../../../components/ui/file-drop-zone/FileDropzone';
-
-
+import { AlignButtonsField } from './AlignButtonsField';
 
 
 type Props = {
-  file: File | Blob;     
+  file: File | Blob;
   height?: number;
   controls?: boolean;
   autoPlay?: boolean;
   muted?: boolean;
+};
+
+const inferMime = (f: File | Blob): string => {
+  
+  const t = (f as File).type?.trim();
+  
+  if (t) return t;
+  
+  const name = (f as File).name || '';
+  const ext = name.split('.').pop()?.toLowerCase();
+  
+  if (ext === 'webm') return 'video/webm';
+  if (ext === 'ogv' || ext === 'ogg') return 'video/ogg';
+  
+  return 'video/mp4';
+
 };
 
 export function VideoPlayer({
@@ -23,89 +38,81 @@ export function VideoPlayer({
   autoPlay = true,
   muted = true,
 }: Props) {
-
-    const videoRef = useRef<HTMLVideoElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   
-    const mime = useMemo(() => {
+  const normalized = useMemo(() => {
+  
+    const type = (file as File).type;
+    
+    if (type && type.length > 0) return file;
+    
+    const mime = inferMime(file);
 
-        const t = (file as File)?.type?.trim();
+    return new Blob([file], { type: mime }) as Blob;
 
-        if (t) return t; 
+  }, [file]);
 
-        
-        const name = (file as File)?.name || "";
-        const ext = name.split(".").pop()?.toLowerCase();
-
-        if (ext === "mp4") return "video/mp4";
-        if (ext === "webm") return "video/webm";
-        if (ext === "ogv" || ext === "ogg") return "video/ogg";
-        
-        return "video/mp4";
-
-    }, [file]);
-
-  const src = useMemo(() => URL.createObjectURL(file), [file]);
+  const [url, setUrl] = useState<string | null>(null);
+  const mime = useMemo(() => inferMime(normalized), [normalized]);
 
   useEffect(() => {
+    const u = URL.createObjectURL(normalized);
+    setUrl(u);
+    return () => {
+      URL.revokeObjectURL(u);
+    };
+  }, [normalized]);
 
+  
+  useEffect(() => {
+    if (!autoPlay) return;
     const v = videoRef.current;
     if (!v) return;
-
-    
-    v.src = src;
-    v.load();
-
-    
-    const tryPlay = async () => {
+    const onCanPlay = async () => {
       try {
         await v.play();
       } catch {
-        console.log("No se pudo reproducir el video!!")        
+        
       }
     };
-    if (autoPlay) tryPlay();
-
-    return () => {
-      v.pause();
-      v.removeAttribute("src");
-      v.load();
-      URL.revokeObjectURL(src);
-    };
-  }, [src, autoPlay]);
+    v.addEventListener('canplay', onCanPlay);
+    return () => v.removeEventListener('canplay', onCanPlay);
+  }, [autoPlay]);
 
   const [err, setErr] = useState<string | null>(null);
+
+  const mapMediaError = (code?: number) => {
+    switch (code) {
+      case 1: return 'ABORTED (descarga abortada)';
+      case 2: return 'NETWORK (error de red)';
+      case 3: return 'DECODE (códec no soportado o archivo corrupto)';
+      case 4: return 'SRC_NOT_SUPPORTED (tipo/códec no soportado)';
+      default: return 'desconocido';
+    }
+  };
 
   return (
     <div>
       <video
+        key={url ?? 'no-src'}      
         ref={videoRef}
+        src={url ?? undefined}     
         width="100%"
         height={height && height > 0 ? height : 50}
         controls={controls}
-        muted={muted}       
-        playsInline         
+        muted={muted}
+        playsInline
         preload="metadata"
         onCanPlay={() => setErr(null)}
         onError={() => {
           const v = videoRef.current;
           const mediaErr = v?.error;
-          
-          let msg = "Error reproduciendo el video.";
-
-          if (mediaErr) {
-            
-            msg += ` Código: ${mediaErr.code}`;
-          }
-          setErr(msg + ` MIME: ${mime}`);
+          setErr(`Error reproduciendo el video. ${mapMediaError(mediaErr?.code)}. MIME: ${mime}`);
         }}
-        
-      >
-        <source src={src} type={mime} />
-        Tu navegador no soporta la reproducción de video.
-      </video>
+      />
       {err && (
-        <small style={{ color: "crimson", display: "block", marginTop: 6 }}>
+        <small style={{ color: 'crimson', display: 'block', marginTop: 6 }}>
           {err}
         </small>
       )}
@@ -155,6 +162,7 @@ export const VideoFields = () => {
           />
         )}
       />
+      <AlignButtonsField />
     </>
   );
 }
