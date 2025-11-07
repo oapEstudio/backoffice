@@ -75,11 +75,27 @@ export const FATHER_PROFILE: IRoute = {
     viewNav: true
 }
 export const NEW_DYNAMIC_PAGE: IRoute = {
+    title: 'Nueva páginas',
+    order:  'Nueva páginas',
+    name: '/new_dynamic_page',
+    children: [],
+    viewNav: true
+}
+
+export const DYNAMIC_PAGE: IRoute = {
     title: 'Páginas',
     order:  'Páginas',
     name: '/dynamic_page',
     children: [],
     viewNav: true
+}
+
+export const PREVIEW_DYNAMIC_PAGE: IRoute = {
+    title: 'Previsualización',
+    order:  'Previsualización',
+    name: '/dynamic_page_preview',
+    children: [],
+    viewNav: false
 }
 export const HELP: IRoute = {
     title: 'Ayuda',
@@ -120,5 +136,5 @@ export const NEW_DOCUMENT_INVISIBLE: IRoute = {
 }
 
 export const ROUTES: IRoute[] =[
-    HOME, FATHER_PROFILE, NOTIFICATION, FUNTIONALITIES, NEW_DYNAMIC_PAGE, HELP
+    HOME, FATHER_PROFILE, NOTIFICATION, FUNTIONALITIES, DYNAMIC_PAGE, HELP
 ];

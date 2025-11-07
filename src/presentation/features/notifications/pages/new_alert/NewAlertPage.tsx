@@ -8,7 +8,7 @@ import StepOneNewAlert from './components/StepOneNewAlert/StepOneNewAlert'
 import { StepTwoNewAlert } from './components/StepTwoNewAlert/StepTwoNewAlert';
 import { StepThreeNewAlert } from './components/StepThreeNewAlert/StepThreeNewAlert';
 import { Button } from '../../../../components/ui/button'
-import { ActionStep } from '../../shared/components/action-step/ActionStep'
+import { ActionStep } from '../../../../components/ui/step/action-step/ActionStep'
 
 import { eStep } from '../../shared/reducers/ActionStepReducer'
 import { useNewAlertPage } from './hooks/useNewAlertPage'

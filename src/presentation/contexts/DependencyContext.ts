@@ -35,6 +35,8 @@ import { GetHelpByIdUseCase } from '../../application/usecases/GetHelpByIdUseCas
 import { UpdateHelpProfilesUseCase } from '../../application/usecases/UpdateHelpProfilesUseCase';
 import { UpdateHelpUseCase } from '../../application/usecases/UpdateHelpUseCase';
 import { CancellationHelpUseCase } from '../../application/usecases/CancellationHelpUseCase';
+import { GetDynamicPagesUseCase } from '../../application/usecases/GetDynamicPagesUseCase';
+import { DynamicPageRepository } from '../../infrastructure/adapters/http/DynamicPageRepository';
 
 
 const profileRepo = new ProfileRepository();
@@ -43,6 +45,7 @@ const menuRepo = new MenuRepository();
 const highlightRepo = new HighlightRepository();
 const notificationRepo = new NotificationRepository();
 const helpRepo = new HelpRepository();
+const dynamicPageRepo = new DynamicPageRepository();
 
 export interface IDependencies{
   getProfiles: GetProfilesUseCase,
@@ -82,6 +85,7 @@ export interface IDependencies{
   updateHelp: UpdateHelpUseCase,
   cancellationHelp: CancellationHelpUseCase,
   getHelpProfiles: GetDatasetFiltersUseCase,
+  getDynamicPages: GetDynamicPagesUseCase
 }
 
 const resourseDimDatasetProfile = env.resources.profiles.dim.dataset;
@@ -144,6 +148,7 @@ export const defaultDependencies: IDependencies = {
   updateHelpProfiles: new UpdateHelpProfilesUseCase(helpRepo),
   updateHelp: new UpdateHelpUseCase(helpRepo),
   cancellationHelp: new CancellationHelpUseCase(helpRepo),
+  getDynamicPages: new GetDynamicPagesUseCase(dynamicPageRepo)
 };
 
 export const DependencyContext = React.createContext<IDependencies>(defaultDependencies);

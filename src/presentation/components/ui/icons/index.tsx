@@ -252,11 +252,13 @@ type SVGIconProps = {
   icon: ElementType;           
   color?: string;
   fontSize?: 'inherit'|'small'|'medium'|'large';
+  style?: React.CSSProperties
 };
 
 
-export const SVGIcon = ({ icon, color = colors.palette.primary.main, fontSize = 'medium' }: SVGIconProps) => (
+export const SVGIcon = ({ icon, color = colors.palette.primary.main, fontSize = 'medium',style }: SVGIconProps) => (
   <SvgIcon
+    style={style}    
     component={icon}
     inheritViewBox
     fontSize={fontSize}

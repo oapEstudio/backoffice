@@ -18,12 +18,37 @@ import { ConfirmDialog } from '../../../../components/ui/confirm-dialog/ConfirmD
 import { eToast, Toast } from '../../../../components/ui/toast/CustomToastService'
 import { useNotificationCancellation } from '../../hooks/useCancellationNotification'
 import EditNotificationModal from './components/edit-notification/EditNotificationModal'
+import { useNotificationPage } from './hooks/useNotificationPage'
 
 
 
 export const NotificationsPage = () => {
   
-    const {setParams,params,result,loading} = useGetNotifications(INITIAL_PARAMS_TABLE);   
+
+  const { openEdit,
+          rowId,
+          setRowId,
+          setOpenEdit,
+          refresh,        
+          openProfilesModal,       
+          selectedProfiles,       
+          setOpenProfilesModal,
+          setParams,
+          openFilter,
+          currentFilters,
+          setFilters,      
+          setOpenFilter,
+          openDelete,
+          doConfirmDelete,
+          setOpenDelete,
+          params,        
+          loading,
+          result,
+          filterButtons,
+          rows,
+          actions,
+          Headers} = useNotificationPage();
+    /*const {setParams,params,result,loading} = useGetNotifications(INITIAL_PARAMS_TABLE);   
     const [openFilter, setOpenFilter] = useState(false);
     const [openProfilesModal, setOpenProfilesModal] = useState(false);
     const [selectedProfiles, setSelectedProfiles] = useState<Array<{id: string; name: string}>>([]);
@@ -129,19 +154,19 @@ export const NotificationsPage = () => {
           }
         ],
         []
-      );
+      );*/
       
        
       return (
         <>
             <EditNotificationModal
               open={openEdit}
-              notificationId={editNotificationId}
+              notificationId={rowId}
               onClose={() => setOpenEdit(false)}
               onSaved={() => refresh()} />
             <UpdateNotificationProfileCarousel 
               open={openProfilesModal}
-              notificationId={selectedNotificationId}
+              notificationId={rowId}
               selectedProfiles={selectedProfiles}
               onClose={() => setOpenProfilesModal(false)}
               onSaved={() => {

@@ -13,7 +13,7 @@ import { StepTwoNotifications } from './componentes/step-two-notifications/StepT
 import StepThreeNotifications from './componentes/step-three-notifications/StepThreeNotifications'
 import { useNewCarouselPage } from './hooks/useNewCarouselPage'
 import { eStep } from './reducers/ActionStepReducer'
-import { ActionStep } from '../../shared/components/action-step/ActionStep'
+import { ActionStep } from '../../../../components/ui/step/action-step/ActionStep'
 
 
 

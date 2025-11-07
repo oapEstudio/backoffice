@@ -1,3 +1,4 @@
+import type { IPageParameters } from "../../../../application/common/IPaginatedResponse";
 import { env } from "../../../../infrastructure/config/env";
 
 
@@ -5,7 +6,7 @@ const PAGE_INIT = 1;
 const SORT_DESCENDING = true;
 const SORT_BY = null;
 
-export const INITIAL_PARAMS_TABLE = {
+export const INITIAL_PARAMS_TABLE: IPageParameters = {
     page: PAGE_INIT, pageSize: env.pageSize, sortBy: SORT_BY, sortDescending: SORT_DESCENDING
 }
 
