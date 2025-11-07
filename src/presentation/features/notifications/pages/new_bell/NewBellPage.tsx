@@ -6,7 +6,7 @@ import { FormProvider } from 'react-hook-form';
 import { CustomBox } from '../../../../components/ui/box/CustomBox';
 import StepNavigationBackOffice from '../../../../components/ui/step/step-navigation-backoffice';
 import StepperWrapperBackOfficeDefault from '../../../../components/ui/step/stepper-wrapper-backoffice-default';
-import { ActionStep } from '../../shared/components/action-step/ActionStep';
+import { ActionStep } from '../../../../components/ui/step/action-step/ActionStep';
 import { eStep } from '../new_carousel/reducers/ActionStepReducer';
 import { Button } from '../../../../components/ui/button';
 import StepOneNewBell from './components/StepOneNewBell/StepOneNewBell';

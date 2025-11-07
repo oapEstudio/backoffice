@@ -90,6 +90,12 @@ export const env = {
          version: 'v1'
       }
     },
+    dynamic_pages: {
+       getAll: {   
+         endpoint: 'notifications',   
+         version: 'v1'
+      },
+    },
     notifications: { 
       dim: {      
         dataset: {

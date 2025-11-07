@@ -1,4 +1,3 @@
-// Stepper.tsx
 import React from 'react';
 import { styled } from '@mui/material/styles';
 
@@ -18,7 +17,7 @@ const Row = styled('div')({});
 const CIRCLE_SIZE = 40;
 const LINE_THICKNESS = 4;
 const TITLE_GAP = 8;
-const TITLE_EXTRA = 8; // el que ya usabas para el top del título
+const TITLE_EXTRA = 8; 
 
 const StepperWrapper = styled(
   'div',
@@ -27,11 +26,10 @@ const StepperWrapper = styled(
   width: '100% !important',
   display: 'grid',
   gridTemplateColumns: template,
-  alignItems: 'center',          // ⬅️ centra verticalmente respecto al alto de la fila
-  columnGap: 0,                  // sin huecos entre step y conector
+  alignItems: 'center',          
+  columnGap: 0,                 
   marginTop: '30px',
   zIndex: 0,
-  // ⬇️ reservamos espacio debajo para que el título no pise lo de abajo
   paddingBottom: CIRCLE_SIZE / 2 + TITLE_GAP + TITLE_EXTRA,
 }));
 
@@ -82,12 +80,12 @@ const Title = styled(
   { shouldForwardProp: (prop) => prop !== 'active' }
 )<{ active: boolean }>(({ theme, active }) => ({
   position: 'absolute',
-  top: CIRCLE_SIZE + TITLE_EXTRA,     // debajo del círculo
+  top: CIRCLE_SIZE + TITLE_EXTRA,    
   left: '50%',
   transform: 'translateX(-50%)',
   textAlign: 'center',
   maxWidth: 160,
-  fontFamily: 'Roboto, Arial, Helvetica, sans-serif',
+  //fontFamily: 'Roboto, Arial, Helvetica, sans-serif',
   fontSize: 16,
   color: active ? theme.palette.primary.main : 'inherit',
 }));
@@ -108,14 +106,13 @@ const StepNavigationBackOffice: React.FC<StepperProps> = ({ steps }) => {
  const visibles = steps.filter(s => s.show);
 const lastIndex = visibles.length - 1;
 
-// índice del paso activo (si hubiera más de uno marcado, toma el último)
+
 const currentIndex = (() => {
   let idx = -1;
   visibles.forEach((s, i) => { if (s.active) idx = i; });
   return idx;
 })();
 
-// grid: auto 1fr auto 1fr ... auto
 const template = visibles
   .map((_, i) => (i < lastIndex ? 'auto 1fr' : 'auto'))
   .join(' ');
@@ -138,11 +135,10 @@ return (
         </StepBtn>
       </Container>
 
-      {/* Conector entre este step y el siguiente */}
       {idx < lastIndex && (
         <Connector
           className="step-connector"
-          active={idx === currentIndex - 1}   // 🔵 Solo la línea previa al paso activo
+          active={idx === currentIndex - 1}  
         />
       )}
     </React.Fragment>
