@@ -97,7 +97,7 @@ export const useEditHelpModal = ({
           helpDocumentTypeId: help.helpDocumentTypeId ? String(help.helpDocumentTypeId) : undefined ,
           link: help.link ? help.link : '',
         });
-        
+
       } catch (error) {
         console.error('Error loading help data:', error);
       }

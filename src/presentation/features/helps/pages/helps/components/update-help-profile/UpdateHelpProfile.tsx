@@ -1,7 +1,4 @@
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import { useUpdateHelpProfile } from "../../../../hooks/useUpdateHelpProfile";
-import { useEffect } from "react";
-import { eToast, Toast } from "../../../../../../components/ui/toast/CustomToastService";
 import CustomModal from "../../../../../../components/ui/modal/modal.component";
 import DualProfileFetch from "../../../../../../components/widgets/dual-profile-add-fetch/DualProfileAddFetch";
 import { Typography } from "@mui/material";
@@ -17,10 +14,6 @@ interface UpdateHelpProfilesProps {
   leftSeedProfiles?: Array<{ id: string; name: string }>;
   onClose: () => void;
   onSaved: () => void;
-}
-
-interface IFormValues {
-  profiles: string[];
 }
 
 export const UpdateHelpProfile: React.FC<UpdateHelpProfilesProps> = ({
