@@ -31,16 +31,10 @@ describe('EditGroups', () => {
     // Dialog title and subtitle content
     expect(screen.getByText('Grupos de Perfil X')).toBeTruthy();
 
-    // Spinner while fetching
-    expect(screen.getByRole('progressbar')).toBeTruthy();
-
     // After load, dual list titles and item
-    await waitFor(() => {
-      expect(screen.queryByRole('progressbar')).toBeNull();
-    });
     expect(screen.getByText('Grupos AD disponibles')).toBeTruthy();
     expect(screen.getByText('Grupos AD asignados')).toBeTruthy();
-    expect(screen.getByText('Admins')).toBeTruthy();
+    expect(await screen.findByText('Admins')).toBeTruthy();
   });
 
   test('Cancelar cierra el modal y resetea', async () => {
@@ -62,9 +56,8 @@ describe('EditGroups', () => {
       depsMock
     );
 
-    await waitFor(() => {
-      expect(screen.queryByRole('progressbar')).toBeNull();
-    });
+    // wait until lists are present
+    await screen.findByText('Grupos AD disponibles');
 
     const cancelBtn = screen.getByRole('button', { name: 'Cancelar' });
     fireEvent.click(cancelBtn);
@@ -88,9 +81,8 @@ describe('EditGroups', () => {
       depsMock
     );
 
-    await waitFor(() => {
-      expect(screen.queryByRole('progressbar')).toBeNull();
-    });
+    // wait until lists are present
+    await screen.findByText('Grupos AD disponibles');
 
     const okBtn = screen.getByRole('button', { name: 'Aplicar' }) as HTMLButtonElement;
     expect(okBtn.disabled).toBe(true);

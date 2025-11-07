@@ -75,12 +75,66 @@ export const FATHER_PROFILE: IRoute = {
     viewNav: true
 }
 export const NEW_DYNAMIC_PAGE: IRoute = {
+    title: 'Nueva páginas',
+    order:  'Nueva páginas',
+    name: '/new_dynamic_page',
+    children: [],
+    viewNav: true
+}
+
+export const DYNAMIC_PAGE: IRoute = {
     title: 'Páginas',
     order:  'Páginas',
     name: '/dynamic_page',
     children: [],
     viewNav: true
 }
+
+export const PREVIEW_DYNAMIC_PAGE: IRoute = {
+    title: 'Previsualización',
+    order:  'Previsualización',
+    name: '/dynamic_page_preview',
+    children: [],
+    viewNav: false
+}
+export const HELP: IRoute = {
+    title: 'Ayuda',
+    order:  'Ayuda',
+    name: '/helps',
+    children: [],
+    viewNav: true
+}
+export const NEW_SECTION: IRoute = {
+    title: 'Nueva Sección',
+    order:  'HelpSection',
+    name: '/new_section_help',
+    children: [],
+    viewNav: true
+}
+export const NEW_ARTICLE: IRoute = {
+    title: 'Nuevo Artículo',
+    order:  'HelpArticle',
+    name: '/new_article_help',
+    children: [],
+    viewNav: true
+}
+
+export const NEW_DOCUMENT: IRoute = {
+    title: 'Nuevo Documento',
+    order:  'HelpDocument',
+    name: '/new_document_help',
+    children: [],
+    viewNav: true
+}
+
+export const NEW_DOCUMENT_INVISIBLE: IRoute = {
+    title: 'Nuevo Documento Invisible',
+    order:  'HelpDocumentInvisible',
+    name: '/new_document_invisible_help',
+    children: [],
+    viewNav: true
+}
+
 export const ROUTES: IRoute[] =[
-    HOME, FATHER_PROFILE, NOTIFICATION, FUNTIONALITIES, UPLOAD_PACK, NEW_DYNAMIC_PAGE
+    HOME, FATHER_PROFILE, NOTIFICATION, FUNTIONALITIES, DYNAMIC_PAGE, HELP
 ];

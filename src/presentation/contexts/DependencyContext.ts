@@ -28,12 +28,24 @@ import { UpdateNotificationsProfilesUseCase } from '../../application/usecases/U
 import { CancellationNotificationUseCase } from '../../application/usecases/CancellationNotificationsUseCase';
 import { GetNotificationByIdUseCase } from '../../application/usecases/GetNotificationByIdUseCase';
 import { UpdateNotificationUseCase } from '../../application/usecases/UpdateNotificationUseCase';
+import { GetHelpUseCase } from '../../application/usecases/GetHelpsUseCase';
+import { HelpRepository } from '../../infrastructure/adapters/http/HelpRepositoy';
+import { CreateHelpUseCase } from '../../application/usecases/CreateHelpUseCase';
+import { GetHelpByIdUseCase } from '../../application/usecases/GetHelpByIdUseCase';
+import { UpdateHelpProfilesUseCase } from '../../application/usecases/UpdateHelpProfilesUseCase';
+import { UpdateHelpUseCase } from '../../application/usecases/UpdateHelpUseCase';
+import { CancellationHelpUseCase } from '../../application/usecases/CancellationHelpUseCase';
+import { GetDynamicPagesUseCase } from '../../application/usecases/GetDynamicPagesUseCase';
+import { DynamicPageRepository } from '../../infrastructure/adapters/http/DynamicPageRepository';
+
 
 const profileRepo = new ProfileRepository();
 const groupRepo = new GroupRepository();
 const menuRepo = new MenuRepository();
 const highlightRepo = new HighlightRepository();
 const notificationRepo = new NotificationRepository();
+const helpRepo = new HelpRepository();
+const dynamicPageRepo = new DynamicPageRepository();
 
 export interface IDependencies{
   getProfiles: GetProfilesUseCase,
@@ -60,11 +72,25 @@ export interface IDependencies{
   updateNotificationProfiles: UpdateNotificationsProfilesUseCase,
   cancellationNotification: CancellationNotificationUseCase,
   getNotificationById: GetNotificationByIdUseCase,
-  updateNotification: UpdateNotificationUseCase
+  updateNotification: UpdateNotificationUseCase,
+  getHelps: GetHelpUseCase,
+  getHelpTypes: GetDatasetFiltersUseCase,
+  getHelpSections: GetDatasetFiltersUseCase,
+  getHelpStatuses: GetDatasetFiltersUseCase,
+  getHelpArticles: GetDatasetFiltersUseCase,
+  getHelpDocumentTypes: GetDatasetFiltersUseCase,
+  createHelp: CreateHelpUseCase,
+  getHelpById: GetHelpByIdUseCase,
+  updateHelpProfiles: UpdateHelpProfilesUseCase,
+  updateHelp: UpdateHelpUseCase,
+  cancellationHelp: CancellationHelpUseCase,
+  getHelpProfiles: GetDatasetFiltersUseCase,
+  getDynamicPages: GetDynamicPagesUseCase
 }
 
 const resourseDimDatasetProfile = env.resources.profiles.dim.dataset;
 const resourseDimDatasetNotification = env.resources.notifications.dim.dataset;
+const resourseDimDatasetHelp = env.resources.helps.dim.dataset;
 
 /**Profiles */
 const urlProfileStatus = resourseDimDatasetProfile.endpoint.replace('{dataset}','statuses');
@@ -75,6 +101,14 @@ const urlDimProfile = resourseDimDatasetProfile.endpoint.replace('{dataset}','pr
 const urlNotificationStatus = resourseDimDatasetNotification.endpoint.replace('{dataset}','statuses');
 const urlNotificationTypes = resourseDimDatasetNotification.endpoint.replace('{dataset}','types');
 const urlNotificationCommonTypes = resourseDimDatasetNotification.endpoint.replace('{dataset}','commontypes');
+
+/**Help Desk */
+const urlHelpStatus = resourseDimDatasetHelp.endpoint.replace('{dataset}','statuses');
+const urlHelpTypes = resourseDimDatasetHelp.endpoint.replace('{dataset}','types');
+const urlHelpsSections = resourseDimDatasetHelp.endpoint.replace('{dataset}','sections');
+const urlHelpsArticles = resourseDimDatasetHelp.endpoint.replace('{dataset}','articles');
+const urlHelpsDocumentTypes = resourseDimDatasetHelp.endpoint.replace('{dataset}','documentTypes');
+const urlHelpsProfiles = resourseDimDatasetHelp.endpoint.replace('{dataset}','profiles');
 
 export const defaultDependencies: IDependencies = {
   getProfiles: new GetProfilesUseCase(profileRepo),
@@ -101,7 +135,20 @@ export const defaultDependencies: IDependencies = {
   updateNotificationProfiles: new UpdateNotificationsProfilesUseCase(notificationRepo),
   cancellationNotification: new CancellationNotificationUseCase(notificationRepo),
   getNotificationById: new GetNotificationByIdUseCase(notificationRepo),
-  updateNotification: new UpdateNotificationUseCase(notificationRepo)
+  updateNotification: new UpdateNotificationUseCase(notificationRepo),
+  getHelps: new GetHelpUseCase(helpRepo),
+  getHelpTypes: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpTypes,resourseDimDatasetHelp.version)),
+  getHelpSections: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpsSections,resourseDimDatasetHelp.version)),
+  getHelpArticles: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpsArticles,resourseDimDatasetHelp.version)),
+  getHelpDocumentTypes: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpsDocumentTypes,resourseDimDatasetHelp.version)),
+  getHelpStatuses: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpStatus,resourseDimDatasetHelp.version)),
+  getHelpProfiles: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlHelpsProfiles,resourseDimDatasetHelp.version)),
+  createHelp: new CreateHelpUseCase(helpRepo),
+  getHelpById: new GetHelpByIdUseCase(helpRepo),
+  updateHelpProfiles: new UpdateHelpProfilesUseCase(helpRepo),
+  updateHelp: new UpdateHelpUseCase(helpRepo),
+  cancellationHelp: new CancellationHelpUseCase(helpRepo),
+  getDynamicPages: new GetDynamicPagesUseCase(dynamicPageRepo)
 };
 
 export const DependencyContext = React.createContext<IDependencies>(defaultDependencies);

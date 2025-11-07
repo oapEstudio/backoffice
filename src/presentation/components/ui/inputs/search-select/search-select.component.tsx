@@ -7,42 +7,49 @@ import {
   Typography,
 } from "@mui/material";
 
-interface ICustomSearchSelect {
+interface ICustomSearchSelect  {
   value: string;
   onChange: (event: SelectChangeEvent<string>) => void;
   options: { label: string; value: string }[];
   placeholder: string; 
+  disabled: boolean;
 }
 
 const CustomSearchSelect: React.FC<ICustomSearchSelect> = ({
   value,
   onChange,
   options,
-  placeholder, 
+  placeholder,
+  disabled,
 }) => {
   return (
-      <FormControl variant="outlined" size="small" sx={{ width: "100%", maxWidth: "300px" }}>
-        <Select
-          value={value}
-          onChange={onChange}
-          displayEmpty
-          renderValue={(selected) => {
-            if (!selected) {
-              return <Typography sx={{ color: "text.secondary" }}>{placeholder}</Typography>;
-            }
-            return options.find(option => option.value === selected)?.label || "";
-          }}
-        >
-          <MenuItem value="">
-            <Typography sx={{ color: "text.secondary" }}>{placeholder}</Typography>
+    <FormControl 
+      variant="outlined" 
+      size="small" 
+      sx={{ width: "100%", maxWidth: "300px" }}
+    >
+      <Select
+        value={value}
+        onChange={onChange}
+        displayEmpty
+        disabled={disabled}
+        renderValue={(selected) => {
+          if (!selected) {
+            return <Typography sx={{ color: "text.secondary" }}>{placeholder}</Typography>;
+          }
+          return options.find(option => option.value === selected)?.label || "";
+        }}
+      >
+        <MenuItem value="">
+          <Typography sx={{ color: "text.secondary" }}>{placeholder}</Typography>
+        </MenuItem>
+        {options.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
           </MenuItem>
-          {options.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+        ))}
+      </Select>
+    </FormControl>
   );
 };
 

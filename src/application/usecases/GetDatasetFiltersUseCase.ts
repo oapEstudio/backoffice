@@ -7,7 +7,6 @@ export class GetDatasetFiltersUseCase {
   constructor(private repo: IDatasetFilterRepository) {}
  
   execute(filters?: IFilterDataSetDto): Promise<IFilter[]> {
-   
     try {
        return this.repo.getFilters(filters);
     } catch (err) {

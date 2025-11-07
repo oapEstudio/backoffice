@@ -90,6 +90,12 @@ export const env = {
          version: 'v1'
       }
     },
+    dynamic_pages: {
+       getAll: {   
+         endpoint: 'notifications',   
+         version: 'v1'
+      },
+    },
     notifications: { 
       dim: {      
         dataset: {
@@ -116,6 +122,44 @@ export const env = {
         },
          status: {
           endpoint: 'notifications/{id}/status',   
+          version: 'v1'
+        }
+      }
+    },
+    helps: { 
+      dim: {      
+        dataset: {
+           endpoint: 'helps/dataset/{dataset}',   
+           version: 'v1'
+        },
+        statuses: {
+           endpoint: 'helps/statuses',   
+           version: 'v1'
+        },
+        types: {
+           endpoint: 'helps/types',   
+           version: 'v1'
+        }
+      },
+      getAll: {   
+         endpoint: 'helps',   
+         version: 'v1'
+      },
+      create: {
+         endpoint: 'helps',   
+         version: 'v1'
+      },
+      edit: {
+        profiles: {
+         endpoint: 'helps/{id}/profiles',   
+         version: 'v1'
+        },
+        helps: {
+          endpoint: 'helps/{id}',   
+          version: 'v1'
+        },
+         status: {
+          endpoint: 'helps/{id}/status',   
           version: 'v1'
         }
       }
