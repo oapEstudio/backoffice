@@ -6,11 +6,11 @@ import StepNavigationBackOffice from "../../../../components/ui/step/step-naviga
 import { CustomBox } from "../../../../components/ui/box/CustomBox";
 import Button from "../../../../components/ui/button/button.component";
 import { eStep } from "./reducers/ActionStepReducer";
-import { ActionStep } from "../../shared/components/action-step/ActionStep";
 import Loading from "../../../../components/ui/loading";
 import { useNewInvisibleDocumentPage } from "./hooks/useNewInvisibleDocumentPage";
 import { StepOneNewInvisibleDocument } from "./components/StepOneNewInvisibleDocument/StepOneNewInvisibleDocument";
 import StepTwoNewInvisibleDocument from "./components/StepTwoNewInvisibleDocument/StepTwoNewInvisibleDocument";
+import { ActionStep } from "../../../../components/ui/step/action-step/ActionStep";
 
 
 export const NewInvisibleDocumentPage = () => {

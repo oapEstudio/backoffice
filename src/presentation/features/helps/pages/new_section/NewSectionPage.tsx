@@ -6,11 +6,11 @@ import StepNavigationBackOffice from "../../../../components/ui/step/step-naviga
 import { CustomBox } from "../../../../components/ui/box/CustomBox";
 import Button from "../../../../components/ui/button/button.component";
 import { eStep } from "./reducers/ActionStepReducer";
-import { ActionStep } from "../../shared/components/action-step/ActionStep";
 import { useNewSectionPage } from "./hooks/useNewSectionPage";
 import Loading from "../../../../components/ui/loading";
 import { StepOneNewSection } from "./components/StepOneNewSection/StepOneNewSection";
 import StepTwoNewSection from "./components/StepTwoNewSection/StepTwoNewSection";
+import { ActionStep } from "../../../../components/ui/step/action-step/ActionStep";
 
 
 export const NewSectionPage = () => {

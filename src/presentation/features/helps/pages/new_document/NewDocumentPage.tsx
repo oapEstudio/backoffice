@@ -6,12 +6,12 @@ import StepNavigationBackOffice from "../../../../components/ui/step/step-naviga
 import { CustomBox } from "../../../../components/ui/box/CustomBox";
 import Button from "../../../../components/ui/button/button.component";
 import { eStep } from "./reducers/ActionStepReducer";
-import { ActionStep } from "../../shared/components/action-step/ActionStep";
 import { useNewDocumentPage } from "./hooks/useNewDocumentPage";
 import Loading from "../../../../components/ui/loading";
 import StepTwoNewAlert from "./components/StepTwoNewDocument/StepTwoNewDocument";
 import { StepOneNewDocument } from "./components/StepOneNewDocument/StepOneNewDocument";
 import StepTwoNewDocument from "./components/StepTwoNewDocument/StepTwoNewDocument";
+import { ActionStep } from "../../../../components/ui/step/action-step/ActionStep";
 
 
 export const NewDocumentPage = () => {
