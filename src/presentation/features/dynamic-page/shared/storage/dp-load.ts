@@ -16,6 +16,7 @@ export async function loadDynamicPageFromStorage(): Promise<ISectionPage[]> {
   const sections: ISectionPage[] = [];
 
   for (const s of manifest.sections) {
+    
     const elements: IElementDynamicPage[] = [];
 
     for (const el of s.elements) {
@@ -24,23 +25,26 @@ export async function loadDynamicPageFromStorage(): Promise<ISectionPage[]> {
       
         if (el.fileKey) {
       
-          const blob = await idbGet(`dp:file:${el.fileKey}`, dpStore);
-          
-          if (blob) {
+            const blob = await idbGet(`dp:file:${el.fileKey}`, dpStore);
             
-                file = new File([blob], `file-${el.fileKey}`, { type: blob.type });            
-          }
-      }
+            if (blob) {
+              
+                  file = new File([blob], `file-${el.fileKey}`, { type: blob.type });            
+            }
+        }
 
-      elements.push({
-        id: (el as any).id ?? Math.random(),
-        label: el.label,
-        type: el.type as any,
-        height: el.height as any,
-        align: el.align as any,
-        file,
-      });
-    }
+        elements.push({
+          id: (el as any).id ?? Math.random(),
+          label: el.label,
+          type: el.type as any,
+          height: el.height as any,
+          align: el.align as any,
+          file,
+          text: el.text,
+          fontSize: el.fontSize,
+          link: el.link
+        });
+      }
 
     sections.push({
       id: s.id,

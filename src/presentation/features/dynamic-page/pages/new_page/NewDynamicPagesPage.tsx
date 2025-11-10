@@ -69,6 +69,8 @@ export const NewDynamicPagesPage = () => {
                   ...sec.elements,
                   { 
                     id: Date.now(),
+                    text: element.text,
+                    fontSize: element.fontSize,
                     align: element.align, 
                     label: element.label, 
                     type: element.type, 

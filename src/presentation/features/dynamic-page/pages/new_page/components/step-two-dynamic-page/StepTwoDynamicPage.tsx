@@ -25,11 +25,12 @@ export const StepTwoDynamicPage: React.FC<StepTwoDynamicPageProps> = ({initialIm
 
   const formByType: Record<eTypeElement, React.ReactElement | null> = {
     [eTypeElement.BACKGROUND_IMAGE]: <BgImageFields initialImageUrl={initialImageUrl} />,
-    [eTypeElement.TITLE]           : <TitleFields />,
-    [eTypeElement.PARAGRAPH]       : <ParagraphFields />,
-    [eTypeElement.FILE]            : <FileFields />,
-    [eTypeElement.IMG]             : <ImageFields initialImageUrl={initialImageUrl} />,
-     [eTypeElement.VIDEO]           : <VideoFields />,
+    [eTypeElement.TITLE]: <TitleFields />,
+    [eTypeElement.PARAGRAPH]: <ParagraphFields />,
+    [eTypeElement.FILE]: <FileFields />,
+    [eTypeElement.IMG]: <ImageFields initialImageUrl={initialImageUrl} />,
+    [eTypeElement.VIDEO]: <VideoFields />,
+    [eTypeElement.ITEM_MENU]: null
   };
 
   return formByType[type as eTypeElement] ?? null;

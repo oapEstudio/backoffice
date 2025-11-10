@@ -37,11 +37,13 @@ const navStepsInit: StepType[] = [{
 
 export interface IModalAddElementFormValues{
     type: eTypeElement;
+    text: string;
     file: File;
     label: string;
     align: string;
     height: number;
     link: string;
+    fontSize: string;
 }
 export const ModalAddElement: React.FC<ModalAddElementProps> = ({open, onClose, onCancel, onOk}) => {
 
