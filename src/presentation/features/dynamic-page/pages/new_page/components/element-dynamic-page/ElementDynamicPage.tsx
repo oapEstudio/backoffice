@@ -1,5 +1,5 @@
 import { size } from 'lodash';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { CustomGrid } from '../../../../../../components/ui/grid/CustomGrid';
 import { CustomBox } from '../../../../../../components/ui/box/CustomBox';
 import { CustomFab } from '../../../../../../components/ui/fab/CustomFab';
@@ -25,6 +25,8 @@ export enum eTypeElement{
 export interface IElementDynamicPage{
     id: number;  
     label: string;
+    text: string;
+    fontSize: string;
     type: eTypeElement;
     file: File;
     height: number;
@@ -40,6 +42,8 @@ export interface IElementDynamicPageProps{
     handleDeleteElement?: (id: number)=>void;
 }
 export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({size, element,sectionId, handleDeleteElement, isEdit}) => {
+
+ 
   return <CustomGrid  size={ size } >
                  <>{handleDeleteElement && <CustomFab style={{width: '30px' , height: '30px'}} sx={{position: 'absolute'}} onClick={()=>{handleDeleteElement(element.id)}}>
                                                 <DeleteActionIcon />
@@ -51,11 +55,11 @@ export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({size, el
                                     <img width={'100%'} height={element.height} src={URL.createObjectURL(element.file)} /> :
                                     <></>}
                     {element.type === eTypeElement.TITLE?
-                                    <TitlePages title={element.label} style={{padding: '0px 2rem', textAlign: element.align }} /> :
+                                    <TitlePages title={element.label} style={{fontSize: element.fontSize, padding: '0px 2rem', textAlign: element.align }} /> :
                                     <></>}                                                                            
                     {element.type === eTypeElement.PARAGRAPH?
                                     <CustomBox sx={{padding: '2rem'}}>
-                                        <RichTextReadOnly content={element.label} extensions={[StarterKit,TextStyleKit, TextAlign.configure({
+                                        <RichTextReadOnly content={element.text} extensions={[StarterKit,TextStyleKit, TextAlign.configure({
                                                 types: ['heading', 'paragraph']                                               
                                               })]} />
                                     </CustomBox> :
