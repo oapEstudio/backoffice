@@ -10,6 +10,9 @@ export const HELP_TYPES: Record<number, string> = {
   [HELP_INVISIBLE]: 'Invisible',
 };
 
+export const STATE_HELP_NEW: number = 1;
+export const STATE_HELP_ACTIVE: number = 2;
+export const STATE_HELP_INACTIVE: number = 3;
 export const STATE_HELP_CANCEL: number = 4;
 
 

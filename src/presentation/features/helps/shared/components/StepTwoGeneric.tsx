@@ -56,15 +56,15 @@ export const StepTwoGeneric: React.FC<StepTwoGenericProps> = ({
               'No se permiten caracteres especiales como + * ? [ ] ^ $ ( ) { } | \\ ! " # % & / = \' ¡',
           },
         }}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <CustomTextInput
             {...field}
             label={nameLabel}
             type="text"
             required
             maxLength={MAX_LENGTH_INPUT_NAME}
-            error={!!errors.name}
-            helperText={errors.name?.message}
+            error={fieldState.isDirty && !!errors.name}
+            helperText={fieldState.isDirty ? errors.name?.message : undefined}
             disabled={disabledAll}
           />
         )}

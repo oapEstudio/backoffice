@@ -7,8 +7,8 @@ import type { IHelpFormValues } from '../../interface/IHelpFormValues';
 import { MAX_LENGTH_INPUT } from '../../../../shared/constants/default-input';
 import type { SelectOption } from '../../../../../components/ui/inputs/select/select.interface';
 import CustomTextAreaInput from '../../../../../components/ui/inputs/text-area-input/text-area-input.component';
-import { useGetHelpSections } from '../hooks/useGetHelpsSection';
 import CustomSearchSelect from '../custom-search-select/CustomSearchSelect';
+import { useGetHelpSections } from '../../hooks/useGetHelpsSection';
 
 interface HelpArticleDetailsFieldsProps {
   disabledAll?: boolean;
@@ -45,7 +45,7 @@ export const HelpArticleDetailsFields: React.FC<HelpArticleDetailsFieldsProps> =
         name="parentId"
         control={control}
         rules={{ required: 'Seleccionar una Sección es obligatorio' }}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <CustomSearchSelect
             value={field.value || ''}
             onChange={field.onChange}
@@ -55,8 +55,8 @@ export const HelpArticleDetailsFields: React.FC<HelpArticleDetailsFieldsProps> =
             label="Sección a la que pertenecerá este artículo"
             loading={loading}
             disabled={disabledAll}
-            error={!!errors.parentId}
-            helperText={errors.parentId?.message} 
+            error={fieldState.isDirty && !!errors.parentId}
+            helperText={fieldState.isDirty && !!errors.parentId ? errors.parentId?.message : undefined} 
             required={true}
           />
         )}
@@ -72,15 +72,15 @@ export const HelpArticleDetailsFields: React.FC<HelpArticleDetailsFieldsProps> =
           maxLength: MAX_LENGTH_INPUT,
           validate: { minTrimmed: minTrimmed(3) },
         }}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <CustomTextInput
             {...field}
             required
             label={titleLabel}
             type="text"
             maxLength={MAX_LENGTH_INPUT}
-            error={!!errors.title}
-            helperText={errors.title?.message}
+            error={fieldState.isDirty && !!errors.title}
+            helperText={fieldState.isDirty ? errors.title?.message : undefined}
             disabled={disabledAll}
           />
         )}
@@ -96,14 +96,14 @@ export const HelpArticleDetailsFields: React.FC<HelpArticleDetailsFieldsProps> =
           maxLength: 1000,
           validate: { minTrimmed: minTrimmed(3) },
         }}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <CustomTextAreaInput
             {...field}
             label="Descripción del artículo"
             required
             maxLength={1000}
-            error={!!errors.description}
-            helperText={errors.description?.message}
+            error={fieldState.isDirty && !!errors.description}
+            helperText={fieldState.isDirty ? errors.description?.message : undefined}
           />
         )}
       />

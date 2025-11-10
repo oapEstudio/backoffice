@@ -38,7 +38,7 @@ export function toHelpsRow(h: IHelp, callbackEdit?: any, callbackCancellation?: 
   const buttonEdit = (
     <CustomStack direction='row' spacing={2} sx={styleContentElement}>
       <span>
-        {h.profile.length}
+        {h.profiles.length}
       </span>
       <WrapperContainerEdit>
         <EditActionIcon handleClick={callbackEdit} parameterHandleClick={h} />

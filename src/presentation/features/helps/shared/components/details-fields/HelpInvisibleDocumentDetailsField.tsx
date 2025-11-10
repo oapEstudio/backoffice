@@ -9,6 +9,7 @@ import type { SelectOption } from '../../../../../components/ui/inputs/select/se
 import FileDropzone from '../../../../../components/ui/file-drop-zone/FileDropzone';
 import { Typography } from '@mui/material';
 import { HELP_DOCUMENT_LINK } from '../../constants/helps';
+import { useDocumentAccept } from '../../hooks/useDocumentAccept';
 
 interface HelpDocumentInvisibleDetailsFieldsProps {
   disabledAll?: boolean;
@@ -26,22 +27,22 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
   selectItemsDocumentType = [],
 }) => {
   const { control, formState: { errors }, watch, setValue } = useFormContext<IHelpFormValues>();
-  const watchDocumentType = watch('helpDocumentTypeId');
-  const prevDocumentType = useRef(watchDocumentType);
+  const { accept, docTypeNum } = useDocumentAccept();
+  
+  const prevDocumentType = useRef(docTypeNum);
 
   useEffect(() => {
-    if (prevDocumentType.current !== watchDocumentType && prevDocumentType.current !== undefined) {
-      if (Number(watchDocumentType) === HELP_DOCUMENT_LINK) {
+    if (prevDocumentType.current !== docTypeNum && prevDocumentType.current !== undefined) {
+      if (Number(docTypeNum) === HELP_DOCUMENT_LINK) {
         setValue('document', []);
         setValue('link', '');
       } else {
-        setValue('document', []);
         setValue('link', '');
       }
     }
 
-    prevDocumentType.current = watchDocumentType;
-  }, [watchDocumentType, setValue]);
+    prevDocumentType.current = docTypeNum;
+  }, [docTypeNum, setValue]);
 
   return (
     <>
@@ -54,15 +55,15 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
           maxLength: MAX_LENGTH_INPUT,
           validate: { minTrimmed: minTrimmed(3) },
         }}
-        render={({ field }) => (
+        render={({ field, fieldState}) => (
           <CustomTextInput
             {...field}
             required
             label={titleLabel}
             type="text"
             maxLength={MAX_LENGTH_INPUT}
-            error={!!errors.title}
-            helperText={errors.title?.message}
+            error={fieldState.isDirty && !!errors.title }
+            helperText={fieldState.isDirty ? errors.title?.message : undefined }
             disabled={disabledAll}
           />
         )}
@@ -73,21 +74,22 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
         name="helpDocumentTypeId"
         control={control}
         rules={{ required: 'El tipo de documento es obligatorio' }}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <CustomSelect
             {...field}
             label="Tipo de documento"
             required
             options={selectItemsDocumentType}
-            error={!!errors.state}
+            error={fieldState.isDirty && !!errors.helpDocumentTypeId }
             disabled={disabledState || disabledAll}
           />
         )}
       />
       <br />
       <br />
-      {Number(watchDocumentType) === HELP_DOCUMENT_LINK ? (
+      {Number(docTypeNum) === HELP_DOCUMENT_LINK ? (
         <Controller
+          shouldUnregister={false}     
           name="link"
           control={control}
           rules={{
@@ -109,15 +111,15 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
               }
             }
           }}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <CustomTextInput
               {...field}
               required
               label="URL del documento"
               type="url"
               placeholder="https://ejemplo.com/documento"
-              error={!!errors.link}
-              helperText={errors.link?.message}
+              error={fieldState.isDirty && !!errors.link }
+              helperText={fieldState.isDirty ? errors.link?.message : undefined }
               disabled={disabledAll}
             />
           )}
@@ -128,20 +130,25 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
           name="document"
           control={control}
           rules={{
-            validate: (v) => (v !== undefined) || 'Debes asignar un archivo',
+          validate: (v) => {
+              if (!v || (Array.isArray(v) && v.length === 0)) {
+                return 'Debes asignar un archivo';
+              }
+            }
           }}
-          render={({ field, fieldState: { error } }) => {
+          render={({ field, fieldState: { error }  }) => {
             return (
               <>
                 <FileDropzone
+                  accept={accept}
                   multiple={false}
                   value={(field.value ? field.value : [])}
                   onFiles={(files) => field.onChange(files)}
                   disabled={disabledAll}
                 />
                 {error && (
-                  <Typography color="error" variant="caption">
-                    {error.message}
+                  <Typography color="error.main" variant="caption">
+                   { error.message }
                   </Typography>
                 )}
               </>
