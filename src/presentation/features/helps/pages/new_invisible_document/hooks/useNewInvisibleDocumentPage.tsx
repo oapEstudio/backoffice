@@ -5,10 +5,9 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { eToast, Toast } from "../../../../../components/ui/toast/CustomToastService";
 import { HELP } from "../../../../../router/routes";
-import { navStepSelected } from "../../../../../utils/navStepSelected";
 import { useScrollToTopOnStep } from "../../../../../utils/useScrollToTopOnStep";
 import type { IHelpFormValues } from "../../../shared/interface/IHelpFormValues";
-import { HELP_DOCUMENT_LINK, HELP_INVISIBLE } from "../../../shared/constants/helps";
+import { HELP_DOCUMENT_DOWNLOAD, HELP_DOCUMENT_LINK, HELP_DOCUMENT_PDF, HELP_INVISIBLE } from "../../../shared/constants/helps";
 import { useCreateHelp } from "../../../hooks/useCreateHelp";
 import { toHelpDocumentTypeSelectCommon } from "../../../mappers/helpCreateMapper";
 import { ActionStepReducer, eStep, getActionStepInitialState } from "../reducers/ActionStepReducer";
@@ -50,7 +49,7 @@ export function useNewInvisibleDocumentPage() {
       [eStep.STEP_ONE]: HELP.name,
     },
   });
-  
+
   const { result: documentTypes, loading: isLoadingDocumentTypes } = useGetHelpDocumentType();
 
   const selectItemsDocumentType = useMemo(
@@ -83,47 +82,39 @@ export function useNewInvisibleDocumentPage() {
 
   useEffect(() => {
     const validateCurrentStep = async () => {
-      const currentDocType = Number(form.getValues('helpDocumentTypeId'));
+      const currentDocType = Number(form.getValues("helpDocumentTypeId"));
+      const isLink    = currentDocType === HELP_DOCUMENT_LINK;
+      const needsFile = currentDocType === HELP_DOCUMENT_DOWNLOAD || currentDocType === HELP_DOCUMENT_PDF;
 
-      const allFields = state.field as Array<keyof IHelpFormValues>;
+      const base = new Set<keyof IHelpFormValues>(state.field as Array<keyof IHelpFormValues>);
+      if (isLink) {
+        base.add("link");
+        base.delete("document");
+      } else if (needsFile) {
+        base.add("document");
+        base.delete("link");
+      } else {
+        base.delete("link");
+        base.delete("document");
+      }
 
-      const fieldsToCheck = allFields.filter(field => {
-        if (field === 'document' && currentDocType === HELP_DOCUMENT_LINK) {
-          return false;
-        }
-        if (field === 'link' && currentDocType !== HELP_DOCUMENT_LINK) {
-          return false;
-        }
-        return true;
-      });
-
-      const isValid = fieldsToCheck.every(field => {
-        const fieldValue = form.getValues(field);
-
-        if (Array.isArray(fieldValue)) {
-          return fieldValue.length > 0;
-        }
-
-        if (typeof fieldValue === 'string') {
-          return fieldValue.trim() !== '';
-        }
-
-        return fieldValue !== null && fieldValue !== undefined;
-      });
-
-      setIsStepValid(isValid);
+      const valid = await form.trigger(Array.from(base));
+      setIsStepValid(valid);
     };
 
-    validateCurrentStep();
+  validateCurrentStep();
 
-    const subscription = form.watch((values, { name }) => {
-      const allFields = state.field as Array<keyof IHelpFormValues>;
-      if (name && (allFields.includes(name as keyof IHelpFormValues) || name === 'helpDocumentTypeId')) {
-        validateCurrentStep();
-      }
-    });
+  const sub = form.watch((_, { name }) => {
+    if (!name) return;
+    const watched = new Set<keyof IHelpFormValues>([
+      "helpDocumentTypeId", "document", "link", ...state.field as Array<keyof IHelpFormValues>
+    ]);
+    if (watched.has(name as keyof IHelpFormValues)) {
+      void validateCurrentStep();
+    }
+  });
 
-    return () => subscription.unsubscribe();
+  return () => sub.unsubscribe();
   }, [form, state.field, state.step]);
 
   const onSubmit = async (data: IHelpFormValues) => {

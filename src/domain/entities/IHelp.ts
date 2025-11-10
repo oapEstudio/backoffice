@@ -15,7 +15,7 @@ export interface IHelp {
      helpDocumentTypeId: number;
      helpDocumentType: string;
      document: any[];   
-     profile: any[];  
+     profiles: any[]; 
      dateCreated: Date;
      dateUpdated: string;
      updatedBy: string;

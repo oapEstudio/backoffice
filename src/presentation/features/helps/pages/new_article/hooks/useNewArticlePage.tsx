@@ -92,31 +92,24 @@ export function useNewArticlePage() {
 
   useEffect(() => {
     const validateCurrentStep = async () => {
-      const fieldsToCheck = state.field as Array<keyof IHelpFormValues>;
 
-      const isValid = fieldsToCheck.every(field => {
-        const fieldValue = form.getValues(field);
-
-        if (Array.isArray(fieldValue)) {
-          return fieldValue.length > 0;
-        }
-
-        return fieldValue !== '' && fieldValue !== null && fieldValue !== undefined;
-      });
-
-      setIsStepValid(isValid);
+      const base = new Set<keyof IHelpFormValues>(state.field as Array<keyof IHelpFormValues>);
+      const valid = await form.trigger(Array.from(base));
+      setIsStepValid(valid);
     };
 
-    validateCurrentStep();
+  validateCurrentStep();
 
-    const subscription = form.watch((_, { name }) => {
-      const fieldsToCheck = state.field as Array<keyof IHelpFormValues>;
-      if (name && fieldsToCheck.includes(name as keyof IHelpFormValues)) {
-        validateCurrentStep();
-      }
-    });
+  const sub = form.watch((_, { name }) => {
+    if (!name) return;
+    const watched = new Set<keyof IHelpFormValues>([...state.field as Array<keyof IHelpFormValues>
+    ]);
+    if (watched.has(name as keyof IHelpFormValues)) {
+      void validateCurrentStep();
+    }
+  });
 
-    return () => subscription.unsubscribe();
+  return () => sub.unsubscribe();
   }, [form, state.field, state.step]);
 
   const onSubmit = async (data: IHelpFormValues) => {

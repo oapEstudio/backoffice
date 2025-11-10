@@ -37,7 +37,6 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
         setValue('document', []);
         setValue('link', '');
       } else {
-        setValue('document', []);
         setValue('link', '');
       }
     }
@@ -56,15 +55,15 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
           maxLength: MAX_LENGTH_INPUT,
           validate: { minTrimmed: minTrimmed(3) },
         }}
-        render={({ field }) => (
+        render={({ field, fieldState}) => (
           <CustomTextInput
             {...field}
             required
             label={titleLabel}
             type="text"
             maxLength={MAX_LENGTH_INPUT}
-            error={!!errors.title}
-            helperText={errors.title?.message}
+            error={fieldState.isDirty && !!errors.title }
+            helperText={fieldState.isDirty ? errors.title?.message : undefined }
             disabled={disabledAll}
           />
         )}
@@ -75,13 +74,13 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
         name="helpDocumentTypeId"
         control={control}
         rules={{ required: 'El tipo de documento es obligatorio' }}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <CustomSelect
             {...field}
             label="Tipo de documento"
             required
             options={selectItemsDocumentType}
-            error={!!errors.state}
+            error={fieldState.isDirty && !!errors.helpDocumentTypeId }
             disabled={disabledState || disabledAll}
           />
         )}
@@ -90,6 +89,7 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
       <br />
       {Number(docTypeNum) === HELP_DOCUMENT_LINK ? (
         <Controller
+          shouldUnregister={false}     
           name="link"
           control={control}
           rules={{
@@ -111,15 +111,15 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
               }
             }
           }}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <CustomTextInput
               {...field}
               required
               label="URL del documento"
               type="url"
               placeholder="https://ejemplo.com/documento"
-              error={!!errors.link}
-              helperText={errors.link?.message}
+              error={fieldState.isDirty && !!errors.link }
+              helperText={fieldState.isDirty ? errors.link?.message : undefined }
               disabled={disabledAll}
             />
           )}
@@ -128,6 +128,7 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
 
         <Controller
           name="document"
+          shouldUnregister={false}     
           control={control}
           rules={{
             validate: (v) => (v !== undefined) || 'Debes asignar un archivo',

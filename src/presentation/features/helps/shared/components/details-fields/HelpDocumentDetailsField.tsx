@@ -68,9 +68,7 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
     if (prevDocumentType.current !== docTypeNum && prevDocumentType.current !== undefined) {
       if (Number(docTypeNum) === HELP_DOCUMENT_LINK) {
         setValue('document', []);
-        setValue('link', '');
       } else {
-        setValue('document', []);
         setValue('link', '');
       }
     }
@@ -105,7 +103,7 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
         name="parentId"
         control={control}
         rules={{ required: `Seleccionar ${selectedType === HELP_SECTION ? 'una Sección' : 'un Artículo'} es obligatorio` }}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <CustomSearchSelect
             value={field.value || ''}
             onChange={field.onChange}
@@ -114,8 +112,8 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
             placeholder={`Buscar ${selectedType === HELP_SECTION ? 'una Sección' : 'un Artículo'}...`}
             loading={loadingSection || loadingArticle}
             disabled={disabledAll}
-            error={!!errors.parentId}
-            helperText={errors.parentId?.message}
+            error={fieldState.isDirty && !!errors.parentId}
+            helperText={fieldState.isDirty ? errors.parentId?.message : undefined}
             required={true}
           />
         )}
@@ -131,15 +129,15 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
           maxLength: MAX_LENGTH_INPUT,
           validate: { minTrimmed: minTrimmed(3) },
         }}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <CustomTextInput
             {...field}
             required
             label={titleLabel}
             type="text"
             maxLength={MAX_LENGTH_INPUT}
-            error={!!errors.title}
-            helperText={errors.title?.message}
+            error={fieldState.isDirty && !!errors.title}
+            helperText={fieldState.isDirty ? errors.title?.message : undefined}
             disabled={disabledAll}
           />
         )}
@@ -150,13 +148,13 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
         name="helpDocumentTypeId"
         control={control}
         rules={{ required: 'El tipo de documento es obligatorio' }}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <CustomSelect
             {...field}
             label="Tipo de documento"
             required
             options={selectItemsDocumentType}
-            error={!!errors.state}
+            error={fieldState.isDirty && !!errors.helpDocumentTypeId}
             disabled={disabledState || disabledAll}
           />
         )}
@@ -186,15 +184,15 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
               }
             }
           }}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <CustomTextInput
               {...field}
               required
               label="URL del documento"
               type="url"
               placeholder="https://ejemplo.com/documento"
-              error={!!errors.link}
-              helperText={errors.link?.message}
+              error={fieldState.isDirty && !!errors.link}
+              helperText={fieldState.isDirty ? errors.link?.message : undefined}
               disabled={disabledAll}
             />
           )}

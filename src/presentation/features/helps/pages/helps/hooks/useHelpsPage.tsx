@@ -3,9 +3,7 @@ import type { IAction } from '../../../../../components/ui/table/table-actions/a
 import type { IRow } from '../../../../../components/ui/table/table.interface';
 import type { IHelp } from '../../../../../../domain/entities/IHelp';
 import { useGetHelps } from '../../../hooks/useGetHelps';
-import { INITIAL_PARAMS_TABLE } from '../../../../shared/constants/initialsParamTable';
 import Button from '../../../../../components/ui/button/button.component';
-import TableFilterBar from '../../../../../components/widgets/table-filter-bar/TableFilterBar';
 import { toHelpsRow, type IHelpRow } from '../../../mappers/helpMapper';
 import type { IFilterHelpsResult } from '../components/filter-help-page/FilterHelpsPage';
 import { SelectCreateHelp } from '../components/select-create-help/SelectHelp';
@@ -13,22 +11,39 @@ import { eToast, Toast } from '../../../../../components/ui/toast/CustomToastSer
 import { useHelpCancellation } from '../../../hooks/useCancellationHelp';
 import { HELP_INVISIBLE, HELP_SECTION } from '../../../shared/constants/helps';
 import { useGetHelpsProfiles } from '../../../shared/hooks/useGetHelpsProfiles';
+import { useTableStandard } from '../../../../../components/widgets/table-page-standard/hooks/useTablePageStandard';
 
 export const useHelpPage = () => {
-  const { setParams, params, result, loading } = useGetHelps(INITIAL_PARAMS_TABLE);
-  const [openFilter, setOpenFilter] = useState(false);
+  const { params,
+    setParams,
+    loading,
+    openFilter,
+    clearFilters,
+    setOpenFilter,
+    openEdit,
+    setOpenEdit,
+    openDelete,
+    openProfilesModal,
+    setOpenProfilesModal,
+    filterButtons,
+    setOpenDelete,
+    result,
+  } = useTableStandard<IHelp>({
+    useCase: useGetHelps,
+    toMapper: toHelpsRow,
+    actionsButton: <SelectCreateHelp />
+
+  });
   const [editHelpId, setEditHelpId] = useState<string>('');
   const [editHelpType, setEditHelpTypeId] = useState<number>(0);
-  const [openEdit, setOpenEdit] = useState(false);
   const refresh = useCallback(() => setParams(p => ({ ...p })), [setParams]);
-  const [openProfilesModal, setOpenProfilesModal] = useState(false);
   const [selectedProfiles, setSelectedProfiles] = useState<Array<{ id: string; name: string }>>([]);
   const [leftSeedProfiles, setLeftSeedProfiles] = useState<Array<{ id: string; name: string }>>([]);
   const [selectedHelpParentId, setSelectedHelpParentId] = useState<string>('');
   const [selectedHelpId, setSelectedHelpId] = useState<string>('');
-  const [openDelete, setOpenDelete] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<string>('');
   const { cancellation } = useHelpCancellation()
+
 
   const hasFilters = useMemo(
     () => params.filters !== undefined && Object.keys(params.filters).length > 0,
@@ -54,20 +69,12 @@ export const useHelpPage = () => {
     [setParams]
   );
 
-  const clearFilters = useCallback(() => {
-    setParams(p => ({
-      ...p,
-      filters: undefined,
-      page: 1,
-    }));
-  }, [setParams]);
-
   const callbackProfiles = useCallback((h: IHelp) => {
 
     setSelectedHelpId(String(h.id));
     setSelectedHelpParentId(String(h.helpTypeId !== HELP_SECTION && h.helpTypeId !== HELP_INVISIBLE ? h.parentId : ''));
 
-    const profs = (h.profile ?? []).map(p => ({ id: String(p.profileId), name: p.profiles.name }));
+    const profs = (h.profiles ?? []).map(p => ({ id: String(p.profileId), name: p.profiles.name }));
 
     setSelectedProfiles(profs);
     setOpenProfilesModal(true);
@@ -102,17 +109,7 @@ export const useHelpPage = () => {
 
   }, [confirmDelete]);
 
-  const toggleFilter = useCallback(() => {
-    setOpenFilter(prev => !prev);
-  }, []);
 
-  // Table rows
-  const rows: IHelpRow[] = useMemo(
-    () => (result?.data ?? []).map(p => toHelpsRow(p, callbackProfiles, callbackCancelled)),
-    [result?.data, callbackProfiles]
-  );
-
-  // Table actions
   const actions: IAction[] = useMemo(
     () => [
       {
@@ -128,19 +125,13 @@ export const useHelpPage = () => {
     []
   );
 
-  const filterButtons = useMemo(() => {
-    return (
-      <TableFilterBar
-        onClearFilters={clearFilters}
-        onOpenFilter={() => setOpenFilter(true)}
-        leftActions={<SelectCreateHelp />}
-        hasFilters={hasFilters}
-      />
-    );
-  }, [clearFilters, hasFilters, setOpenFilter]);
-
   const { result: profiles, loading: isLoadingProfiles } = useGetHelpsProfiles(
-    selectedHelpParentId ? { parentFilter: { parentId: selectedHelpParentId }} : undefined);
+    selectedHelpParentId ? { parentFilter: { parentId: selectedHelpParentId } } : undefined);
+
+  const rows: IHelpRow[] = useMemo(
+    () => (result?.data ?? []).map(p => toHelpsRow(p, callbackProfiles, callbackCancelled)),
+    [result?.data, callbackProfiles]
+  );
 
   useEffect(() => {
     if (profiles && Array.isArray(profiles)) {
@@ -185,6 +176,5 @@ export const useHelpPage = () => {
     setOpenDelete,
     setOpenProfilesModal,
     clearFilters,
-    toggleFilter,
   };
 };
