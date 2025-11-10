@@ -10,11 +10,10 @@ import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import IconButton from '@mui/material/IconButton'
 import LogoYPF from '../../../../../components/ui/icons/ypf-logo/logo-ypf.svg?react';
-import { AddActionIcon, SVGIcon } from '../../../../../components/ui/icons';
+import { AddActionIcon, DeleteActionIcon, SVGIcon } from '../../../../../components/ui/icons';
 import { CustomFab } from '../../../../../components/ui/fab/CustomFab'
-import { eTypeElement } from '../../../pages/new_page/components/element-dynamic-page/ElementDynamicPage'
 import { ID_SECTION_ITEM_MENU } from '../../constants/constants'
-
+import { Link } from 'react-router-dom'
 
 export interface IDynamicPageProps{
     isMenu: boolean;
@@ -23,7 +22,7 @@ export interface IDynamicPageProps{
     handleDeleteSections?: (id: number) => void;
     handleAddElement?: (id: number) => void;
     handleDeleteElement?: (id: number) => void;
-    handleAddMenu: () => void;
+    handleAddMenu?: () => void;
 }
 
 export const DynamicPage: React.FC<IDynamicPageProps> = ({handleAddMenu, 
@@ -51,29 +50,42 @@ export const DynamicPage: React.FC<IDynamicPageProps> = ({handleAddMenu,
                                             <IconButton>
                                                 <SVGIcon style={{width: '7rem', height: '3rem'}} icon={ LogoYPF }  /> 
                                             </IconButton>
+                                              <CustomBox sx={{position: 'relative'}}>
+                                                    {isEdit && <CustomFab   style={{
+                                                                                    backgroundColor: colors.palette.primary.main,
+                                                                                    width: '30px', 
+                                                                                    height: '30px'
+                                                                                    }}
+                                                                            sx={{position: 'absolute'}} 
+                                                                            onClick={()=>{if(handleAddMenu) handleAddMenu();}}>
+                                                                    <AddActionIcon  style={{color: 'white'}}/>
+                                                                </CustomFab>
+                                                    }
+                                             </CustomBox>
                                     </CustomBox>
-                                    <CustomDivider />
+                                    <CustomDivider />                                   
                                     <CustomStack direction='column' sx={{position: 'relative', width: '100%',height: '100%',justifyContent: 'space-between'}}>
-                                        <>
-                                            {isEdit && <CustomFab   style={{width: '30px' , height: '30px'}} sx={{position: 'absolute'}} onClick={()=>{handleAddMenu();}}>
-                                                            <AddActionIcon />
-                                                        </CustomFab>
-                                            }
-                                        </>
+                                       
                                         <CustomBox>
                                             {sections && sections
                                                          .filter(section=>section.id === ID_SECTION_ITEM_MENU)
                                                          .map(section=>{
                                                                
-                                                                return section
-                                                                        .elements                                                               
-                                                                        .map(element=>{
+                                                          return section
+                                                                 .elements                                                               
+                                                                .map(element=>{
 
-                                                                                return  <CustomBox sx={{width: '100%', height: '3rem'}}>
-                                                                                            <Typography variant={'body2'} textAlign={'center'}>
-                                                                                                {element.label}
-                                                                                            </Typography>
-                                                                                        </CustomBox>
+                                                                    return  <CustomBox sx={{'&:hover': {color: 'white', backgroundColor: colors.palette.secondary.light, opacity: 1 },border: isEdit? '0.2rem dashed #9E9E9E' : 'none',alignContent: 'center', width: '100%', height: '3rem'}}>
+                                                                                         <>
+                                                                                           {handleDeleteElement && <CustomFab style={{right: 0, width: '30px' , height: '30px'}} sx={{position: 'absolute'}} onClick={()=>{handleDeleteElement(element.id)}}>
+                                                                                                                        <DeleteActionIcon />
+                                                                                                                    </CustomFab>  
+                                                                                           }                 
+                                                                                         </>
+                                                                                  <Typography fontSize={'1rem'} variant={'body2'} textAlign={'center'}>
+                                                                                       <Link target='_blank' to={element.link}>{element.label}</Link>
+                                                                                   </Typography>
+                                                                            </CustomBox>
                                                                         })
                                             })}                                           
                                         </CustomBox>                                       

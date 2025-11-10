@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useState } from 'react'
 import CustomModal from '../../../../../../components/ui/modal/modal.component'
 import StepperWrapperBackOfficeDefault from '../../../../../../components/ui/step/stepper-wrapper-backoffice-default';
 import StepNavigationBackOffice, { type StepType } from '../../../../../../components/ui/step/step-navigation-backoffice';
-import { InfoIcon } from '../../../../../../components/ui/icons';
+import { InfoIcon, SettingIcon } from '../../../../../../components/ui/icons';
 import { CustomBox } from '../../../../../../components/ui/box/CustomBox';
 import { ActionStepReducer, eStep, getActionStepInitialState } from '../../reducers/ActionStepReducer';
 import CustomSelect from '../../../../../../components/ui/inputs/select/select.component';
@@ -12,6 +12,7 @@ import { StepOneDynamicPage } from '../step-one-dynamic-page/StepOneDynamicPage'
 import { StepTwoDynamicPage } from '../step-two-dynamic-page/StepTwoDynamicPage';
 import { navStepSelected } from '../../../../../../utils/navStepSelected';
 import { eToast, Toast } from '../../../../../../components/ui/toast/CustomToastService';
+import { AppIcon } from '../../../../../../components/ui/icons/index';
 
 interface ModalAddElementProps{
     open: boolean;
@@ -21,13 +22,13 @@ interface ModalAddElementProps{
 }
 const navStepsInit: StepType[] = [{
     active: true,
-    icon: <InfoIcon />,
+    icon: <AppIcon />,
     show: true,
     title: 'Componente'
 
 },{
     active: false,
-    icon: <InfoIcon />,
+    icon: <SettingIcon />,
     show: true,
     title: 'Configuracion'
 }];
@@ -124,6 +125,7 @@ export const ModalAddElement: React.FC<ModalAddElementProps> = ({open, onClose, 
      
   return <CustomModal 
                 key={open ? "open-modal-add-element" : "closed-modal-add-element"}
+                title='Agregar elemento'
                 open={open} 
                 onClose={onClose} 
                 onOk={state.step == eStep.STEP_TWO? form.handleSubmit(onSubmit) : handleNext}
