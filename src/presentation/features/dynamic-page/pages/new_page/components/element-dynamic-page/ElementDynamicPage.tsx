@@ -33,19 +33,20 @@ export interface IElementDynamicPage{
 }
 
 export interface IElementDynamicPageProps{
+    isEdit: boolean;
     element: IElementDynamicPage,
     size: number;
     sectionId: number;
     handleDeleteElement?: (id: number)=>void;
 }
-export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({size, element,sectionId, handleDeleteElement}) => {
+export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({size, element,sectionId, handleDeleteElement, isEdit}) => {
   return <CustomGrid  size={ size } >
                  <>{handleDeleteElement && <CustomFab style={{width: '30px' , height: '30px'}} sx={{position: 'absolute'}} onClick={()=>{handleDeleteElement(element.id)}}>
                                                 <DeleteActionIcon />
                                             </CustomFab>  
                    }                 
                  </>
-                <CustomBox sx={{minHeight: 100, alignContent: 'center'}}>                                                                                         
+                <CustomBox sx={{border: isEdit? '0.2rem dashed #9E9E9E' : 'none', minHeight: 100, alignContent: 'center'}}>                                                                                         
                     {element.type === eTypeElement.BACKGROUND_IMAGE?
                                     <img width={'100%'} height={element.height} src={URL.createObjectURL(element.file)} /> :
                                     <></>}

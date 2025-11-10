@@ -17,5 +17,5 @@ export const PreviewPage = () => {
 
 }, []);
 
-  return <DynamicPage isMenu={true} isEdit={true} sections={initPageProps} />;
+  return <DynamicPage isMenu={true} isEdit={false} sections={initPageProps} />;
 };
