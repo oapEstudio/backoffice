@@ -137,7 +137,7 @@ export function useNewInvisibleDocumentPage() {
         documents: data.document ?? null
       });
 
-      Toast({ message: 'Artículo creado correctamente', type: eToast.Success});
+      Toast({ message: 'Documento Invisible creado correctamente', type: eToast.Success});
       navigate(HELP.name);
 
     } catch (err: any) {
