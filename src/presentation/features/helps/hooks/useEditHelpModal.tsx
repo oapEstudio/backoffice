@@ -110,7 +110,6 @@ export const useEditHelpModal = ({
 
     if (!helpId) return;
 
-    console.log('Submitting form data:', data);
     try {
       const payload: IHelpUpdateDto = {
         description: data.description ?? '',

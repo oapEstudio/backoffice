@@ -30,7 +30,7 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
   selectItemsStatuses = [],
   selectItemsDocumentType = [],
 }) => {
-  const { control, formState: { errors }, watch, setValue, clearErrors } = useFormContext<IHelpFormValues>();  
+  const { control, formState: { errors }, watch, setValue, clearErrors } = useFormContext<IHelpFormValues>();
   const [searchTerm, setSearchTerm] = useState('');
   const { accept, docTypeNum } = useDocumentAccept();
   const selectedType = watch('typeSearch') || HELP_SECTION;
@@ -72,7 +72,7 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
         setValue('link', '');
       }
     }
-    
+
     prevDocumentType.current = docTypeNum;
   }, [docTypeNum, setValue]);
 
@@ -202,20 +202,23 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
           name="document"
           control={control}
           rules={{
-            validate: (v) => (v !== undefined) || 'Debes asignar un archivo',
+            validate: (v) => {
+              if (!v || (Array.isArray(v) && v.length === 0)) {
+                return 'Debes asignar un archivo';
+              }
+            }
           }}
           render={({ field, fieldState: { error } }) => (
-
             <>
               <FileDropzone
-                accept = {accept}
+                accept={accept}
                 multiple={false}
                 value={field.value ? field.value : []}
                 onFiles={(files) => field.onChange(files)}
                 disabled={disabledAll}
               />
               {error && (
-                <Typography color="error" variant="caption">
+                <Typography color="error.main" variant="caption">
                   {error.message}
                 </Typography>
               )}

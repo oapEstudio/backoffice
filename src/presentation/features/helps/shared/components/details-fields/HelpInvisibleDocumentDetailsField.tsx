@@ -128,12 +128,15 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
 
         <Controller
           name="document"
-          shouldUnregister={false}     
           control={control}
           rules={{
-            validate: (v) => (v !== undefined) || 'Debes asignar un archivo',
+          validate: (v) => {
+              if (!v || (Array.isArray(v) && v.length === 0)) {
+                return 'Debes asignar un archivo';
+              }
+            }
           }}
-          render={({ field, fieldState: { error } }) => {
+          render={({ field, fieldState: { error }  }) => {
             return (
               <>
                 <FileDropzone
@@ -144,8 +147,8 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
                   disabled={disabledAll}
                 />
                 {error && (
-                  <Typography color="error" variant="caption">
-                    {error.message}
+                  <Typography color="error.main" variant="caption">
+                   { error.message }
                   </Typography>
                 )}
               </>
