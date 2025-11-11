@@ -7,7 +7,7 @@ export const HELP_TYPES: Record<number, string> = {
   [HELP_SECTION]: 'Sección',
   [HELP_ARTICLE]: 'Artículo',
   [HELP_DOCUMENT]: 'Documento',
-  [HELP_INVISIBLE]: 'Invisible',
+  [HELP_INVISIBLE]: 'Documento Invisible',
 };
 
 export const STATE_HELP_NEW: number = 1;

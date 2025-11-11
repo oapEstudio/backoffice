@@ -21,7 +21,7 @@ const navStepsInit: StepType[] = [{
   active: true,
   icon: <StepNumber number={1} />,
   show: true,
-  title: 'Invisible'
+  title: 'Doc. Invisible'
 
 }, {
   active: false,
