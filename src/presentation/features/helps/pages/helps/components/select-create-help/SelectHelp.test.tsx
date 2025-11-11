@@ -11,7 +11,7 @@ vi.mock('../../../../shared/hooks/useGetHelpsType', () => ({
       { id: HELP_SECTION, name: 'Sección' },
       { id: HELP_ARTICLE, name: 'Artículo' },
       { id: HELP_DOCUMENT, name: 'Documento' },
-      { id: HELP_INVISIBLE, name: 'Invisible' }
+      { id: HELP_INVISIBLE, name: 'Documento Invisible' }
     ],
     loading: false
   })

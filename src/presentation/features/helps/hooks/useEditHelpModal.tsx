@@ -78,9 +78,9 @@ export const useEditHelpModal = ({
         const isHelpDocumentLink =  help.helpDocumentTypeId ===  HELP_DOCUMENT_LINK;
 
         if (!isHelpDocumentLink && isHelpDcocumentType) {
-
+          
           existingFileRef.current = dataUrlToFile(
-            help.document[0]?.link,
+            help.documentLink,
             `help-${help.id}`
           );
         } 

@@ -14,7 +14,8 @@ export interface IHelp {
      statusColor: string;
      helpDocumentTypeId: number;
      helpDocumentType: string;
-     document: any[];   
+     documentLink: string;   
+     document: any[];    
      profiles: any[]; 
      dateCreated: Date;
      dateUpdated: string;
