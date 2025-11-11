@@ -69,6 +69,8 @@ export const NewDynamicPagesPage = () => {
                   ...sec.elements,
                   { 
                     id: Date.now(),
+                    text: element.text,
+                    fontSize: element.fontSize,
                     align: element.align, 
                     label: element.label, 
                     type: element.type, 
@@ -123,20 +125,20 @@ export const NewDynamicPagesPage = () => {
                 <CustomGrid size={2}  justifyContent={'center'} alignContent={'flex-start'}>
                       <CustomStack spacing={5} direction='column'  sx={{ marginTop: 10, position: 'fixed'}}>
                               <CustomBox>
-                                  <CustomFab variant='extended' onClick={handleAddSection}>
-                                      <AddActionIcon  />
+                                  <CustomFab style={{color: 'white', backgroundColor: colors.palette.primary.main}} variant='extended' onClick={handleAddSection}>
+                                      <AddActionIcon style={{marginRight: '0.5rem', color: 'white'}} />
                                       Añadir sección
                                   </CustomFab>
                               </CustomBox>                             
                               <CustomBox >
-                                  <CustomFab  variant='extended' onClick={handlePreview}>
-                                      <GroupActionIcon  />
+                                  <CustomFab  style={{color: 'white', backgroundColor: colors.palette.primary.main}} variant='extended' onClick={handlePreview}>
+                                      <GroupActionIcon  style={{marginRight: '0.5rem', color: 'white'}} />
                                       Agregar perfiles
                                   </CustomFab>
                               </CustomBox>
                                <CustomBox >
-                                  <CustomFab variant='extended' onClick={handlePreview}>
-                                      <EyeIcon  />
+                                  <CustomFab style={{color: 'white', backgroundColor: colors.palette.primary.main}} variant='extended' onClick={handlePreview}>
+                                      <EyeIcon  style={{marginRight: '0.5rem', color: 'white'}} />
                                       Previsualización
                                   </CustomFab>
                               </CustomBox>

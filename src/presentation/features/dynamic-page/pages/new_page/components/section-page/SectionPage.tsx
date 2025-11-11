@@ -5,6 +5,7 @@ import BlankCard from '../../../../../../components/ui/card/blank';
 import { EmptySection } from '../empty-section/EmptySection';
 import { ToolbarSection } from '../toolbar-section/ToolbarSection';
 import { ElementDynamicPage, eTypeElement, type IElementDynamicPage } from '../element-dynamic-page/ElementDynamicPage';
+import { colors } from '../../../../../../common/colors';
 
 
 const ROW_MAX_SIZE: number = 12;
@@ -81,7 +82,7 @@ export const SectionPage: React.FC<ISectionPageProps> = ({
   const rows = useMemo(() => buildRows(section.elements), [section.elements]);
 
   return (
-    <CustomBox sx={{ px: 2, position: 'relative' }}>
+    <CustomBox sx={{border: isEdit? '0.1rem dashed '+ colors.palette.primary.main : 'none', px: 2, position: 'relative' }}>
       <ToolbarSection
         id={section.id}
         isEdit={isEdit}
@@ -95,6 +96,7 @@ export const SectionPage: React.FC<ISectionPageProps> = ({
               row                          
               .map((element, i) => (
                     <ElementDynamicPage
+                      isEdit={isEdit}
                       key={`el_${section.id}_${element.id}_${i}`}
                       sectionId={section.id}
                       element={element}

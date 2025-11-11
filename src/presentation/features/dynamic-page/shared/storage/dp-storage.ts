@@ -8,6 +8,9 @@ export type DPManifest = {
     elements: Array<{
       id: number;
       label: string;
+      text: string;
+      fontSize: string;
+      link: string;
       type: number;  
       height?: number;
       align?: 'left'|'center'|'right';
