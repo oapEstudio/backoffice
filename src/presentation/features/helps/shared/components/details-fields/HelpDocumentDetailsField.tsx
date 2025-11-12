@@ -198,33 +198,60 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
           )}
         />
       ) : (
-        <Controller
-          name="document"
-          control={control}
-          rules={{
-            validate: (v) => {
-              if (!v || (Array.isArray(v) && v.length === 0)) {
-                return 'Debes asignar un archivo';
+        <>
+          <Controller
+            name="document"
+            control={control}
+            rules={{
+              validate: (v) => {
+                const documentLink = watch('documentLink');
+                if (documentLink) return true;
+                if (!v || (Array.isArray(v) && v.length === 0)) {
+                  return 'Debes asignar un archivo';
+                }
               }
-            }
-          }}
-          render={({ field, fieldState: { error } }) => (
-            <>
-              <FileDropzone
-                accept={accept}
-                multiple={false}
-                value={field.value ? field.value : []}
-                onFiles={(files) => field.onChange(files)}
-                disabled={disabledAll}
-              />
-              {error && (
-                <Typography color="error.main" variant="caption">
-                  {error.message}
-                </Typography>
-              )}
-            </>
+            }}
+            render={({ field, fieldState: { error } }) => (
+              <>
+                <FileDropzone
+                  accept={accept}
+                  multiple={false}
+                  value={field.value ? field.value : []}
+                  onFiles={(files) => {
+                    field.onChange(files);
+                    if (files && files.length > 0) {
+                      setValue('documentLink', '');
+                    }
+                  }}
+                  disabled={disabledAll}
+                />
+                {error && (
+                  <Typography color="error.main" variant="caption">
+                    {error.message}
+                  </Typography>
+                )}
+              </>
+            )}
+          />
+
+          {watch('documentLink') && (!watch('document') || watch('document')?.length === 0) && (
+          <Typography
+            variant="body2"
+            sx={{ mt: 1, display: 'flex', alignItems: 'center', gap: 1 }}
+          >
+            Documento actual:
+            <Typography
+              component="a"
+              href={watch('documentLink')}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ color: 'primary.main', textDecoration: 'underline' }}
+            >
+              Ver documento
+            </Typography>
+          </Typography>
           )}
-        />
+        </>
       )}
       <br />
       <br />

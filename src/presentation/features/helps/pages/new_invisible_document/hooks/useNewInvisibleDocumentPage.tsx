@@ -67,7 +67,7 @@ export function useNewInvisibleDocumentPage() {
       document: [],
       state: '1',
       helpTypeId: '',
-      helpDocumentTypeId: '',
+      helpDocumentTypeId: '2',
       link: '',
     },
     mode: 'onChange',
@@ -81,33 +81,20 @@ export function useNewInvisibleDocumentPage() {
   });
 
   useEffect(() => {
-    const validateCurrentStep = async () => {
-      const currentDocType = Number(form.getValues("helpDocumentTypeId"));
-      const isLink    = currentDocType === HELP_DOCUMENT_LINK;
-      const needsFile = currentDocType === HELP_DOCUMENT_DOWNLOAD || currentDocType === HELP_DOCUMENT_PDF;
-
-      const base = new Set<keyof IHelpFormValues>(state.field as Array<keyof IHelpFormValues>);
-      if (isLink) {
-        base.add("link");
-        base.delete("document");
-      } else if (needsFile) {
-        base.add("document");
-        base.delete("link");
-      } else {
-        base.delete("link");
-        base.delete("document");
-      }
-
-      const valid = await form.trigger(Array.from(base));
-      setIsStepValid(valid);
-    };
+  const validateCurrentStep = async () => {
+    const base = new Set<keyof IHelpFormValues>(state.field as Array<keyof IHelpFormValues>);
+    
+      
+    const valid = await form.trigger(Array.from(base));
+    setIsStepValid(valid);
+  };
 
   validateCurrentStep();
 
   const sub = form.watch((_, { name }) => {
     if (!name) return;
     const watched = new Set<keyof IHelpFormValues>([
-      "helpDocumentTypeId", "document", "link", ...state.field as Array<keyof IHelpFormValues>
+      "helpDocumentTypeId", "document", ...state.field as Array<keyof IHelpFormValues>
     ]);
     if (watched.has(name as keyof IHelpFormValues)) {
       void validateCurrentStep();
