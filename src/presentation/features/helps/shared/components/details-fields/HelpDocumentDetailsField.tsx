@@ -10,7 +10,7 @@ import CustomSearchSelect from '../custom-search-select/CustomSearchSelect';
 import FileDropzone from '../../../../../components/ui/file-drop-zone/FileDropzone';
 import { Typography } from '@mui/material';
 import CustomRadioButton from '../../../../../components/ui/inputs/radio-button/radio-button.component';
-import { HELP_ARTICLE, HELP_DOCUMENT_DOWNLOAD, HELP_DOCUMENT_LINK, HELP_DOCUMENT_PDF, HELP_SECTION } from '../../constants/helps';
+import { HELP_ARTICLE, HELP_DOCUMENT_LINK, HELP_SECTION, MAX_SIZE_FILE } from '../../constants/helps';
 import { useGetHelpArticles } from '../../hooks/useGetHelpsArticles';
 import { useGetHelpSections } from '../../hooks/useGetHelpsSection';
 import { useDocumentAccept } from '../../hooks/useDocumentAccept';
@@ -205,10 +205,20 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
             rules={{
               validate: (v) => {
                 const documentLink = watch('documentLink');
+
                 if (documentLink) return true;
+
                 if (!v || (Array.isArray(v) && v.length === 0)) {
                   return 'Debes asignar un archivo';
                 }
+
+                const file = Array.isArray(v) ? v[0] : v;
+
+                if (file.size > MAX_SIZE_FILE) {
+                  return 'El archivo no puede superar los 10 MB';
+                }
+
+                return true;
               }
             }}
             render={({ field, fieldState: { error } }) => (

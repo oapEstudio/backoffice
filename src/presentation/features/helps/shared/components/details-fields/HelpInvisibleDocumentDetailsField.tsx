@@ -8,7 +8,7 @@ import { MAX_LENGTH_INPUT } from '../../../../shared/constants/default-input';
 import type { SelectOption } from '../../../../../components/ui/inputs/select/select.interface';
 import FileDropzone from '../../../../../components/ui/file-drop-zone/FileDropzone';
 import { Typography } from '@mui/material';
-import { HELP_DOCUMENT_LINK } from '../../constants/helps';
+import { MAX_SIZE_FILE } from '../../constants/helps';
 import { useDocumentAccept } from '../../hooks/useDocumentAccept';
 
 interface HelpDocumentInvisibleDetailsFieldsProps {
@@ -78,10 +78,20 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
             rules={{
               validate: (v) => {
                 const documentLink = watch('documentLink');
+
                 if (documentLink) return true;
+
                 if (!v || (Array.isArray(v) && v.length === 0)) {
                   return 'Debes asignar un archivo';
                 }
+
+                const file = Array.isArray(v) ? v[0] : v;
+
+                if (file.size > MAX_SIZE_FILE) {
+                  return 'El archivo no puede superar los 10 MB';
+                }
+
+                return true;
               }
             }}
             render={({ field, fieldState: { error } }) => (
