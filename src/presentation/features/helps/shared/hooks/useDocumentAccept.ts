@@ -16,7 +16,16 @@ export const useDocumentAccept = () => {
       case HELP_DOCUMENT_PDF:
         return 'application/pdf,.pdf';
       case HELP_DOCUMENT_DOWNLOAD:
-        return 'text/plain,.doc,.docx,.txt';
+        return [
+          'application/pdf,.pdf',
+          '.doc,.docx,.txt,.rtf',
+          '.xls,.xlsx',
+          '.ppt,.pptx',
+
+          '.jpg,.jpeg,.png,.gif,.bmp,.webp,.svg',
+
+          '.mp4,.mov,.avi,.mkv,.wmv,.webm'
+        ].join(',');
       default:
         return '*/*';
     }
