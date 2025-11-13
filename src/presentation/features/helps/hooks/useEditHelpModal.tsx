@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { HELP_ARTICLE, HELP_DOCUMENT, HELP_DOCUMENT_LINK, HELP_INVISIBLE, HELP_SECTION } from '../shared/constants/helps';
+import { HELP_ARTICLE, HELP_DOCUMENT, HELP_DOCUMENT_DOWNLOAD, HELP_INVISIBLE, HELP_SECTION } from '../shared/constants/helps';
 import type { IHelpFormValues } from '../shared/interface/IHelpFormValues';
 import { useGetHelpById } from './useGetHelpById';
 import HelpSectionDetailsFields from '../shared/components/details-fields/HelpSectionDetailsFields';
@@ -12,7 +12,6 @@ import { toHelpDocumentTypeSelectCommon, toHelpSelect } from '../mappers/helpCre
 import HelpArticleDetailsFields from '../shared/components/details-fields/HelpArticleDetailsField';
 import HelpDocumentDetailsFields from '../shared/components/details-fields/HelpDocumentDetailsField';
 import React from 'react';
-import { dataUrlToFile } from '../../../utils/dataUrlToFile';
 import HelpInvisibleDocumentDetailsFields from '../shared/components/details-fields/HelpInvisibleDocumentDetailsField';
 import { useGetHelpDocumentType } from '../shared/hooks/useGetHelpsDocumentType';
 import { useGetHelpStatus } from '../shared/hooks/useGetHelpsState';
@@ -61,6 +60,7 @@ export const useEditHelpModal = ({
       helpTypeId: '',
       helpDocumentTypeId: '',
       link: '',
+      documentLink: ''
     },
     mode: 'onChange',
     reValidateMode: 'onChange',
@@ -73,17 +73,6 @@ export const useEditHelpModal = ({
     const loadHelpData = async () => {
       try {
         const help = await fetchById(helpId);
-
-        const isHelpDcocumentType = help.helpTypeId === HELP_DOCUMENT  ||  help.helpTypeId === HELP_INVISIBLE;
-        const isHelpDocumentLink =  help.helpDocumentTypeId ===  HELP_DOCUMENT_LINK;
-
-        if (!isHelpDocumentLink && isHelpDcocumentType) {
-          
-          existingFileRef.current = dataUrlToFile(
-            help.documentLink,
-            `help-${help.id}`
-          );
-        } 
         
         form.reset({
           name: help.name,
@@ -92,10 +81,11 @@ export const useEditHelpModal = ({
           typeSearch: help.isParentSection ? HELP_SECTION : HELP_ARTICLE,
           parentId: String(help.parentId ?? '').toUpperCase(),
           title: help.title,
-          document: existingFileRef.current ? [existingFileRef.current] : null,
+          document: null,
           helpTypeId: String(help.helpTypeId),
           helpDocumentTypeId: help.helpDocumentTypeId ? String(help.helpDocumentTypeId) : undefined ,
           link: help.link ? help.link : '',
+          documentLink: help.documentLink ? help.documentLink : '',
         });
 
       } catch (error) {
@@ -149,7 +139,7 @@ export const useEditHelpModal = ({
       case HELP_DOCUMENT:
         return <HelpDocumentDetailsFields disabledState={false} selectItemsStatuses={selectItemsStatuses} selectItemsDocumentType={selectItemsDocumentType} />;
       case HELP_INVISIBLE:
-        return <HelpInvisibleDocumentDetailsFields disabledState={false} selectItemsStatuses={selectItemsStatuses} selectItemsDocumentType={selectItemsDocumentType} />;
+        return <HelpInvisibleDocumentDetailsFields disabledState={false} selectItemsStatuses={selectItemsStatuses} selectItemsDocumentType={selectItemsDocumentType.filter(documentType => documentType.value === HELP_DOCUMENT_DOWNLOAD.toString())} />;
       default:
         return null;
     }
