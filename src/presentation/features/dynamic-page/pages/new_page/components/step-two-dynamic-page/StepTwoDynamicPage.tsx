@@ -9,6 +9,7 @@ import { ParagraphFields } from './components/ParagraphFields';
 import { FileFields } from './components/FileFields';
 import { ImageFields } from './components/ImageFields';
 import { VideoFields } from './components/VideoFields';
+import { AccordeonField } from './components/AccordeonField';
 
 
 interface StepTwoDynamicPageProps{
@@ -30,7 +31,8 @@ export const StepTwoDynamicPage: React.FC<StepTwoDynamicPageProps> = ({initialIm
     [eTypeElement.FILE]: <FileFields />,
     [eTypeElement.IMG]: <ImageFields initialImageUrl={initialImageUrl} />,
     [eTypeElement.VIDEO]: <VideoFields />,
-    [eTypeElement.ITEM_MENU]: null
+    [eTypeElement.ITEM_MENU]: null,
+    [eTypeElement.ACCORDEON] : <AccordeonField />
   };
 
   return formByType[type as eTypeElement] ?? null;

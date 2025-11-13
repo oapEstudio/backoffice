@@ -4,9 +4,10 @@ import { type DPManifest, blobFromFileOrDataUrl } from './dp-storage';
 import { set as idbSet } from 'idb-keyval';
 import { dpStore } from './dp-store';
 
-export async function saveDynamicPageToStorage(sections: ISectionPage[]) {
+export async function saveDynamicPageToStorage(sections: ISectionPage[],hasMenu: boolean) {
   const manifest: DPManifest = {
     version: 1,
+    hasMenu: hasMenu,
     sections: [],
   };
 
@@ -40,6 +41,7 @@ export async function saveDynamicPageToStorage(sections: ISectionPage[]) {
       id: s.id,
       order: s.order,
       elements: manElems,
+      backgroundColor: s.backgroundColor
     });
   }
 
