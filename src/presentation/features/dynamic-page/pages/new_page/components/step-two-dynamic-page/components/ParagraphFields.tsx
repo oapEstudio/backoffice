@@ -8,7 +8,7 @@ export const ParagraphFields: React.FC = () => {
   const { control } = useFormContext<IModalAddElementFormValues>();
   return (
     <Controller
-      name="label"
+      name="text"
       control={control}
       rules={{ required: 'El texto es obligatorio', minLength: 10 }}
       render={({ field, fieldState: { error } }) => (

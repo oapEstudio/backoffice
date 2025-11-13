@@ -72,7 +72,7 @@ export const ModalAddMenu: React.FC<ModalAddElementProps> = ({open, onClose, onC
        }
      
   return <CustomModal 
-                key={open ? "open-modal-add-element" : "closed-modal-add-element"}
+                key={open ? "open-modal-add-menu" : "closed-modal-add-menu"}
                 open={open} 
                 onClose={onClose} 
                 title='Nuevo item de menu'

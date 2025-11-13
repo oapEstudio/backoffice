@@ -16,6 +16,9 @@ import BlankCard from '../../../../components/ui/card/blank';
 import { colors } from '../../../../common/colors';
 import { ModalAddMenu } from './components/modal-add-menu/ModalAddMenu';
 import { ID_SECTION_ITEM_MENU } from '../../shared/constants/constants';
+import { ModalAddSection } from './components/modal-add-section/ModalAddSection';
+import { CustomToggle } from '../../../../components/ui/toggle/CustomToggle';
+import { PanelNewPage } from './components/panel-new-page/PanelNewPage';
 
 
 export const NewDynamicPagesPage = () => {
@@ -23,12 +26,15 @@ export const NewDynamicPagesPage = () => {
   const [pagesProps, setPagesProps] = useState<ISectionPage[]>([{
     elements: [],
     id: ID_SECTION_ITEM_MENU,
+    backgroundColor: '',
     order: 0
   }]);
   const [openAddElement, setOpenAddElement] = useState<boolean>(false);
   const [openAddItemMenu, setOpenAddItemMenu] = useState<boolean>(false);
+  const [openAddSection, setOpenAddSection] = useState<boolean>(false);
   const [sectionID, setSectionID] = useState<number>();    
-  const navigate = useNavigate();
+  const [hasMenu, setHasMenu] = useState<boolean>(true);
+  
   const hrefDynamicPage = useHref(PREVIEW_DYNAMIC_PAGE.name); 
     
 
@@ -50,6 +56,7 @@ export const NewDynamicPagesPage = () => {
   const handleCancelAddModal = ()=>{
     setOpenAddElement(false);
     setOpenAddItemMenu(false);
+    setOpenAddSection(false);
   }
   const handleAddElement = (id: number) =>{
       
@@ -86,16 +93,19 @@ export const NewDynamicPagesPage = () => {
       setOpenAddElement(false);
       setOpenAddItemMenu(false);  
   }
-  const handleAddSection = ()=>{
+  const handleAddSection = (backgroundColor?: string)=>{
 
     setPagesProps((previos)=>([
                 ...previos,
                 {
+                    backgroundColor: backgroundColor??'',
                     elements: [],
                     id: previos.length + 1,
                     order: previos.length +1
                 }
     ]));
+
+    setOpenAddSection(false);
   }
 
   const handleAddItemMenu = ()=>{
@@ -108,7 +118,7 @@ export const NewDynamicPagesPage = () => {
   const handlePreview = async ()=>{
 
     await resetDynamicPageStorage();
-    await saveDynamicPageToStorage(pagesProps);
+    await saveDynamicPageToStorage(pagesProps, hasMenu);
    
     
 
@@ -123,26 +133,12 @@ export const NewDynamicPagesPage = () => {
         >
             <CustomGrid container sx={{minHeight: 500, width: '100%' }}>
                 <CustomGrid size={2}  justifyContent={'center'} alignContent={'flex-start'}>
-                      <CustomStack spacing={5} direction='column'  sx={{ marginTop: 10, position: 'fixed'}}>
-                              <CustomBox>
-                                  <CustomFab style={{color: 'white', backgroundColor: colors.palette.primary.main}} variant='extended' onClick={handleAddSection}>
-                                      <AddActionIcon style={{marginRight: '0.5rem', color: 'white'}} />
-                                      Añadir sección
-                                  </CustomFab>
-                              </CustomBox>                             
-                              <CustomBox >
-                                  <CustomFab  style={{color: 'white', backgroundColor: colors.palette.primary.main}} variant='extended' onClick={handlePreview}>
-                                      <GroupActionIcon  style={{marginRight: '0.5rem', color: 'white'}} />
-                                      Agregar perfiles
-                                  </CustomFab>
-                              </CustomBox>
-                               <CustomBox >
-                                  <CustomFab style={{color: 'white', backgroundColor: colors.palette.primary.main}} variant='extended' onClick={handlePreview}>
-                                      <EyeIcon  style={{marginRight: '0.5rem', color: 'white'}} />
-                                      Previsualización
-                                  </CustomFab>
-                              </CustomBox>
-                      </CustomStack>                    
+                     <PanelNewPage 
+                          setOpenAddSection={setOpenAddSection} 
+                          handlePreview={handlePreview} 
+                          hasMenu={hasMenu} 
+                          setHasMenu={setHasMenu}                     
+                      />                   
                 </CustomGrid>
                 <CustomGrid size={10} sx={{px: '1rem'}}>
                    <ModalAddElement 
@@ -156,10 +152,16 @@ export const NewDynamicPagesPage = () => {
                       onClose={()=>setOpenAddItemMenu(false)} 
                       onCancel={handleCancelAddModal} 
                       onOk={(element)=>{newElement(element)}} 
+                  />  
+                   <ModalAddSection 
+                      open={openAddSection} 
+                      onClose={()=>setOpenAddSection(false)} 
+                      onCancel={handleCancelAddModal} 
+                      onOk={(element)=>{handleAddSection(element.backgroundColor)}} 
                   />       
                    <BlankCard elevation={20}>
                       <DynamicPage 
-                          isMenu={true}
+                          isMenu={hasMenu}
                           sections={pagesProps}
                           handleDeleteSections={handleDeleteSection}
                           handleAddMenu={handleAddItemMenu}

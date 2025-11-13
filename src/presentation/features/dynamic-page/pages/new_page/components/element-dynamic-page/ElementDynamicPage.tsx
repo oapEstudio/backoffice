@@ -5,12 +5,17 @@ import { CustomBox } from '../../../../../../components/ui/box/CustomBox';
 import { CustomFab } from '../../../../../../components/ui/fab/CustomFab';
 import { DeleteActionIcon } from '../../../../../../components/ui/icons';
 import { TitlePages } from '../../../../../../components/widgets/title-page/TitlePages';
-import { RichTextReadOnly } from 'mui-tiptap';
+import { FontSize, RichTextReadOnly } from 'mui-tiptap';
 import StarterKit from "@tiptap/starter-kit";
 
-import { TextStyleKit } from '@tiptap/extension-text-style';
+import { Color, TextStyle, TextStyleKit } from '@tiptap/extension-text-style';
 import TextAlign from '@tiptap/extension-text-align';
 import { VideoPlayer } from '../step-two-dynamic-page/components/VideoFields';
+import { CustomAccordion } from '../../../../../../components/ui/accordion/Accordion';
+import { BulletList } from '@tiptap/extension-bullet-list';
+import { OrderedList } from '@tiptap/extension-ordered-list';
+import { Underline } from '@tiptap/extension-underline';
+import { CustomRichTextView } from '../../../../../../components/ui/rich-text-editor/CustomRichTextEditor';
 
 export enum eTypeElement{
     BACKGROUND_IMAGE = 1,
@@ -19,7 +24,8 @@ export enum eTypeElement{
     FILE = 4,
     IMG = 5,
     VIDEO = 6,
-    ITEM_MENU = 7
+    ITEM_MENU = 7,
+    ACCORDEON = 8
 }
 
 export interface IElementDynamicPage{
@@ -50,7 +56,7 @@ export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({size, el
                                             </CustomFab>  
                    }                 
                  </>
-                <CustomBox sx={{border: isEdit? '0.2rem dashed #9E9E9E' : 'none', minHeight: 100, alignContent: 'center'}}>                                                                                         
+                <CustomBox sx={{height: '100%', border: isEdit? '0.2rem dashed #9E9E9E' : 'none', minHeight: 100, alignContent: 'center'}}>                                                                                         
                     {element.type === eTypeElement.BACKGROUND_IMAGE?
                                     <img width={'100%'} height={element.height} src={URL.createObjectURL(element.file)} /> :
                                     <></>}
@@ -58,10 +64,8 @@ export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({size, el
                                     <TitlePages title={element.label} style={{fontSize: element.fontSize, padding: '0px 2rem', textAlign: element.align }} /> :
                                     <></>}                                                                            
                     {element.type === eTypeElement.PARAGRAPH?
-                                    <CustomBox sx={{padding: '2rem'}}>
-                                        <RichTextReadOnly content={element.text} extensions={[StarterKit,TextStyleKit, TextAlign.configure({
-                                                types: ['heading', 'paragraph']                                               
-                                              })]} />
+                                    <CustomBox sx={{alignContent: 'center', padding: '2rem',lineHeight: 'normal'}}>
+                                        <CustomRichTextView content={element.text} />
                                     </CustomBox> :
                                     <></>}   
                    {element.type === eTypeElement.FILE?
@@ -77,7 +81,17 @@ export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({size, el
                                     <VideoPlayer 
                                         file={element.file} 
                                         height={element.height} /> :
-                                    <></>}                                                                                                                                                   
+                                    <></>}  
+
+                     {element.type === eTypeElement.ACCORDEON?
+                                    <CustomAccordion 
+                                        title={element.label} 
+                                        content={ 
+                                               <CustomBox sx={{alignContent: 'center',padding: '2rem',lineHeight: 'normal'}}>
+                                                    <CustomRichTextView content={element.text}/>
+                                                </CustomBox>
+                                             } 
+                                      /> :<></>}                                                                                                                                                   
                 </CustomBox>                                                                            
         </CustomGrid>
 }

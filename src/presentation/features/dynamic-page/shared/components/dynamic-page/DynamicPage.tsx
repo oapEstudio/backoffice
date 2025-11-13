@@ -50,7 +50,7 @@ export const DynamicPage: React.FC<IDynamicPageProps> = ({handleAddMenu,
                                             <IconButton>
                                                 <SVGIcon style={{width: '7rem', height: '3rem'}} icon={ LogoYPF }  /> 
                                             </IconButton>
-                                              <CustomBox sx={{position: 'relative'}}>
+                                              <CustomBox sx={{position: 'absolute',top: '4rem', left: 0}}>
                                                     {isEdit && <CustomFab   style={{
                                                                                     backgroundColor: colors.palette.primary.main,
                                                                                     width: '30px', 

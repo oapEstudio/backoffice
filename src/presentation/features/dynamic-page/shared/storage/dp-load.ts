@@ -5,11 +5,16 @@ import { type DPManifest } from './dp-storage';
 import { get as idbGet } from 'idb-keyval';
 import { dpStore } from './dp-store';
 
-export async function loadDynamicPageFromStorage(): Promise<ISectionPage[]> {
+interface IPreviewPage{
+  sections: ISectionPage[],
+  hasMenu: boolean;
+}
+
+export async function loadDynamicPageFromStorage(): Promise<IPreviewPage> {
   
     const raw = localStorage.getItem(KEY_STORAGE_PROPS_DYNAMIC_PAGE);
 
-  if (!raw) return [];
+  if (!raw) return {sections: [], hasMenu: false};
   
   const manifest = JSON.parse(raw) as DPManifest;
 
@@ -50,8 +55,12 @@ export async function loadDynamicPageFromStorage(): Promise<ISectionPage[]> {
       id: s.id,
       order: s.order,
       elements,
+      backgroundColor: s.backgroundColor
     });
   }
 
-  return sections;
+  return {
+    sections: sections,
+    hasMenu: manifest.hasMenu
+  }
 }

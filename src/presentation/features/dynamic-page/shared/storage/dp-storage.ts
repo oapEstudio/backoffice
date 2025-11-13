@@ -2,9 +2,11 @@ import { set as idbSet, get as idbGet, del as idbDel } from 'idb-keyval';
 
 export type DPManifest = {
   version: 1;
+  hasMenu: boolean;  
   sections: Array<{
     id: number;
     order: number;
+    backgroundColor: string;
     elements: Array<{
       id: number;
       label: string;

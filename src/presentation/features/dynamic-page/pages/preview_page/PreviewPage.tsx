@@ -5,17 +5,19 @@ import { loadDynamicPageFromStorage } from '../../shared/storage/dp-load';
 
 export const PreviewPage = () => {
   const [initPageProps, setInitPageProps] = useState<ISectionPage[]>([]);
+  const [hasMenu, setHasMenu] = useState<boolean>(false);
 
  useEffect(() => {
   
   (async () => {
     const s = await loadDynamicPageFromStorage();
     
-    setInitPageProps(s);
+    setHasMenu(s.hasMenu);
+    setInitPageProps(s.sections);
 
   })();
 
 }, []);
 
-  return <DynamicPage isMenu={true} isEdit={false} sections={initPageProps} />;
+  return <DynamicPage isMenu={hasMenu} isEdit={false} sections={initPageProps} />;
 };
