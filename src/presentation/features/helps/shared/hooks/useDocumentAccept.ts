@@ -21,10 +21,8 @@ export const useDocumentAccept = () => {
           '.doc,.docx,.txt,.rtf',
           '.xls,.xlsx',
           '.ppt,.pptx',
-
           '.jpg,.jpeg,.png,.gif,.bmp,.webp,.svg',
-
-          '.mp4,.mov,.avi,.mkv,.wmv,.webm'
+          '.mp4,.mov,.avi,.mkv,.wmv,.webm','.zip'
         ].join(',');
       default:
         return '*/*';
