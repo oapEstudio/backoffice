@@ -139,7 +139,7 @@ export const useEditHelpModal = ({
       case HELP_DOCUMENT:
         return <HelpDocumentDetailsFields disabledState={false} selectItemsStatuses={selectItemsStatuses} selectItemsDocumentType={selectItemsDocumentType} />;
       case HELP_INVISIBLE:
-        return <HelpInvisibleDocumentDetailsFields disabledState={false} selectItemsStatuses={selectItemsStatuses} selectItemsDocumentType={selectItemsDocumentType.filter(documentType => documentType.value === HELP_DOCUMENT_DOWNLOAD.toString())} />;
+        return <HelpInvisibleDocumentDetailsFields disabledState={false} selectItemsStatuses={selectItemsStatuses} selectItemsDocumentType={selectItemsDocumentType} />;
       default:
         return null;
     }
