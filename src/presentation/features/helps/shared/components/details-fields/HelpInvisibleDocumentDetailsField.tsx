@@ -8,7 +8,7 @@ import { MAX_LENGTH_INPUT } from '../../../../shared/constants/default-input';
 import type { SelectOption } from '../../../../../components/ui/inputs/select/select.interface';
 import FileDropzone from '../../../../../components/ui/file-drop-zone/FileDropzone';
 import { Typography } from '@mui/material';
-import { MAX_SIZE_FILE } from '../../constants/helps';
+import { HELP_DOCUMENT_LINK, MAX_SIZE_FILE } from '../../constants/helps';
 import { useDocumentAccept } from '../../hooks/useDocumentAccept';
 
 interface HelpDocumentInvisibleDetailsFieldsProps {
@@ -28,6 +28,21 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
 }) => {
   const { control, formState: { errors }, watch, setValue } = useFormContext<IHelpFormValues>();
   const { accept, docTypeNum } = useDocumentAccept();
+
+  const prevDocumentType = useRef(docTypeNum);
+
+  useEffect(() => {
+    if (prevDocumentType.current !== docTypeNum && prevDocumentType.current !== undefined) {
+      if (Number(docTypeNum) === HELP_DOCUMENT_LINK) {
+        setValue('document', []);
+        setValue('link', '');
+      } else {
+        setValue('link', '');
+      }
+    }
+
+    prevDocumentType.current = docTypeNum;
+  }, [docTypeNum, setValue]);
 
   return (
     <>
@@ -72,6 +87,45 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
       />
       <br />
       <br />
+      {Number(docTypeNum) === HELP_DOCUMENT_LINK ? (
+        <Controller
+          shouldUnregister={false}
+          name="link"
+          control={control}
+          rules={{
+            required: 'La URL es obligatoria',
+            validate: {
+              validUrl: (value) => {
+                if (!value) return true;
+                try {
+                  new URL(value);
+                  return true;
+                } catch {
+                  return 'Debe ser una URL válida (ej: https://ejemplo.com)';
+                }
+              },
+              validProtocol: (value) => {
+                if (!value) return true;
+                return value.startsWith('http://') || value.startsWith('https://')
+                  || 'La URL debe comenzar con http:// o https://';
+              }
+            }
+          }}
+          render={({ field, fieldState }) => (
+            <CustomTextInput
+              {...field}
+              required
+              label="URL del documento"
+              type="url"
+              placeholder="https://ejemplo.com/documento"
+              error={fieldState.isDirty && !!errors.link}
+              helperText={fieldState.isDirty ? errors.link?.message : undefined}
+              disabled={disabledAll}
+            />
+          )}
+        />
+      ) : (
+        <>
           <Controller
             name="document"
             control={control}
@@ -134,6 +188,8 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
               </Typography>
             </Typography>
           )}
+        </>
+      )}
       <br />
       <br />
       <Controller

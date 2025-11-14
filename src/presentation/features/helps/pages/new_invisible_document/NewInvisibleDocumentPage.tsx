@@ -32,7 +32,7 @@ export const NewInvisibleDocumentPage = () => {
           </CustomBox>
         :
           <CustomBox sx={{ p: '0 4rem', minHeight: 300, paddingTop: '2rem' }}>
-            {state.step == 1 ? <StepOneNewInvisibleDocument selectItemsStatuses={selectItemsStatuses} selectItemsDocumentType={selectItemsDocumentType.filter(documentType => documentType.value === HELP_DOCUMENT_DOWNLOAD.toString())}/> : <></>}
+            {state.step == 1 ? <StepOneNewInvisibleDocument selectItemsStatuses={selectItemsStatuses} selectItemsDocumentType={selectItemsDocumentType}/> : <></>}
             {state.step == 2 ? <StepTwoNewInvisibleDocument /> : <></>}
           </CustomBox> }
         <CustomBox sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
