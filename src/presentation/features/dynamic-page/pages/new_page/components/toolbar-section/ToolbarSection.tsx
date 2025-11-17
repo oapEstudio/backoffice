@@ -5,10 +5,10 @@ import { AddActionIcon, DeleteActionIcon } from '../../../../../../components/ui
 import { colors } from '../../../../../../common/colors';
 
 export interface IToolbarSectionProps{
-    id: number;
+    id: string;
     isEdit: boolean;
-    handleDeleteSections?: (id: number) => void;
-    handleAddElements?: (id: number) => void;
+    handleDeleteSections?: (id: string) => void;
+    handleAddElements?: (id: string) => void;
 } 
 
 export const ToolbarSection: React.FC<IToolbarSectionProps> = ({isEdit,id, handleDeleteSections, handleAddElements}) => {

@@ -36,7 +36,7 @@ export function toDynamicPageRow(d: IDynamicPage, callbackEdit: any, callbackCan
     const buttonEdit = <>
                   <CustomStack direction='row' spacing={2} sx={styleContentElement}>
                       <span>
-                          {d.profiles.length}
+                          {d.profiles?.length}
                       </span>
                       <WrapperContainerEdit>
                           <EditActionIcon handleClick={callbackEdit} parameterHandleClick={d} />
@@ -58,12 +58,12 @@ export function toDynamicPageRow(d: IDynamicPage, callbackEdit: any, callbackCan
    
     return {
         id: String(d.id),
-        name: d.name,       
+        name: d.title,       
         lastChangeView:  `${formatDate(d.dateUpdated,{includeTime: true})} - ${d.updatedBy}`,
         profiles: buttonEdit,
         status: stateComp,       
         cancellation: cancelationComp,
-        url: d.url        
+        url: d.urlRelative        
     }
 }
 

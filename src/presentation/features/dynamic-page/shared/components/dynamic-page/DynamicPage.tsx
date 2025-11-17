@@ -19,9 +19,9 @@ export interface IDynamicPageProps{
     isMenu: boolean;
     isEdit: boolean;
     sections: ISectionPage[];
-    handleDeleteSections?: (id: number) => void;
-    handleAddElement?: (id: number) => void;
-    handleDeleteElement?: (id: number) => void;
+    handleDeleteSections?: (id: string) => void;
+    handleAddElement?: (id: string) => void;
+    handleDeleteElement?: (id: string) => void;
     handleAddMenu?: () => void;
 }
 
@@ -68,7 +68,7 @@ export const DynamicPage: React.FC<IDynamicPageProps> = ({handleAddMenu,
                                        
                                         <CustomBox>
                                             {sections && sections
-                                                         .filter(section=>section.id === ID_SECTION_ITEM_MENU)
+                                                         .filter(section=>section.id === ID_SECTION_ITEM_MENU.toString())
                                                          .map(section=>{
                                                                
                                                           return section
