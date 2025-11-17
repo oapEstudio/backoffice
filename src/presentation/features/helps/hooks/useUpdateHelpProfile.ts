@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react';
 import { DependencyContext } from '../../../contexts/DependencyContext';
-import type { INotificationUpdateProfiles } from '../../../../application/dtos/INotificationUpdateProfiles';
 import type { IHelpUpdateProfiles } from '../../../../application/dtos/IHelpUpdateProfiles';
 
 export function useUpdateHelpProfile() {

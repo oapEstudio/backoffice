@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { HELP_ARTICLE, HELP_DOCUMENT, HELP_DOCUMENT_DOWNLOAD, HELP_INVISIBLE, HELP_SECTION } from '../shared/constants/helps';
+import { HELP_ARTICLE, HELP_DOCUMENT, HELP_INVISIBLE, HELP_SECTION } from '../shared/constants/helps';
 import type { IHelpFormValues } from '../shared/interface/IHelpFormValues';
 import { useGetHelpById } from './useGetHelpById';
 import HelpSectionDetailsFields from '../shared/components/details-fields/HelpSectionDetailsFields';

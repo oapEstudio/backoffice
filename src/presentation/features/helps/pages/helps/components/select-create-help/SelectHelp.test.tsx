@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { HELP_ARTICLE, HELP_DOCUMENT, HELP_INVISIBLE, HELP_SECTION } from '../../../../shared/constants/helps';
 import { SelectCreateHelp } from './SelectHelp';
 import { fireEvent, render, screen } from '@testing-library/react';

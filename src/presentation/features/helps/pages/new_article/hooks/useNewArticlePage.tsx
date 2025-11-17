@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import type { StepType } from "../../../../../components/ui/step/step-navigation-backoffice";
 import { StepNumber } from "../../../shared/components/step-number/StepNumber";
 import { useForm } from "react-hook-form";
