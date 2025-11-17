@@ -12,7 +12,7 @@ export const StepTwoProfile: React.FC = () => {
   return (
     <>
       <TitleStep
-        title="Asignación de Grupos"
+        title="Asignación de grupos"
         subtitle="Selecciona los grupos AD para este perfil."
       />
 

@@ -105,14 +105,14 @@ export const HELP: IRoute = {
     viewNav: true
 }
 export const NEW_SECTION: IRoute = {
-    title: 'Nueva Sección',
+    title: 'Nueva sección',
     order:  'HelpSection',
     name: '/new_section_help',
     children: [],
     viewNav: true
 }
 export const NEW_ARTICLE: IRoute = {
-    title: 'Nuevo Artículo',
+    title: 'Nuevo artículo',
     order:  'HelpArticle',
     name: '/new_article_help',
     children: [],
@@ -120,7 +120,7 @@ export const NEW_ARTICLE: IRoute = {
 }
 
 export const NEW_DOCUMENT: IRoute = {
-    title: 'Nuevo Documento',
+    title: 'Nuevo documento',
     order:  'HelpDocument',
     name: '/new_document_help',
     children: [],
@@ -128,7 +128,7 @@ export const NEW_DOCUMENT: IRoute = {
 }
 
 export const NEW_DOCUMENT_INVISIBLE: IRoute = {
-    title: 'Nuevo Documento Invisible',
+    title: 'Nuevo documento invisible',
     order:  'HelpDocumentInvisible',
     name: '/new_document_invisible_help',
     children: [],

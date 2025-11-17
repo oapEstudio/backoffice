@@ -22,8 +22,8 @@ interface IConfirmDialogProps {
 export const ConfirmDialog: React.FC<IConfirmDialogProps> = (
   {
     open,
-    title = 'Confirmacion!',
-    subtitle = 'Desea continuar con la operacion?',
+    title = '¡Confirmacion!',
+    subtitle = '¿Desea continuar con la operación?',
     onOk,
     onCancel,
     labelCancel = 'Cancelar',

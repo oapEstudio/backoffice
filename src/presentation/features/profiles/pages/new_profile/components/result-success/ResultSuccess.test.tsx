@@ -14,7 +14,7 @@ describe('ResultSuccess',()=>{
 
         expect(paragraphs.some(x=>x.innerHTML.includes('El perfil'))).toBeTruthy();
         expect(paragraphs.some(x=>x.innerHTML.includes(mockProfile))).toBeTruthy();
-        expect(paragraphs.some(x=>x.innerHTML.includes('Ha sido creado correctamente'))).toBeTruthy();
+        expect(paragraphs.some(x=>x.innerHTML.includes('ha sido creado correctamente'))).toBeTruthy();
     });
 
     test('should match snapshot',()=>{

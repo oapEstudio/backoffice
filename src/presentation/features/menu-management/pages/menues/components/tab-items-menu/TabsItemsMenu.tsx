@@ -110,7 +110,7 @@ export const TabsItemsMenu: React.FC<TabsItemsMenuProps> = ({
 
                         {!loading && (resultItemsMenu?.count??0) === 0?
                           
-                          <EmptyElementList message={'No hay items de menú disponibles'} />
+                          <EmptyElementList message={'No hay ítems de menú disponibles'} />
                           
                           : <></>
                         }

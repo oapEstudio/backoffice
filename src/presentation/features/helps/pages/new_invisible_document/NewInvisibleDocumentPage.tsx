@@ -11,7 +11,6 @@ import { useNewInvisibleDocumentPage } from "./hooks/useNewInvisibleDocumentPage
 import { StepOneNewInvisibleDocument } from "./components/StepOneNewInvisibleDocument/StepOneNewInvisibleDocument";
 import StepTwoNewInvisibleDocument from "./components/StepTwoNewInvisibleDocument/StepTwoNewInvisibleDocument";
 import { ActionStep } from "../../../../components/ui/step/action-step/ActionStep";
-import { HELP_DOCUMENT_DOWNLOAD } from "../../shared/constants/helps";
 
 
 export const NewInvisibleDocumentPage = () => {
@@ -37,7 +36,7 @@ export const NewInvisibleDocumentPage = () => {
           </CustomBox> }
         <CustomBox sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
           {false ? (
-            <Button variant="primary" onClick={() => { }} title='Volver al Inicio' />
+            <Button variant="primary" onClick={() => { }} title='Volver al inicio' />
           ) : (
             <ActionStep
               labelBack={state.labelPrev}

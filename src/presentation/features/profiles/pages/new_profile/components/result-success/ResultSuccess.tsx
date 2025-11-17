@@ -15,7 +15,7 @@ export const ResultSuccess: React.FC<IResultSucess> = ({perfil}) => {
         <>
             <SuccessMessage text='El perfil'/>
             <SuccessMessage color= "#007F49" text={`"${perfil}"`}/>
-            <SuccessMessage text='Ha sido creado correctamente'/>
+            <SuccessMessage text='ha sido creado correctamente'/>
         </>
     </CustomStack>
   )
