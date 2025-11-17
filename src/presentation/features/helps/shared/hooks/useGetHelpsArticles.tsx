@@ -7,14 +7,32 @@ export function useGetHelpArticles(search?: string) {
   const [result, setResult] = useState<IFilter[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
-
+  
   useEffect(() => {
+    let cancelled = false;
+    
     setLoading(true);
     getHelpArticles.execute({ filters: { search: search, pageSize: 500} })
-      .then(res => setResult(res.filter(r => r.description !== '')))
-      .catch(err => setError(err instanceof Error ? err : new Error(String(err))))
-      .finally(() => setLoading(false));
-  }, [ getHelpArticles, search]);
-
+      .then(res => {
+        if (!cancelled) {
+          setResult(res.filter(r => r.description !== ''));
+        }
+      })
+      .catch(err => {
+        if (!cancelled) {
+          setError(err instanceof Error ? err : new Error(String(err)));
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      });
+    
+    return () => {
+      cancelled = true;
+    };
+  }, [getHelpArticles, search]);
+  
   return { result, loading, error };
 }

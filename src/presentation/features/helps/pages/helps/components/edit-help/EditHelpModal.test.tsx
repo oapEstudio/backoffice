@@ -21,7 +21,7 @@ describe('UI/EditHelpModal', () => {
     const dialog = screen.getByRole('dialog');
     expect(dialog).toBeTruthy();
   });
-
+  
   it('no debe renderizar el modal cuando open es false', () => {
     const { container } = render(
       <EditHelpModal

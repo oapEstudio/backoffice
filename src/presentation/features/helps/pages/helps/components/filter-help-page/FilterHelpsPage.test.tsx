@@ -1,16 +1,13 @@
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import { FilterHelpsPage, type IFilterHelpsResult } from './FilterHelpsPage'
-import { HELP_ARTICLE, HELP_DOCUMENT, HELP_INVISIBLE, HELP_SECTION, HELP_TYPES, STATE_HELP_ACTIVE } from '../../../../shared/constants/helps'
+import { HELP_ARTICLE, HELP_TYPES, STATE_HELP_ACTIVE } from '../../../../shared/constants/helps'
 
 const initialFilters: IFilterHelpsResult = {
   profileIds: ['034905656-2323sdfdfsdw434', '343565kldklsfdfg34-we3413dfdsfds'],
   status: ['ACTIVE'],
   helpType: [HELP_TYPES[HELP_ARTICLE]],
 }
-
-const idA = '034905656-2323sdfdfsdw434'
-const idB = '343565kldklsfdfg34-we3413dfdsfds'
 
 const setProfileNamesSpy = vi.fn()
 const setProfileIdsSpy = vi.fn()
@@ -80,14 +77,6 @@ vi.mock(
   })
 )
 
-// (cosmético) si CustomBox mete layout difícil de testear
-vi.mock('../../../../../../components/ui/box/CustomBox', () => ({
-  CustomBox: ({ children }: any) => <div>{children}</div>,
-}))
-
-vi.mock('../../../../../../components/ui/box/CustomBox', () => ({
-  CustomBox: ({ children }: any) => <div>{children}</div>
-}));
 
 describe('FilterHelpsPage', () => {
   it('renderiza el modal cuando open=true', () => {
@@ -103,7 +92,7 @@ describe('FilterHelpsPage', () => {
     const dialog = screen.getByRole('dialog')
     expect(dialog).toBeTruthy()
   })
-
+  
   it('no debe renderizar el modal cuando open=false', () => {
     const { container } = render(
       <FilterHelpsPage open={false} initialFilters={initialFilters} onOk={vi.fn()} onCancel={vi.fn()} />
