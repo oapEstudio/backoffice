@@ -119,7 +119,7 @@ export const useEditHelpModal = ({
       onClose();
     } catch (err: any) {
       const message = err?.error?.message;
-      Toast({ message: message ? message : 'Error al actualizar item de ayuda', type: eToast.Error });
+      Toast({ message: message ? message : 'Error al actualizar ítem de ayuda', type: eToast.Error });
     }
   });
 

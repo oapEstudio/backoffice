@@ -62,7 +62,7 @@ export const NewProfilePage: React.FC = () => {
 
         <CustomBox sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
           {isSuccess ? (
-            <Button variant="primary" onClick={resetFlow} title='Volver al Inicio' />
+            <Button variant="primary" onClick={resetFlow} title='Volver al inicio' />
           ) : (
             <ActionStep
                 handleNext={activeStep === STEPS.length - 1 ? form.handleSubmit(onSubmit) : nextStep}

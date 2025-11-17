@@ -45,7 +45,7 @@ export const SelectCreateHelp = () => {
     <CustomBox sx={{ width: '200px' }}>
       <CustomSelect
         displayEmpty
-        placeholder={'Crear item de ayuda'}
+        placeholder={'Crear ítem de ayuda'}
         size='small'
         sx={styleCustomSelect}
         value={selectedHelpType}

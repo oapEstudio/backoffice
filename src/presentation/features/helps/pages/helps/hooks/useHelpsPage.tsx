@@ -93,13 +93,13 @@ export const useHelpPage = () => {
 
       await cancellation(pendingDeleteId);
 
-      Toast({ message: 'Item de ayuda dado de baja correctamente', type: eToast.Success })
+      Toast({ message: 'Ítem de ayuda dado de baja correctamente', type: eToast.Success })
 
       refresh();
 
     } catch (err: any) {
       const message = err?.error?.message;
-      Toast({ message: message ? message : 'Error al dar de baja el item de ayuda', type: eToast.Error });
+      Toast({ message: message ? message : 'Error al dar de baja el ítem de ayuda', type: eToast.Error });
     }
   }, [cancellation, pendingDeleteId, refresh]);
 
