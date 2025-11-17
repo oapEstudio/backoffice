@@ -8,5 +8,6 @@ export default interface IButtonProps {
   onClick?: (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   disabled?: boolean;
-  style?: any
+  style?: any;
+  className?: string; 
 }

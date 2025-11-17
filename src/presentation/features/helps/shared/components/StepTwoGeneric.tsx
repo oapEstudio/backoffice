@@ -56,15 +56,15 @@ export const StepTwoGeneric: React.FC<StepTwoGenericProps> = ({
               'No se permiten caracteres especiales como + * ? [ ] ^ $ ( ) { } | \\ ! " # % & / = \' ¡',
           },
         }}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <CustomTextInput
             {...field}
             label={nameLabel}
             type="text"
             required
             maxLength={MAX_LENGTH_INPUT_NAME}
-            error={!!errors.name}
-            helperText={errors.name?.message}
+            error={fieldState.isDirty && !!errors.name}
+            helperText={fieldState.isDirty ? errors.name?.message : undefined}
             disabled={disabledAll}
           />
         )}
@@ -75,10 +75,10 @@ export const StepTwoGeneric: React.FC<StepTwoGenericProps> = ({
         name="profiles"
         control={control}
         rules={{
-          validate: (v) =>
+        validate: (v) =>
             !requireProfiles || (Array.isArray(v) && v.length > 0) || 'Debes asignar al menos un perfil',
         }}
-        render={({ field, fieldState: { error } }) => (
+        render={({ field, fieldState }) => (
           <>
             <InputLabel sx={styles.label}>
               {profilesLabel}
@@ -99,9 +99,10 @@ export const StepTwoGeneric: React.FC<StepTwoGenericProps> = ({
                   onChangeProfiles={(profiles) => field.onChange(profiles)}
                 />
               )}
-              {!!error && (
-                <Typography color="error" variant="caption" sx={{ mt: 1, display: "block" }}>
-                  {error.message}
+              {!!fieldState.error && (
+                <Typography color="error.main" variant="caption" sx={{ mt: 1, display: "block" }}>
+                 {fieldState.isDirty}
+                  { fieldState.error.message}
                 </Typography>
               )}
             </>

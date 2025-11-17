@@ -3,7 +3,7 @@ import { Headers } from './constants/configTable';
 import { FilterHelpsPage, type IFilterHelpsResult } from './components/filter-help-page/FilterHelpsPage';
 import { HELP } from '../../../../router/routes';
 import EditHelpModal from './components/edit-help/EditHelpModal';
-import { useHelpPage } from '../../hooks/useHelpsPage';
+import { useHelpPage } from './hooks/useHelpsPage';
 import UpdateHelpProfile from './components/update-help-profile/UpdateHelpProfile';
 import { ConfirmDialog } from '../../../../components/ui/confirm-dialog/ConfirmDialog';
 

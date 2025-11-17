@@ -59,7 +59,7 @@ export const HighlightMenuEditModal: FC<HighlightMenuEditModalProps> = ({
 
   return (
     <CustomModal
-      title="Editar Item destacado"
+      title="Editar ítem destacado"
       labelCancel='Dejar de destacar'
       open={open}
       onClose={()=>{        

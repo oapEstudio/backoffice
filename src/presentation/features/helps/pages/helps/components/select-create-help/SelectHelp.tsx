@@ -8,7 +8,7 @@ import { toHelpSelect } from '../../../../mappers/helpCreateMapper';
 import { useNavigate } from 'react-router-dom';
 import { HELP_ARTICLE, HELP_DOCUMENT, HELP_INVISIBLE, HELP_SECTION } from '../../../../shared/constants/helps';
 import { NEW_ARTICLE, NEW_DOCUMENT, NEW_DOCUMENT_INVISIBLE, NEW_SECTION } from '../../../../../../router/routes';
-import { useGetHelpType } from '../../../../shared/components/hooks/useGetHelpsType';
+import { useGetHelpType } from '../../../../shared/hooks/useGetHelpsType';
 
 const styleCustomSelect = {
   '& .MuiOutlinedInput-root': { height: 36 },
@@ -45,7 +45,7 @@ export const SelectCreateHelp = () => {
     <CustomBox sx={{ width: '200px' }}>
       <CustomSelect
         displayEmpty
-        placeholder={'Crear item de ayuda'}
+        placeholder={'Crear ítem de ayuda'}
         size='small'
         sx={styleCustomSelect}
         value={selectedHelpType}

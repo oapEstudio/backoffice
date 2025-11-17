@@ -75,7 +75,7 @@ export const EditProfile: React.FC<EditProfileModalProps> = ({
 
   return (
     <CustomModal
-      title="Editar Perfil"
+      title="Editar perfil"
       subtitle="Modificá su nombre, descripción y/o estado."
       open={open}
       labelOk="Aplicar"

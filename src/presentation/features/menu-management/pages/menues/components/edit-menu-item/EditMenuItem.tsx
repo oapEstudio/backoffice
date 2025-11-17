@@ -71,7 +71,7 @@ initialMenu,  parentLabel
 
   return (
     <CustomModal
-      title="Editar ítem de Menú"
+      title="Editar ítem de menú"
       open={open}
       onClose={onClose}
       onCancel={handleCancel}

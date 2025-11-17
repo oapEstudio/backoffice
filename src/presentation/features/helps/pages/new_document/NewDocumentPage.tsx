@@ -1,16 +1,16 @@
 import { ContainerPage } from "../../../../components/containers/container-page/ContainerPage";
-import { HELP, NEW_ARTICLE, NEW_DOCUMENT } from "../../../../router/routes";
-import { FormProvider, useForm } from "react-hook-form";
+import { HELP, NEW_DOCUMENT } from "../../../../router/routes";
+import { FormProvider } from "react-hook-form";
 import StepperWrapperBackOfficeDefault from "../../../../components/ui/step/stepper-wrapper-backoffice-default";
 import StepNavigationBackOffice from "../../../../components/ui/step/step-navigation-backoffice";
 import { CustomBox } from "../../../../components/ui/box/CustomBox";
 import Button from "../../../../components/ui/button/button.component";
 import { eStep } from "./reducers/ActionStepReducer";
-import { ActionStep } from "../../shared/components/action-step/ActionStep";
 import { useNewDocumentPage } from "./hooks/useNewDocumentPage";
 import Loading from "../../../../components/ui/loading";
-import { StepOneNewAlert } from "./components/StepOneNewAlert/StepOneNewAlert";
-import StepTwoNewAlert from "./components/StepTwoNewAlert/StepTwoNewAlert";
+import { StepOneNewDocument } from "./components/StepOneNewDocument/StepOneNewDocument";
+import StepTwoNewDocument from "./components/StepTwoNewDocument/StepTwoNewDocument";
+import { ActionStep } from "../../../../components/ui/step/action-step/ActionStep";
 
 
 export const NewDocumentPage = () => {
@@ -31,12 +31,12 @@ export const NewDocumentPage = () => {
           </CustomBox>
         :
           <CustomBox sx={{ p: '0 4rem', minHeight: 300, paddingTop: '2rem' }}>
-            {state.step == 1 ? <StepOneNewAlert selectItemsStatuses={selectItemsStatuses} selectItemsDocumentType={selectItemsDocumentType}  /> : <></>}
-            {state.step == 2 ? <StepTwoNewAlert leftSeedProfiles={leftSeedProfiles} isLoadingProfiles={isLoadingProfiles} /> : <></>}
+            {state.step == 1 ? <StepOneNewDocument selectItemsStatuses={selectItemsStatuses} selectItemsDocumentType={selectItemsDocumentType}  /> : <></>}
+            {state.step == 2 ? <StepTwoNewDocument leftSeedProfiles={leftSeedProfiles} isLoadingProfiles={isLoadingProfiles} /> : <></>}
           </CustomBox> }
         <CustomBox sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
           {false ? (
-            <Button variant="primary" onClick={() => { }} title='Volver al Inicio' />
+            <Button variant="primary" onClick={() => { }} title='Volver al inicio' />
           ) : (
             <ActionStep
               labelBack={state.labelPrev}

@@ -30,7 +30,7 @@ describe('EditProfile', () => {
       depsMock
     );
 
-    expect(screen.getByText('Editar Perfil')).toBeTruthy();
+    expect(screen.getByText('Editar perfil')).toBeTruthy();
     expect(screen.getByText(/Modific/i)).toBeTruthy();
 
     // loading from ProfileForm

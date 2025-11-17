@@ -21,7 +21,7 @@ export type ActionStepType =
 export const getActionStepInitialState = (): ActionStepState => {
 
     return {
-        field: ['title', 'helpDocumentTypeId', 'document', 'link', 'state'],
+        field: ['title', 'helpDocumentTypeId', 'document', 'state'],
         labelNext: 'Siguiente',
         labelPrev: 'Cancelar',
         step: 1
@@ -36,7 +36,7 @@ export const ActionStepReducer = (state: ActionStepState, action: ActionStepType
         case 'STEP_ONE': {
 
             const step_one: ActionStepState = {
-                field: ['title', 'helpDocumentTypeId', 'document', 'link', 'state'],
+                field: ['title', 'helpDocumentTypeId', 'document', 'state'],
                 labelNext: 'Siguiente',
                 labelPrev: 'Cancelar',
                 step: 1
@@ -48,7 +48,7 @@ export const ActionStepReducer = (state: ActionStepState, action: ActionStepType
         case 'STEP_CONFIRMATION': {
 
             const step_two: ActionStepState = {
-                field: ['title', 'helpDocumentTypeId', 'document',  'link',  'state', 'name', 'profiles'],
+                field: ['title', 'helpDocumentTypeId', 'document', 'state', 'name', 'profiles'],
                 labelNext: 'Confirmar',
                 labelPrev: 'Atrás',
                 step: 2

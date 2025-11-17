@@ -10,4 +10,5 @@ export interface IHelpFormValues {
   helpTypeId: string;
   helpDocumentTypeId?: string;
   link: string;
+  documentLink?: string;
 }

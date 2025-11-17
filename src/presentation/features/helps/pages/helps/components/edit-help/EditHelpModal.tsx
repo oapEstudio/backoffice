@@ -35,7 +35,7 @@ export const EditHelpModal: React.FC<EditHelpModalProps> = ({
 
   return (
     <CustomModal
-      title={`Editar ${HELP_TYPES[helpType]}`}
+      title={`Editar ${HELP_TYPES[helpType]?.toLowerCase()}`}
       open={open}
       onOk={handleOk}
       onClose={onClose}

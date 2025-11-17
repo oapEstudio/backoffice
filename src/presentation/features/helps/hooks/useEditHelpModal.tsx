@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { HELP_ARTICLE, HELP_DOCUMENT, HELP_DOCUMENT_LINK, HELP_INVISIBLE, HELP_SECTION } from '../shared/constants/helps';
+import { HELP_ARTICLE, HELP_DOCUMENT, HELP_INVISIBLE, HELP_SECTION } from '../shared/constants/helps';
 import type { IHelpFormValues } from '../shared/interface/IHelpFormValues';
 import { useGetHelpById } from './useGetHelpById';
 import HelpSectionDetailsFields from '../shared/components/details-fields/HelpSectionDetailsFields';
@@ -9,13 +9,12 @@ import type { IHelpUpdateDto } from '../../../../application/dtos/IHelpUpdateDto
 import { eToast, Toast } from '../../../components/ui/toast/CustomToastService';
 import { useUpdateHelp } from './useUpdateHelp';
 import { toHelpDocumentTypeSelectCommon, toHelpSelect } from '../mappers/helpCreateMapper';
-import { useGetHelpStatus } from '../shared/components/hooks/useGetHelpsState';
 import HelpArticleDetailsFields from '../shared/components/details-fields/HelpArticleDetailsField';
 import HelpDocumentDetailsFields from '../shared/components/details-fields/HelpDocumentDetailsField';
-import { useGetHelpDocumentType } from '../shared/components/hooks/useGetHelpsDocumentType';
 import React from 'react';
-import { dataUrlToFile } from '../../../utils/dataUrlToFile';
 import HelpInvisibleDocumentDetailsFields from '../shared/components/details-fields/HelpInvisibleDocumentDetailsField';
+import { useGetHelpDocumentType } from '../shared/hooks/useGetHelpsDocumentType';
+import { useGetHelpStatus } from '../shared/hooks/useGetHelpsState';
 
 interface UseEditHelpModalProps {
   open: boolean;
@@ -61,6 +60,7 @@ export const useEditHelpModal = ({
       helpTypeId: '',
       helpDocumentTypeId: '',
       link: '',
+      documentLink: ''
     },
     mode: 'onChange',
     reValidateMode: 'onChange',
@@ -73,17 +73,6 @@ export const useEditHelpModal = ({
     const loadHelpData = async () => {
       try {
         const help = await fetchById(helpId);
-
-        const isHelpDcocumentType = help.helpTypeId === HELP_DOCUMENT  ||  help.helpTypeId === HELP_INVISIBLE;
-        const isHelpDocumentLink =  help.helpDocumentTypeId ===  HELP_DOCUMENT_LINK;
-
-        if (!isHelpDocumentLink && isHelpDcocumentType) {
-
-          existingFileRef.current = dataUrlToFile(
-            help.document[0]?.link,
-            `help-${help.id}`
-          );
-        } 
         
         form.reset({
           name: help.name,
@@ -92,12 +81,13 @@ export const useEditHelpModal = ({
           typeSearch: help.isParentSection ? HELP_SECTION : HELP_ARTICLE,
           parentId: String(help.parentId ?? '').toUpperCase(),
           title: help.title,
-          document: existingFileRef.current ? [existingFileRef.current] : null,
+          document: null,
           helpTypeId: String(help.helpTypeId),
           helpDocumentTypeId: help.helpDocumentTypeId ? String(help.helpDocumentTypeId) : undefined ,
           link: help.link ? help.link : '',
+          documentLink: help.documentLink ? help.documentLink : '',
         });
-        
+
       } catch (error) {
         console.error('Error loading help data:', error);
       }
@@ -127,8 +117,9 @@ export const useEditHelpModal = ({
       Toast({ message: 'Item de ayuda actualizado', type: eToast.Success });
       onSuccess();
       onClose();
-    } catch {
-      Toast({ message: 'Error al actualizar el item de ayuda', type: eToast.Error });
+    } catch (err: any) {
+      const message = err?.error?.message;
+      Toast({ message: message ? message : 'Error al actualizar ítem de ayuda', type: eToast.Error });
     }
   });
 
