@@ -30,6 +30,7 @@ export interface ISectionPageProps{
 const isFullWidth = (el: IElementDynamicPage) =>
   el.type === eTypeElement.TITLE || 
   el.type === eTypeElement.BACKGROUND_IMAGE ||
+  el.type === eTypeElement.FILE ||
   el.type === eTypeElement.ACCORDEON;
 
 

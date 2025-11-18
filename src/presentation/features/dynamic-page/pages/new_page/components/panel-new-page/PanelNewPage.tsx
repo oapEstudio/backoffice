@@ -10,7 +10,7 @@ import { Button } from '../../../../../../components/ui/button'
 
 export interface IPanelNewPageProps{
     setOpenAddSection: (value: boolean)=>void;
-    handlePreview: React.MouseEventHandler<HTMLButtonElement> | undefined;
+    handlePreview:  (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     handleSave:  (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     hasMenu: boolean;
     setHasMenu: (value: boolean)=>void
@@ -20,21 +20,14 @@ export const PanelNewPage: React.FC<IPanelNewPageProps> = ({setOpenAddSection, h
   return (
      <CustomStack spacing={5} direction='column'  sx={{backgroundColor: '#f5f5f5',padding: '1rem', marginTop: 10, position: 'fixed'}}>
         <CustomToggle sx={{justifyContent: 'left'}}  label='Pagina con menu?' options={[{label: 'SI',value: true},{label: 'NO',value: false}]} state={hasMenu} setState={setHasMenu} />
-            <CustomBox>
-                <CustomFab style={{color: 'white', backgroundColor: colors.palette.primary.main}} variant='extended' onClick={()=>setOpenAddSection(true)}>
-                    <AddActionIcon style={{marginRight: '0.5rem', color: 'white'}} />
-                        Añadir sección
-                </CustomFab>
+            <CustomBox>              
+                <Button variant='primary' title='Añadir sección' style={{width: '100%'}} icon={ <AddActionIcon style={{marginRight: '0.5rem', color: 'white'}} />} onClick={()=>setOpenAddSection(true)}/>
             </CustomBox>                                                    
-            <CustomBox >
-                <CustomFab style={{color: 'white', backgroundColor: colors.palette.primary.main}} variant='extended' onClick={handlePreview}>
-                    <EyeIcon  style={{marginRight: '0.5rem', color: 'white'}} />
-                       Previsualización
-                </CustomFab>
+            <CustomBox >               
+                 <Button variant='primary' title='Previsualización' style={{width: '100%'}}icon={<EyeIcon  style={{marginRight: '0.5rem', color: 'white'}} />} onClick={handlePreview}/>
             </CustomBox>
-             <CustomBox >
-             
-                <Button variant='primary' title='Guardar' icon={<SaveeIcon  style={{marginRight: '0.5rem', color: 'white'}} />} onClick={handleSave}/>
+             <CustomBox >             
+                <Button variant='primary' title='Guardar'  style={{width: '100%'}} icon={<SaveeIcon  style={{marginRight: '0.5rem', color: 'white'}} />} onClick={handleSave}/>
             </CustomBox>
             
     </CustomStack> 

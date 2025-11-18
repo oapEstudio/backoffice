@@ -96,7 +96,8 @@ export interface IDependencies{
   getDynamicPageStatuses: GetDatasetFiltersUseCase,
   cancellationDynamicPage: CancellationDynamicPageUseCase,
   updateDynamicPageProfiles: UpdateDynamicPageProfilesUseCase,
-  updateDynamicPage: UpdateDynamicPageUseCase
+  updateDynamicPage: UpdateDynamicPageUseCase,
+  getElementTypeDynamicPage: GetDatasetFiltersUseCase,
 }
 
 const resourseDimDatasetProfile = env.resources.profiles.dim.dataset;
@@ -125,6 +126,7 @@ const urlHelpsProfiles = resourseDimDatasetHelp.endpoint.replace('{dataset}','pr
 /* DynamicPage */
 
 const urlDynamicPageStatus = resourseDimDataseDynamicPage.endpoint.replace('{dataset}','statuses');
+const urlElementTypeDynamicPage = resourseDimDataseDynamicPage.endpoint.replace('{dataset}','ElementTypes');
 
 export const defaultDependencies: IDependencies = {
   getProfiles: new GetProfilesUseCase(profileRepo),
@@ -170,7 +172,8 @@ export const defaultDependencies: IDependencies = {
   getDynamicPageStatuses: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlDynamicPageStatus,resourseDimDataseDynamicPage.version)),  
   cancellationDynamicPage: new CancellationDynamicPageUseCase(dynamicPageRepo),
   updateDynamicPageProfiles: new UpdateDynamicPageProfilesUseCase(dynamicPageRepo),
-  updateDynamicPage: new UpdateDynamicPageUseCase(dynamicPageRepo)
+  updateDynamicPage: new UpdateDynamicPageUseCase(dynamicPageRepo),
+  getElementTypeDynamicPage: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlElementTypeDynamicPage, resourseDimDataseDynamicPage.version))
 };
 
 export const DependencyContext = React.createContext<IDependencies>(defaultDependencies);
