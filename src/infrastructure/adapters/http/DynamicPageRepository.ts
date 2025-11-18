@@ -178,7 +178,7 @@ normalizeDto(dto: ICreateDynamicPageDto) {
                 }
             });
 
-          const res = await apiHandler.post<IDynamicPage, FormData>(
+          const res = await apiHandler.put<IDynamicPage, FormData>(
             this.resolveURL(url, version),
             {},
             form
