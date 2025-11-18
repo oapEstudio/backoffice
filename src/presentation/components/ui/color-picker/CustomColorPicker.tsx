@@ -1,43 +1,77 @@
-import React, { useState } from 'react'
-import { MuiColorInput } from 'mui-color-input';
-import { styles } from '../inputs/styles';
-import InputLabel from '@mui/material/InputLabel';
-import Required from '../required/required.component';
-import { CustomStack } from '../stack/Stack';
+import { Box, Stack, InputLabel, Typography } from "@mui/material";
+import { MuiColorInput } from "mui-color-input";
+import Required from "../required/required.component";
+import { colors } from "../../../common/colors";
 
-
-interface ICustomColorPickerProps{
-    handleChange: (newValue: string)=>void;
-    init?: string;
+interface CustomColorPickerProps {
     label?: string;
-    required?: boolean
+    required?: boolean;
+    value: string;
+    onChange: (color: string) => void;
+    palette?: string[];
+    allowCustom?: boolean;
 }
-export const CustomColorPicker: React.FC<ICustomColorPickerProps> = ({
-    handleChange,
-    init = '#ffffff',
+
+const defaultPalette = [
+    colors.white,
+    colors.palette.primary.main,
+    colors.palette.primary.dark,
+    colors.palette.primary.disabled
+];
+
+export const CustomColorPicker: React.FC<CustomColorPickerProps> = ({
     label,
-    required = false
+    required,
+    value,
+    onChange,
+    palette = defaultPalette,
+    allowCustom = true,
 }) => {
-   
-    const [value, setValue] = useState(init);
+    return (
+        <Stack direction="column" spacing={1}>
 
-    const change = (newValue: string) => {
-        setValue(newValue);
-        handleChange(newValue);
-    }
-
-    return <CustomStack  direction='column'>
-        <>
-            {
-                label && (
-                    <InputLabel sx={styles.label}>
+            {label && (
+                <InputLabel>
                     {label}
                     {required && <Required value="*" />}
-                    </InputLabel>
-                )
-            }
-        </>
-    
-        <MuiColorInput format="hex" value={value} onChange={change} />
-    </CustomStack>
-}
+                </InputLabel>
+            )}
+
+            <Stack direction="row" spacing={1} flexWrap="wrap">
+                {palette.map((color) => (
+                    <Box
+                        key={color}
+                        onClick={() => onChange(color)}
+                        sx={{
+                            width: 28,
+                            height: 28,
+                            borderRadius: "6px",
+                            cursor: "pointer",
+                            background: color,
+                            border: value === color ? "2px solid #000" : "1px solid #ccc",
+                            transition: "0.2s",
+                            marginBottom: '30px',
+                            "&:hover": {
+                                opacity: 0.8,
+                            },
+                        }}
+                    />
+                ))}
+            </Stack>
+
+            {allowCustom && (
+                <>
+                <Typography color={colors.grey500} sx={{ paddinTop: '30px' }}>    
+
+                Color personalizado (opcional)
+                </Typography>
+                <MuiColorInput
+                    format="hex"
+                    value={value}
+                    onChange={onChange}
+                    sx={{ mt: 1, maxWidth: 140 }}
+                /></>
+            )}
+        </Stack>
+    );
+};
