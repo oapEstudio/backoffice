@@ -188,7 +188,8 @@ export function useNewDynamicPage(init?: IDynamicPage){
                     type: element.type, 
                     file: element.file, 
                     height: element.height,
-                    link: element.link 
+                    link: element.link,
+                    order: sec.elements.length + 1
                   }, 
                 ],
               }
@@ -341,6 +342,8 @@ export function useNewDynamicPage(init?: IDynamicPage){
     openAddSection,
     handleAddSection,
     openSave,
+    creating,
+    updating,
     setOpenSave,
     searchingById,
     initFormSave,

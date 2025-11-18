@@ -146,7 +146,8 @@ normalizeDto(dto: ICreateDynamicPageDto) {
          const form = new FormData();
     
          const ndto = this.normalizeDto(dto);
-    
+        
+         
     
           form.append("title", ndto.title);
 
@@ -155,16 +156,18 @@ normalizeDto(dto: ICreateDynamicPageDto) {
           this.appendFormDataIfDefined(form, "description", ndto.description);
           this.appendFormDataIfDefined(form, "hasMenu", ndto.hasMenu);
           this.appendFormDataIfDefined(form, "statusId", ndto.statusId);
-
-          ndto.sections?.forEach((section, si) => {
+          
+          let contador = 0;
+          ndto.sections?.forEach((section) => {
 
 
                 if(section.backgroundColor || section.elements.length > 0 ){
-                    this.appendFormDataIfDefined(form, `sections[${si}].order`, section.order);
-                    this.appendFormDataIfDefined(form, `sections[${si}].backgroundColor`, section.backgroundColor);
+                    this.appendFormDataIfDefined(form, `sections[${contador}].order`, section.order);
+                    this.appendFormDataIfDefined(form, `sections[${contador}].backgroundColor`, section.backgroundColor);
 
                     section.elements?.forEach((el, ei) => {
-                      const base = `sections[${si}].elements[${ei}]`;          
+                      const base = `sections[${contador}].elements[${ei}]`;  
+
                       this.appendFormDataIfDefined(form, `${base}.order`, el.order);
                       this.appendFormDataIfDefined(form, `${base}.label`, el.label);
                       this.appendFormDataIfDefined(form, `${base}.text`, el.text);
@@ -175,6 +178,8 @@ normalizeDto(dto: ICreateDynamicPageDto) {
                       this.appendFormDataIfDefined(form, `${base}.align`, el.align);
                       this.appendFormDataIfDefined(form, `${base}.link`, el.link);
                     });
+
+                     contador++;
                 }
             });
 

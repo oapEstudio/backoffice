@@ -31,6 +31,7 @@ export enum eTypeElement{
 
 export interface IElementDynamicPage{
     id: string;  
+    order: number;
     label: string;
     text: string;
     fontSize: string;

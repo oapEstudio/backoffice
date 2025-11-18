@@ -8,7 +8,7 @@ export const Headers: IColumn[] =[{
 },{
     align: 'left',
     id: 'lastChangeView',
-    label: 'Modificación',
+    label: 'Última modificación',
     order: 'lastChange'
 },{
     align: 'left',

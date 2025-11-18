@@ -27,7 +27,8 @@ interface IModalSaveProps{
     onCancel: ()=>void;
     onOk: (element: IModalSaveFormValues)=>void;
     init?: IModalSaveFormValues;
-    isEdit?: boolean
+    isEdit?: boolean,
+    saving?: boolean
 }
 
 export interface IModalSaveFormValues{
@@ -36,7 +37,7 @@ export interface IModalSaveFormValues{
   state: string;
 }
 
-export const ModalSave: React.FC<IModalSaveProps> = ({open, onClose, onCancel, onOk, init, isEdit = false}) => {
+export const ModalSave: React.FC<IModalSaveProps> = ({open, onClose, onCancel, onOk, init, isEdit = false, saving = false}) => {
 
   const { resultState, loading } = useDynamicPageFilterOptions({
      stateFilters:{ forCreate: true } 
@@ -103,7 +104,7 @@ export const ModalSave: React.FC<IModalSaveProps> = ({open, onClose, onCancel, o
                 onOk={form.handleSubmit(onSubmit)}
                 onCancel={handleBack} 
                 labelCancel={'Cancelar'}
-                labelOk={'Aceptar'}
+                labelOk={saving? 'Guardando...' : 'Aceptar'}
                 maxWidth={'md'} 
                 disabled={!form.formState.isValid}>
                     

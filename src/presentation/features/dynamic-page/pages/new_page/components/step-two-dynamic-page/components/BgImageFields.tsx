@@ -37,7 +37,7 @@ export const BgImageFields: React.FC<{ initialImageUrl?: string }> = ({ initialI
                   render={({ field }) => (
                     <CustomTextInput
                       {...field}
-                      label="HEIGHT"
+                      label="Ancho en pixeles (HEIGHT)"
                       type="number"
                       error={!!errors.height}
                       helperText={errors.height?.message}

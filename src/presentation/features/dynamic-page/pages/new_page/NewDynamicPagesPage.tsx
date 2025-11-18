@@ -37,6 +37,8 @@ export const NewDynamicPagesPage = () => {
     handleAddSection,
     openSave,
     initFormSave,
+    creating,
+    updating,
     save,
     update,
     isEdit,
@@ -81,6 +83,7 @@ export const NewDynamicPagesPage = () => {
                   <ModalSave 
                       isEdit={isEdit}
                       init={initFormSave}
+                      saving={creating || updating}
                       open={openSave} 
                       onClose={()=>setOpenSave(false)} 
                       onCancel={handleCancelAddModal} onOk={isEdit?update:save} />  
