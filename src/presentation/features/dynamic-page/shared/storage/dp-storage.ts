@@ -4,11 +4,11 @@ export type DPManifest = {
   version: 1;
   hasMenu: boolean;  
   sections: Array<{
-    id: number;
+    id: string;
     order: number;
     backgroundColor: string;
     elements: Array<{
-      id: number;
+      id: string;
       label: string;
       text: string;
       fontSize: string;
