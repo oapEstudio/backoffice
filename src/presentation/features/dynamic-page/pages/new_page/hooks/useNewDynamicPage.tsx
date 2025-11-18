@@ -15,7 +15,7 @@ import { useGetDynamicPageById } from "../../../hooks/useGetDynamicPageById";
 import { dataUrlToFile } from "../../../../../utils/dataUrlToFile";
 import { useUpdateDynamicPage } from "../../../hooks/useUpdateDynamicPage";
 import type { IUpdateDynamicPageDto } from "../../../../../../application/dtos/IUpdateDynamicPageDto";
-import { eTypeElement } from "../components/element-dynamic-page/ElementDynamicPage";
+import { eTypeElement, type IElementDynamicPage } from "../components/element-dynamic-page/ElementDynamicPage";
 
 export function useNewDynamicPage(init?: IDynamicPage){
 
@@ -58,24 +58,57 @@ export function useNewDynamicPage(init?: IDynamicPage){
       try {
         const pageById = await fetchById(pageId);
 
-        setPagesProps(pageById.sections.map(s=>{
+       setPagesProps(() => {
 
-          const section: ISectionPage = {
-            elements: s.elements.map(e=>{
+          const MENU_ID = ID_SECTION_ITEM_MENU.toString();
+
+
+          const menuElements: IElementDynamicPage[] = [];
+          const normalSections: ISectionPage[] = [];
+
+          for (const s of pageById.sections) {
+           
+            const mapped = (s.elements ?? []).map((e: any): IElementDynamicPage => {
+              const type = e.type?.toString() as eTypeElement;
+              const file = e.fileUrl ? dataUrlToFile(e.fileUrl) : null;
+
               return {
                 ...e,
-                id: e.id,
-                file: dataUrlToFile(e.fileUrl)
-              }
-            }),
-            backgroundColor: s.backgroundColor,
-            id: s.id,
-            order: s.order
-          };
-          
-          return section;
+                id: String(e.id),
+                type,
+                file, 
+              };
+            });
 
-        }));
+          
+            const sectionMenuElems = mapped.filter(el => el.type === eTypeElement.ITEM_MENU);
+            const sectionOtherElems = mapped.filter(el => el.type !== eTypeElement.ITEM_MENU);
+
+            
+            if (sectionMenuElems.length) menuElements.push(...sectionMenuElems);
+
+            
+            if (sectionOtherElems.length) {
+              normalSections.push({
+                id: String(s.id),
+                order: s.order,
+                backgroundColor: s.backgroundColor ?? '',
+                elements: sectionOtherElems,
+              });
+            }
+          }
+
+          
+          const menuSection: ISectionPage = {
+            id: MENU_ID,
+            order: 0,
+            backgroundColor: '',
+            elements: menuElements,
+          };
+
+          return [menuSection, ...normalSections];
+        });
+
 
         setInitFormSave({
           name: pageById.title,

@@ -18,14 +18,14 @@ import { Underline } from '@tiptap/extension-underline';
 import { CustomRichTextView } from '../../../../../../components/ui/rich-text-editor/CustomRichTextEditor';
 
 export enum eTypeElement{
-    BACKGROUND_IMAGE = 1,
-    TITLE = 2,
-    PARAGRAPH = 3,
-    FILE = 4,
-    IMG = 5,
-    VIDEO = 6,
-    ITEM_MENU = 7,
-    ACCORDEON = 8
+    BACKGROUND_IMAGE = "1",
+    TITLE = "2",
+    PARAGRAPH = "3",
+    FILE = "4",
+    IMG = "5",
+    VIDEO = "6",
+    ITEM_MENU = "8",
+    ACCORDEON = "7"
 }
 
 export interface IElementDynamicPage{

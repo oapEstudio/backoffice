@@ -1,11 +1,11 @@
 import type { IFilter } from "../../../../domain/entities/IFilter";
-import type { SelectOption } from "../../../components/ui/inputs/multiselect/multiselect.interface";
+import type { SelectOption } from "../../../components/ui/inputs/select/select.interface";
 
 export const toSelectOption = (filter: IFilter): SelectOption=>{
    
     const SelectItem: SelectOption = {
-        id: filter.id,
-        name: filter.description
+        value: filter.id,
+        label: filter.description
     }
 
     return SelectItem;

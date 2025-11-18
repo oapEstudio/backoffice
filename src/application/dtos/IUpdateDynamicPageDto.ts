@@ -20,7 +20,7 @@ export interface IElementDto{
     label?:    string;
     text?:     string;
     fontSize?: string;
-    type?:     number;
+    type?:     string;
     file?:     File | null;
     height?:   number;
     align?:    string;
