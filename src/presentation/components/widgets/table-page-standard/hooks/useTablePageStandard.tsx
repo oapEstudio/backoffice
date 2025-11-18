@@ -93,7 +93,8 @@ export function useTableStandard<e extends IEntity>(props: IUseTableStandardProp
             []
       );            
     return {
-        openFilter, 
+        openFilter,
+        clearFilters, 
         setOpenFilter,
         openEdit, 
         setOpenEdit,

@@ -6,11 +6,11 @@ import StepNavigationBackOffice from "../../../../components/ui/step/step-naviga
 import { CustomBox } from "../../../../components/ui/box/CustomBox";
 import Button from "../../../../components/ui/button/button.component";
 import { eStep } from "./reducers/ActionStepReducer";
-import { ActionStep } from "../../shared/components/action-step/ActionStep";
 import { useNewSectionPage } from "./hooks/useNewSectionPage";
 import Loading from "../../../../components/ui/loading";
-import { StepOneNewAlert } from "./components/StepOneNewAlert/StepOneNewAlert";
-import StepTwoNewAlert from "./components/StepTwoNewAlert/StepTwoNewAlert";
+import { StepOneNewSection } from "./components/StepOneNewSection/StepOneNewSection";
+import StepTwoNewSection from "./components/StepTwoNewSection/StepTwoNewSection";
+import { ActionStep } from "../../../../components/ui/step/action-step/ActionStep";
 
 
 export const NewSectionPage = () => {
@@ -31,12 +31,12 @@ export const NewSectionPage = () => {
           </CustomBox>
         :
           <CustomBox sx={{ p: '0 4rem', minHeight: 300, paddingTop: '2rem' }}>
-            {state.step == 1 ? <StepOneNewAlert selectItemsStatuses={selectItemsStatuses} /> : <></>}
-            {state.step == 2 ? <StepTwoNewAlert /> : <></>}
+            {state.step == 1 ? <StepOneNewSection selectItemsStatuses={selectItemsStatuses} /> : <></>}
+            {state.step == 2 ? <StepTwoNewSection /> : <></>}
           </CustomBox> }
         <CustomBox sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
           {false ? (
-            <Button variant="primary" onClick={() => { }} title='Volver al Inicio' />
+            <Button variant="primary" onClick={() => { }} title='Volver al inicio' />
           ) : (
             <ActionStep
               labelBack={state.labelPrev}

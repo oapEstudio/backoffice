@@ -8,27 +8,34 @@ export function useProfileFilterOptions() {
   const [statuses, setStatuses] = useState<IFilter[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-
+  
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-
+    
     Promise.all([
       getProfilesFilterProfiles.execute({filters: {PageSize: 1000}}),
       getProfileStatuses.execute(),
-    ]).then(([pf, st]) => {
-      if (!cancelled) {
-        setProfiles(pf);
-        setStatuses(st);
-      }
-    })
-     .catch(err => setError(err instanceof Error ? err : new Error(String(err))))
-     .finally(() => {
-      if (!cancelled) setLoading(false);
-    });
-
-    return () => { cancelled = true; };
+    ])
+      .then(([pf, st]) => {
+        if (!cancelled) {
+          setProfiles(pf);
+          setStatuses(st);
+        }
+      })
+      .catch(err => {
+        if (!cancelled) {
+          setError(err instanceof Error ? err : new Error(String(err)));
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    
+    return () => { 
+      cancelled = true; 
+    };
   }, [getProfilesFilterProfiles, getProfileStatuses]);
-
-  return { profiles, statuses, loading,error };
+  
+  return { profiles, statuses, loading, error };
 }

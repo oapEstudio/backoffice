@@ -10,7 +10,7 @@ import IconButton from "@mui/material/IconButton";
 
 export interface IHelpRow extends IRow {
   id: string;
-  name: string;
+  name: any;
   title: string;
   state: any;
   helpTypeId: number;
@@ -35,10 +35,19 @@ export function toHelpsRow(h: IHelp, callbackEdit?: any, callbackCancellation?: 
     paddingLeft: '20px'
   }));
 
+  const WrapperConteinerName = styled('div')(() => ({ }));
+
+  const nameComp = <>
+    <WrapperConteinerName>
+      {h.name} <br />
+      {h.parent ? <small style={{marginTop: '20px'}}>Item asociado: {h.parent}</small> : ''}
+    </WrapperConteinerName>
+  </>
+
   const buttonEdit = (
     <CustomStack direction='row' spacing={2} sx={styleContentElement}>
       <span>
-        {h.profile.length}
+        {h.profiles.length}
       </span>
       <WrapperContainerEdit>
         <EditActionIcon handleClick={callbackEdit} parameterHandleClick={h} />
@@ -52,7 +61,7 @@ export function toHelpsRow(h: IHelp, callbackEdit?: any, callbackCancellation?: 
     paddingRight: '20px'
   }));
 
-  const urlComp = h.link ? <CopyUrlButton url={h.link} /> : <p style={{ textAlign: 'center', paddingRight: '20%'}}> - </p>;
+  const urlComp = h.link || h.documentLink ? <CopyUrlButton url={h.link ?? h.documentLink} /> : <p style={{ textAlign: 'center', paddingRight: '20%'}}> - </p>;
 
   const stateComp = <>
     <WrapperContainerStatus>
@@ -68,7 +77,7 @@ export function toHelpsRow(h: IHelp, callbackEdit?: any, callbackCancellation?: 
     helpType: h.helpType,
     helpTypeId: h.helpTypeId,
     title: h.title,
-    name: h.name,
+    name: nameComp,
     lastChangeView: `${formatDate(h.dateUpdated, { includeTime: true })} - ${h.updatedBy}`,
     state: stateComp,
     url: urlComp,

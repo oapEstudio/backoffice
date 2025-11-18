@@ -52,7 +52,7 @@ export const AddMenuItemModal: FC<AddMenuItemModalProps> = ({ open, onClose, onS
   }
 
 
-  const title = parentId ? 'Agregar ítem de Menú (hijo)' : 'Agregar ítem de Menú'
+  const title = parentId ? 'Agregar ítem de menú (hijo)' : 'Agregar ítem de menú'
 
   return (
     <CustomModal

@@ -25,7 +25,8 @@ export const StepOneDynamicPage = () => {
               {label: 'Parrafo', value: 3},
               {label: 'Archivo', value: 4},
               {label: 'Imagen', value: 5},
-              {label: 'Video', value: 6}
+              {label: 'Video', value: 6},
+               {label: 'Accordeon', value: 8}
             ]}            
          />
         )}

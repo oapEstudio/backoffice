@@ -5,6 +5,8 @@ import BlankCard from '../../../../../../components/ui/card/blank';
 import { EmptySection } from '../empty-section/EmptySection';
 import { ToolbarSection } from '../toolbar-section/ToolbarSection';
 import { ElementDynamicPage, eTypeElement, type IElementDynamicPage } from '../element-dynamic-page/ElementDynamicPage';
+import { colors } from '../../../../../../common/colors';
+import { BackgroundColor } from '@tiptap/extension-text-style';
 
 
 const ROW_MAX_SIZE: number = 12;
@@ -12,20 +14,23 @@ const ROW_MAX_SIZE: number = 12;
 export interface ISectionPage{
   order: number;
   elements: IElementDynamicPage[];
-  id: number;
+  id: string;
+  backgroundColor: string;
 }
 
 export interface ISectionPageProps{
   section: ISectionPage;
   isEdit: boolean;
-  handleDeleteSections?: (id: number) => void;
-  handleAddElement?: (id: number) => void;
-  handleDeleteElement?: (id: number) => void;
+  handleDeleteSections?: (id: string) => void;
+  handleAddElement?: (id: string) => void;
+  handleDeleteElement?: (id: string) => void;
 }
 
 
 const isFullWidth = (el: IElementDynamicPage) =>
-  el.type === eTypeElement.TITLE || el.type === eTypeElement.BACKGROUND_IMAGE;
+  el.type === eTypeElement.TITLE || 
+  el.type === eTypeElement.BACKGROUND_IMAGE ||
+  el.type === eTypeElement.ACCORDEON;
 
 
 const buildRows = (elements: IElementDynamicPage[]) => {
@@ -81,20 +86,21 @@ export const SectionPage: React.FC<ISectionPageProps> = ({
   const rows = useMemo(() => buildRows(section.elements), [section.elements]);
 
   return (
-    <CustomBox sx={{ px: 2, position: 'relative' }}>
+    <CustomBox sx={{backgroundColor: section.backgroundColor, border: isEdit? '0.3rem dashed '+ colors.palette.primary.main : 'none', px: 2, position: 'relative' }}>
       <ToolbarSection
         id={section.id}
         isEdit={isEdit}
         handleDeleteSections={handleDeleteSections}
         handleAddElements={handleAddElement}
       />
-      <BlankCard>    
+      <BlankCard color={section.backgroundColor?'transparent': ''}>    
         {rows.map((row, rIdx) => (
           <CustomGrid container spacing={1} key={`row_${section.id}_${rIdx}`}>
             {
               row                          
               .map((element, i) => (
                     <ElementDynamicPage
+                      isEdit={isEdit}
                       key={`el_${section.id}_${element.id}_${i}`}
                       sectionId={section.id}
                       element={element}

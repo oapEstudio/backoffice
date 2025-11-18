@@ -8,7 +8,8 @@ import { MAX_LENGTH_INPUT } from '../../../../shared/constants/default-input';
 import type { SelectOption } from '../../../../../components/ui/inputs/select/select.interface';
 import FileDropzone from '../../../../../components/ui/file-drop-zone/FileDropzone';
 import { Typography } from '@mui/material';
-import { HELP_DOCUMENT_LINK } from '../../constants/helps';
+import { HELP_DOCUMENT_LINK, MAX_SIZE_FILE } from '../../constants/helps';
+import { useDocumentAccept } from '../../hooks/useDocumentAccept';
 
 interface HelpDocumentInvisibleDetailsFieldsProps {
   disabledAll?: boolean;
@@ -26,22 +27,22 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
   selectItemsDocumentType = [],
 }) => {
   const { control, formState: { errors }, watch, setValue } = useFormContext<IHelpFormValues>();
-  const watchDocumentType = watch('helpDocumentTypeId');
-  const prevDocumentType = useRef(watchDocumentType);
+  const { accept, docTypeNum } = useDocumentAccept();
+
+  const prevDocumentType = useRef(docTypeNum);
 
   useEffect(() => {
-    if (prevDocumentType.current !== watchDocumentType && prevDocumentType.current !== undefined) {
-      if (Number(watchDocumentType) === HELP_DOCUMENT_LINK) {
+    if (prevDocumentType.current !== docTypeNum && prevDocumentType.current !== undefined) {
+      if (Number(docTypeNum) === HELP_DOCUMENT_LINK) {
         setValue('document', []);
         setValue('link', '');
       } else {
-        setValue('document', []);
         setValue('link', '');
       }
     }
 
-    prevDocumentType.current = watchDocumentType;
-  }, [watchDocumentType, setValue]);
+    prevDocumentType.current = docTypeNum;
+  }, [docTypeNum, setValue]);
 
   return (
     <>
@@ -54,15 +55,15 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
           maxLength: MAX_LENGTH_INPUT,
           validate: { minTrimmed: minTrimmed(3) },
         }}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <CustomTextInput
             {...field}
             required
             label={titleLabel}
             type="text"
             maxLength={MAX_LENGTH_INPUT}
-            error={!!errors.title}
-            helperText={errors.title?.message}
+            error={fieldState.isDirty && !!errors.title}
+            helperText={fieldState.isDirty ? errors.title?.message : undefined}
             disabled={disabledAll}
           />
         )}
@@ -73,21 +74,22 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
         name="helpDocumentTypeId"
         control={control}
         rules={{ required: 'El tipo de documento es obligatorio' }}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <CustomSelect
             {...field}
             label="Tipo de documento"
             required
             options={selectItemsDocumentType}
-            error={!!errors.state}
+            error={fieldState.isDirty && !!errors.helpDocumentTypeId}
             disabled={disabledState || disabledAll}
           />
         )}
       />
       <br />
       <br />
-      {Number(watchDocumentType) === HELP_DOCUMENT_LINK ? (
+      {Number(docTypeNum) === HELP_DOCUMENT_LINK ? (
         <Controller
+          shouldUnregister={false}
           name="link"
           control={control}
           rules={{
@@ -109,45 +111,84 @@ export const HelpInvisibleDocumentDetailsFields: React.FC<HelpDocumentInvisibleD
               }
             }
           }}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <CustomTextInput
               {...field}
               required
               label="URL del documento"
               type="url"
               placeholder="https://ejemplo.com/documento"
-              error={!!errors.link}
-              helperText={errors.link?.message}
+              error={fieldState.isDirty && !!errors.link}
+              helperText={fieldState.isDirty ? errors.link?.message : undefined}
               disabled={disabledAll}
             />
           )}
         />
       ) : (
+        <>
+          <Controller
+            name="document"
+            control={control}
+            rules={{
+              validate: (v) => {
+                const documentLink = watch('documentLink');
 
-        <Controller
-          name="document"
-          control={control}
-          rules={{
-            validate: (v) => (v !== undefined) || 'Debes asignar un archivo',
-          }}
-          render={({ field, fieldState: { error } }) => {
-            return (
+                if (documentLink) return true;
+
+                if (!v || (Array.isArray(v) && v.length === 0)) {
+                  return 'Debes asignar un archivo';
+                }
+
+                const file = Array.isArray(v) ? v[0] : v;
+
+                if (file.size > MAX_SIZE_FILE) {
+                  return 'El archivo no puede superar los 10 MB';
+                }
+
+                return true;
+              }
+            }}
+            render={({ field, fieldState: { error } }) => (
               <>
                 <FileDropzone
+                  accept={accept}
                   multiple={false}
-                  value={(field.value ? field.value : [])}
-                  onFiles={(files) => field.onChange(files)}
+                  value={field.value ? field.value : []}
+                  onFiles={(files) => {
+                    field.onChange(files);
+                    if (files && files.length > 0) {
+                      setValue('documentLink', '');
+                    }
+                  }}
                   disabled={disabledAll}
                 />
                 {error && (
-                  <Typography color="error" variant="caption">
+                  <Typography color="error.main" variant="caption">
                     {error.message}
                   </Typography>
                 )}
               </>
-            );
-          }}
-        />
+            )}
+          />
+
+          {watch('documentLink') && (!watch('document') || watch('document')?.length === 0) && (
+            <Typography
+              variant="body2"
+              sx={{ mt: 1, display: 'flex', alignItems: 'center', gap: 1 }}
+            >
+              Documento actual:
+              <Typography
+                component="a"
+                href={watch('documentLink')}
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ color: 'primary.main', textDecoration: 'underline' }}
+              >
+                Ver documento
+              </Typography>
+            </Typography>
+          )}
+        </>
       )}
       <br />
       <br />

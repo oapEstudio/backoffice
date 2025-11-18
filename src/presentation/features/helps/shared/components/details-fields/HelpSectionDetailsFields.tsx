@@ -35,15 +35,15 @@ export const HelpSectionDetailsFields: React.FC<HelpSectionDetailsFieldsProps> =
           maxLength: MAX_LENGTH_INPUT,
           validate: { minTrimmed: minTrimmed(3) }
         }}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <CustomTextInput
             {...field}
             label={titleLabel}
             type="text"
             required
             maxLength={MAX_LENGTH_INPUT}
-            error={!!errors.title}
-            helperText={errors.title?.message}
+            error={fieldState.isDirty && !!errors.title}
+            helperText={fieldState.isDirty ? errors.title?.message : undefined}
             disabled={disabledAll}
           />
         )}

@@ -48,10 +48,14 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import SvgIcon from '@mui/material/SvgIcon';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import type { ElementType } from "react";
+import SettingsIcon from '@mui/icons-material/Settings';
+import AppsIcon from '@mui/icons-material/Apps';
+import SaveIcon from '@mui/icons-material/Save';
 
 export interface IIconAction{
-  handleClick?: any,
-  parameterHandleClick?: any
+  handleClick?: any;
+  parameterHandleClick?: any;
+  style?: React.CSSProperties;
 }
 export const PendingIcon = ({ color }: any) => {
   return <PendingTwoToneIcon sx={{ color: color, fontSize: 40 }} />;
@@ -135,23 +139,23 @@ export const EditActionIcon: React.FC<IIconAction> = ({handleClick, parameterHan
   }} />
 };
 
-export const GroupActionIcon: React.FC<IIconAction> = ({handleClick, parameterHandleClick}) => {
+export const GroupActionIcon: React.FC<IIconAction> = ({handleClick, parameterHandleClick, style}) => {
   //return <EditIcon sx={{ color: baselightTheme.palette.info.dark }} />;
-  return <GroupAddOutlinedIcon onClick={()=>{
+  return <GroupAddOutlinedIcon style={style} onClick={()=>{
       if(handleClick) parameterHandleClick? handleClick(parameterHandleClick) : handleClick();
   }} />
 };
 
-export const AddActionIcon: React.FC<IIconAction> = ({handleClick, parameterHandleClick}) => {
+export const AddActionIcon: React.FC<IIconAction> = ({handleClick, parameterHandleClick, style}) => {
   //return <EditIcon sx={{ color: baselightTheme.palette.info.dark }} />;
-  return <AddOutlinedIcon onClick={()=>{
+  return <AddOutlinedIcon style={style} onClick={()=>{
       if(handleClick) parameterHandleClick? handleClick(parameterHandleClick) : handleClick();
   }} />
 };
 
-export const DeleteActionIcon: React.FC<IIconAction> = ({handleClick, parameterHandleClick}) => {
+export const DeleteActionIcon: React.FC<IIconAction> = ({handleClick, parameterHandleClick, style}) => {
   //return <EditIcon sx={{ color: baselightTheme.palette.info.dark }} />;
-  return <DeleteOutlineOutlinedIcon onClick={()=>{
+  return <DeleteOutlineOutlinedIcon style={style} onClick={()=>{
       if(handleClick) parameterHandleClick? handleClick(parameterHandleClick) : handleClick();
   }} />
 };
@@ -170,10 +174,17 @@ export const UserAvatar = () => {
   );
 };
 
-export const EyeIcon = () => {
-  return <RemoveRedEyeIcon sx={{ color: baselightTheme.palette.info.dark }} />;
+export const EyeIcon: React.FC<IIconAction> = ({style}) => {
+  return <RemoveRedEyeIcon style={style} sx={{ color: baselightTheme.palette.info.dark }} />;
 };
 
+export const SettingIcon: React.FC<IIconAction> = ({style}) => {
+  return <SettingsIcon style={style} />
+}
+
+export const AppIcon: React.FC<IIconAction> = ({style}) => {
+  return <AppsIcon style={style} />
+}
 export const PencilIcon = () => {
   return <IconPencil />;
 };
@@ -242,6 +253,12 @@ export const DownloaddIcon = () =>{
 export const WarningTriangleIcon = () =>{
   return <WarningAmberIcon />
 } 
+
+export const SaveeIcon : React.FC<IIconAction> = ({handleClick, parameterHandleClick, style}) => {
+  return <SaveIcon style={style} onClick={()=>{
+      if(handleClick) parameterHandleClick? handleClick(parameterHandleClick) : handleClick();
+  }} />
+};
 
 export const Visibility = () => {
   return <VisibilityIcon />;

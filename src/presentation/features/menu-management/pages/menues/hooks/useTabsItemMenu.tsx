@@ -102,7 +102,7 @@ export function useTabsItemMenu(){
    const ButtonCreateMenu = (
       <Button
         variant="primary"
-        title="Crear item padre"
+        title="Crear ítem padre"
         onClick={() => {
           setParentNode(null);
           setOpenAdd(true)

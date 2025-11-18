@@ -4,7 +4,7 @@ export const Headers: IColumn[] =[{
     align: 'left',
     id: 'name',
     label: 'Nombre',
-    order: 'name'
+    order: 'title'
 },{
     align: 'left',
     id: 'lastChangeView',
@@ -24,7 +24,7 @@ export const Headers: IColumn[] =[{
     align: 'left',
     id: 'url',
     label: 'URL',
-    order: 'url'
+    order: 'urlRelative'
 },{
     align: 'left',
     id: 'actions',

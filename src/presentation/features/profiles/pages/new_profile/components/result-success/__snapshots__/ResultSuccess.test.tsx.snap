@@ -24,7 +24,7 @@ exports[`ResultSuccess > should match snapshot 1`] = `
     <p
       class="MuiTypography-root MuiTypography-body1 css-1gacaac-MuiTypography-root"
     >
-      Ha sido creado correctamente
+      ha sido creado correctamente
     </p>
   </div>
 </div>

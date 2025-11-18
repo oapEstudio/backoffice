@@ -1,10 +1,11 @@
-import { InputLabel } from "@mui/material";
+
 import TextField from "@mui/material/TextField";
 import { Controller, type FieldValues } from "react-hook-form";
 import Required from "../../required/required.component";
 import { styles } from "../styles";
 import type { ITextInput } from "./text-input.interface";
 import InputAdornment from '@mui/material/InputAdornment';
+import InputLabel from "@mui/material/InputLabel";
 
 type TextLike = "text" | "search" | "email" | "password";
 

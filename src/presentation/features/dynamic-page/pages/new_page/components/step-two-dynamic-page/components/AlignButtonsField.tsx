@@ -14,7 +14,7 @@ export const AlignButtonsField: React.FC = () => {
       render={({ field }) => {
         const val = field.value as 'left'|'center'|'right'|undefined;
         return (
-          <ButtonGroup variant="outlined" aria-label="Alineación">
+          <ButtonGroup variant="outlined" aria-label="Alineación" sx={{display: 'flex',justifyContent: 'center'}}>
             <Button
               onClick={() => field.onChange('left')}
               variant={val === 'left' ? 'primary' : 'secondary'}

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import CustomTextInput from '../../../../../components/ui/inputs/text-input/text-input.component';
 import CustomSelect from '../../../../../components/ui/inputs/select/select.component';
@@ -6,13 +6,14 @@ import { minTrimmed } from '../../../../../utils/minTrimmed';
 import type { IHelpFormValues } from '../../interface/IHelpFormValues';
 import { MAX_LENGTH_INPUT } from '../../../../shared/constants/default-input';
 import type { SelectOption } from '../../../../../components/ui/inputs/select/select.interface';
-import { useGetHelpSections } from '../hooks/useGetHelpsSection';
 import CustomSearchSelect from '../custom-search-select/CustomSearchSelect';
 import FileDropzone from '../../../../../components/ui/file-drop-zone/FileDropzone';
 import { Typography } from '@mui/material';
 import CustomRadioButton from '../../../../../components/ui/inputs/radio-button/radio-button.component';
-import { HELP_ARTICLE, HELP_DOCUMENT_LINK, HELP_SECTION } from '../../constants/helps';
-import { useGetHelpArticles } from '../hooks/useGetHelpsArticles';
+import { HELP_ARTICLE, HELP_DOCUMENT_LINK, HELP_SECTION, MAX_SIZE_FILE } from '../../constants/helps';
+import { useGetHelpArticles } from '../../hooks/useGetHelpsArticles';
+import { useGetHelpSections } from '../../hooks/useGetHelpsSection';
+import { useDocumentAccept } from '../../hooks/useDocumentAccept';
 
 interface HelpDocumentDetailsFieldsProps {
   disabledAll?: boolean;
@@ -29,11 +30,10 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
   selectItemsStatuses = [],
   selectItemsDocumentType = [],
 }) => {
-  const { control, formState: { errors }, watch, setValue } = useFormContext<IHelpFormValues>();
+  const { control, formState: { errors }, watch, setValue, clearErrors } = useFormContext<IHelpFormValues>();
   const [searchTerm, setSearchTerm] = useState('');
-
+  const { accept, docTypeNum } = useDocumentAccept();
   const selectedType = watch('typeSearch') || HELP_SECTION;
-  const watchDocumentType = watch('helpDocumentTypeId');
 
   const { result: sectionItems, loading: loadingSection } = useGetHelpSections(
     selectedType === HELP_SECTION ? searchTerm : ''
@@ -62,21 +62,19 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
     setSearchTerm('');
   };
 
-  const prevDocumentType = useRef(watchDocumentType);
+  const prevDocumentType = useRef(docTypeNum);
 
   useEffect(() => {
-    if (prevDocumentType.current !== watchDocumentType && prevDocumentType.current !== undefined) {
-      if (Number(watchDocumentType) === HELP_DOCUMENT_LINK) {
+    if (prevDocumentType.current !== docTypeNum && prevDocumentType.current !== undefined) {
+      if (Number(docTypeNum) === HELP_DOCUMENT_LINK) {
         setValue('document', []);
-        setValue('link', '');
       } else {
-        setValue('document', []);
         setValue('link', '');
       }
     }
-    
-    prevDocumentType.current = watchDocumentType;
-  }, [watchDocumentType, setValue]);
+
+    prevDocumentType.current = docTypeNum;
+  }, [docTypeNum, setValue]);
 
   return (
     <>
@@ -105,7 +103,7 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
         name="parentId"
         control={control}
         rules={{ required: `Seleccionar ${selectedType === HELP_SECTION ? 'una Sección' : 'un Artículo'} es obligatorio` }}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <CustomSearchSelect
             value={field.value || ''}
             onChange={field.onChange}
@@ -114,8 +112,8 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
             placeholder={`Buscar ${selectedType === HELP_SECTION ? 'una Sección' : 'un Artículo'}...`}
             loading={loadingSection || loadingArticle}
             disabled={disabledAll}
-            error={!!errors.parentId}
-            helperText={errors.parentId?.message}
+            error={fieldState.isDirty && !!errors.parentId}
+            helperText={fieldState.isDirty ? errors.parentId?.message : undefined}
             required={true}
           />
         )}
@@ -131,15 +129,15 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
           maxLength: MAX_LENGTH_INPUT,
           validate: { minTrimmed: minTrimmed(3) },
         }}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <CustomTextInput
             {...field}
             required
             label={titleLabel}
             type="text"
             maxLength={MAX_LENGTH_INPUT}
-            error={!!errors.title}
-            helperText={errors.title?.message}
+            error={fieldState.isDirty && !!errors.title}
+            helperText={fieldState.isDirty ? errors.title?.message : undefined}
             disabled={disabledAll}
           />
         )}
@@ -150,20 +148,20 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
         name="helpDocumentTypeId"
         control={control}
         rules={{ required: 'El tipo de documento es obligatorio' }}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <CustomSelect
             {...field}
             label="Tipo de documento"
             required
             options={selectItemsDocumentType}
-            error={!!errors.state}
+            error={fieldState.isDirty && !!errors.helpDocumentTypeId}
             disabled={disabledState || disabledAll}
           />
         )}
       />
       <br />
       <br />
-      {Number(watchDocumentType) === HELP_DOCUMENT_LINK ? (
+      {Number(docTypeNum) === HELP_DOCUMENT_LINK ? (
         <Controller
           name="link"
           control={control}
@@ -186,43 +184,84 @@ export const HelpDocumentDetailsFields: React.FC<HelpDocumentDetailsFieldsProps>
               }
             }
           }}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <CustomTextInput
               {...field}
               required
               label="URL del documento"
               type="url"
               placeholder="https://ejemplo.com/documento"
-              error={!!errors.link}
-              helperText={errors.link?.message}
+              error={fieldState.isDirty && !!errors.link}
+              helperText={fieldState.isDirty ? errors.link?.message : undefined}
               disabled={disabledAll}
             />
           )}
         />
       ) : (
-        <Controller
-          name="document"
-          control={control}
-          rules={{
-            validate: (v) => (v !== undefined) || 'Debes asignar un archivo',
-          }}
-          render={({ field, fieldState: { error } }) => (
+        <>
+          <Controller
+            name="document"
+            control={control}
+            rules={{
+              validate: (v) => {
+                const documentLink = watch('documentLink');
 
-            <>
-              <FileDropzone
-                multiple={false}
-                value={field.value ? field.value : []}
-                onFiles={(files) => field.onChange(files)}
-                disabled={disabledAll}
-              />
-              {error && (
-                <Typography color="error" variant="caption">
-                  {error.message}
-                </Typography>
-              )}
-            </>
+                if (documentLink) return true;
+
+                if (!v || (Array.isArray(v) && v.length === 0)) {
+                  return 'Debes asignar un archivo';
+                }
+
+                const file = Array.isArray(v) ? v[0] : v;
+
+                if (file.size > MAX_SIZE_FILE) {
+                  return 'El archivo no puede superar los 10 MB';
+                }
+
+                return true;
+              }
+            }}
+            render={({ field, fieldState: { error } }) => (
+              <>
+                <FileDropzone
+                  accept={accept}
+                  multiple={false}
+                  value={field.value ? field.value : []}
+                  onFiles={(files) => {
+                    field.onChange(files);
+                    if (files && files.length > 0) {
+                      setValue('documentLink', '');
+                    }
+                  }}
+                  disabled={disabledAll}
+                />
+                {error && (
+                  <Typography color="error.main" variant="caption">
+                    {error.message}
+                  </Typography>
+                )}
+              </>
+            )}
+          />
+
+          {watch('documentLink') && (!watch('document') || watch('document')?.length === 0) && (
+          <Typography
+            variant="body2"
+            sx={{ mt: 1, display: 'flex', alignItems: 'center', gap: 1 }}
+          >
+            Documento actual:
+            <Typography
+              component="a"
+              href={watch('documentLink')}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ color: 'primary.main', textDecoration: 'underline' }}
+            >
+              Ver documento
+            </Typography>
+          </Typography>
           )}
-        />
+        </>
       )}
       <br />
       <br />

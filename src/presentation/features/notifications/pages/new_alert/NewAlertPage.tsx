@@ -41,7 +41,7 @@ export const NewAlertPage = () => {
              </CustomBox>
               <CustomBox sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
               {false ? (
-                <Button variant="primary" onClick={()=>{}} title='Volver al Inicio' />
+                <Button variant="primary" onClick={()=>{}} title='Volver al inicio' />
               ) : (
                 <ActionStep
                     labelBack={state.labelPrev}

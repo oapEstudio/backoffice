@@ -1,13 +1,11 @@
-import React, { useEffect, useMemo, useRef, useState } from "react"
+import React, { useEffect } from "react"
 import { CustomModal } from "../../../../../../components/ui/modal/modal.component";
-import { toSelectOption } from "../../../../mappers/filterHelpsMapper";
 import { arraysEqual } from "../../../../../../utils/arrayToEquals";
 import type { SelectOption } from "../../../../../../components/ui/inputs/multiselect/multiselect.interface";
 import CustomMultiselect from "../../../../../../components/ui/inputs/multiselect/multiselect.component";
 import ProfileMultiSelect from "../../../../../../components/widgets/multiselect-profile/MultiSelectProfile";
 import Loading from "../../../../../../components/ui/loading";
-import { useProfileFilterHelpOptions } from "../../../../shared/components/hooks/useProfileFilterOptions";
-import { useHelpFilterOptions } from "../../../../shared/components/hooks/useHelpsFilterOptions";
+import { useFilterHelpsPage } from "../../../../hooks/useFilterHelpsPage";
 
 export interface IFilterHelpsResult {
   profileIds: string[]
@@ -29,79 +27,23 @@ export const FilterHelpsPage: React.FC<FilterHelpPageProps> = ({
   onCancel,
 }) => {
 
-  const { resultState, resultType, loading } = useHelpFilterOptions({
-    stateFilters: { forCreate: true }
-  });
-  const { profiles: profileFilters, loading: loadingProfiles } = useProfileFilterHelpOptions()
-
-  const selectItemsStatuses: SelectOption[] = useMemo(
-    () => resultState.map(toSelectOption),
-    [resultState]
-  )
-
-  const selectItemsTypes: SelectOption[] = useMemo(
-    () => resultType.map(toSelectOption),
-    [resultType]
-  )
-
-  const [profileNames, setProfileNames] = useState<string[]>([])
-  const [profileIds, setProfileIds] = useState<string[]>([])
-  const [selectedStatuses, setSelectedStatuses] = useState<SelectOption[]>([])
-  const [selectedTypes, setSelectedTypes] = useState<SelectOption[]>([])
-
-
-  const wasOpen = useRef(false);
-
-  useEffect(() => {
-    const justOpened = open && !wasOpen.current;
-
-    wasOpen.current = open
-
-    if (!open || loading || loadingProfiles) return;
-
-    if (!justOpened) return;
-
-    const nextIds = (initialFilters.profileIds ?? []).map(s => String(s).toLowerCase());
-    setProfileIds(prev => (arraysEqual(prev, nextIds) ? prev : nextIds));
-
-    const idSet = new Set(nextIds);
-    
-    const derivedNames = profileFilters.map(p => ({ id: p.id, name: p.description }))
-      .filter(o => idSet.has(String(o.id).toLowerCase()))
-      .map(o => String(o.name));
-
-    if (derivedNames.length > 0) {
-      setProfileNames(prev => (arraysEqual(prev, derivedNames) ? prev : derivedNames));
-    } else {
-      setProfileNames([]);
-    }
-
-    const nextStatuses = selectItemsStatuses.filter(o => initialFilters.status.includes(String(o.id)))
-
-    setSelectedStatuses(prev => {
-
-      const prevIds = prev.map(x => String(x.id))
-      const nextIds = nextStatuses.map(x => String(x.id))
-      return arraysEqual(prevIds, nextIds) ? prev : nextStatuses
-    });
-
-    const nextTypes = selectItemsTypes.filter(o => initialFilters.helpType.includes(String(o.id)))
-
-    setSelectedTypes(prev => {
-      const prevIds = prev.map(x => String(x.id))
-      const nextIds = nextTypes.map(x => String(x.id))
-      return arraysEqual(prevIds, nextIds) ? prev : nextTypes
-    });
-  }, [
-    open,
-    loading,
-    loadingProfiles,
-    selectItemsStatuses,
-    selectItemsTypes,
-    profileFilters,
-    initialFilters,
-  ])
-
+const {
+  selectItemsStatuses,
+  selectItemsTypes,
+  loading,
+  loadingProfiles,
+  profileNames,
+  profileIds,
+  selectedStatuses,
+  selectedTypes,
+  setProfileNames,
+  setProfileIds,
+  setSelectedStatuses,
+  setSelectedTypes,
+} = useFilterHelpsPage({ 
+  open, 
+  initialFilters 
+});
 
   return (
     <CustomModal

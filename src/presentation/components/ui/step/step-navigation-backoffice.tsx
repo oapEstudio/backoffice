@@ -85,6 +85,7 @@ const Title = styled(
   transform: 'translateX(-50%)',
   textAlign: 'center',
   maxWidth: 160,
+  minWidth: 100,
   //fontFamily: 'Roboto, Arial, Helvetica, sans-serif',
   fontSize: 16,
   color: active ? theme.palette.primary.main : 'inherit',
