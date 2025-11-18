@@ -32,8 +32,8 @@ export const useHelpPage = () => {
     useCase: useGetHelps,
     toMapper: toHelpsRow,
     actionsButton: <SelectCreateHelp />
-
   });
+  
   const [editHelpId, setEditHelpId] = useState<string>('');
   const [editHelpType, setEditHelpTypeId] = useState<number>(0);
   const refresh = useCallback(() => setParams(p => ({ ...p })), [setParams]);

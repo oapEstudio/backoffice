@@ -42,6 +42,7 @@ import { GetDynamicPageByIdUseCase } from '../../application/usecases/GetDynamic
 import { CancellationDynamicPageUseCase } from '../../application/usecases/CancellationDynamicPageUseCase';
 import { UpdateDynamicPageProfilesUseCase } from '../../application/usecases/UpdateDynamicPageProfilesUseCase';
 import { UpdateDynamicPageUseCase } from '../../application/usecases/UpdateDynamicPageUseCase';
+import { CancellationProfileUseCase } from '../../application/usecases/CancellationProfileUseCase';
 
 
 const profileRepo = new ProfileRepository();
@@ -60,6 +61,7 @@ export interface IDependencies{
   createProfile: CreateProfileUseCase,
   getProfileStatuses: GetDatasetFiltersUseCase,
   getProfilesFilterProfiles: GetDatasetFiltersUseCase,
+  cancellationProfile: CancellationProfileUseCase,
   getMenues: GetMenuUseCase,
   createMenu: CreateMenuUseCase,
   updateMenuProfileGroup: UpdateMenuProfileGroupUseCase,
@@ -136,6 +138,7 @@ export const defaultDependencies: IDependencies = {
   getProfileStatuses: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlProfileStatus,resourseDimDatasetProfile.version)),
   getProfilesFilterProfiles: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlDimProfile,resourseDimDatasetProfile.version)),
   updateProfileGroup: new UpdateProfileGroupsUseCase(profileRepo),
+  cancellationProfile: new CancellationProfileUseCase(profileRepo),
   getMenues: new GetMenuUseCase(menuRepo),
   createMenu: new CreateMenuUseCase(menuRepo),
   updateMenuProfileGroup: new UpdateMenuProfileGroupUseCase(menuRepo),

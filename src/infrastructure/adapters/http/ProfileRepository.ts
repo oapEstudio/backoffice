@@ -16,61 +16,76 @@ export class ProfileRepository extends RepositoryAbstract implements IProfileRep
 
   async updateProfileGroups(id: string, payload: IProfileUpdateGroups) {
 
-     const url = this.resource.edit.groups.endpoint.replace('{id}',id);
-     const version = this.resource.edit.groups.version;
+    const url = this.resource.edit.groups.endpoint.replace('{id}', id);
+    const version = this.resource.edit.groups.version;
 
-     const res = await apiHandler.put<IProfile>(this.resolveURL(url,version),{},payload);
+    const res = await apiHandler.put<IProfile>(this.resolveURL(url, version), {}, payload);
 
-     return res.data;
+    return res.data;
   }
- 
 
-  async updateProfile(id: string, payload: IProfileUpdateDto){
 
-     const url = this.resource.edit.profile.endpoint.replace('{id}',id);
-     const version = this.resource.edit.profile.version;
+  async updateProfile(id: string, payload: IProfileUpdateDto) {
 
-    const res = await apiHandler.put<IProfile>(this.resolveURL(url,version),{},payload);
+    const url = this.resource.edit.profile.endpoint.replace('{id}', id);
+    const version = this.resource.edit.profile.version;
+
+    const res = await apiHandler.put<IProfile>(this.resolveURL(url, version), {}, payload);
 
     return res.data;
   }
   async getProfiles(params: IPageParameters): Promise<IPaginatedResponse<IProfile>> {
-    
-  
+
+
     const mapped = this.paramsMap(params);
     const qs = this.toQueryStringPagination(mapped);
 
     const version = this.resource.getAll.version;
     const url = `${this.resource.getAll.endpoint}?${qs}`;
 
-    const response = await apiHandler.get<IPaginatedResponse<IProfile>>(this.resolveURL(url,version));
+    const response = await apiHandler.get<IPaginatedResponse<IProfile>>(this.resolveURL(url, version));
 
     return response.data;
-    
+
   }
 
-   async createProfile(dto: IProfileCreateDto): Promise<string> {
+  async createProfile(dto: IProfileCreateDto): Promise<string> {
 
-      const version = this.resource.create.version;
-      const url = `${this.resource.create.endpoint}`;
+    const version = this.resource.create.version;
+    const url = `${this.resource.create.endpoint}`;
 
-      const res = await apiHandler.post<{ id: string }, IProfileCreateDto>(
-        this.resolveURL(url,version),
-        {},
-        dto
-      )
-      return res.data.id;
-   }
+    const res = await apiHandler.post<{ id: string }, IProfileCreateDto>(
+      this.resolveURL(url, version),
+      {},
+      dto
+    )
+    return res.data.id;
+  }
 
   async getStatuses(params: IPageParameters): Promise<IPaginatedResponse<IStatuses>> {
-          const version = this.resource.dim.statuses.version;
-          const url = `${this.resource.dim.statuses.endpoint}`;
-          const response = await apiHandler.get<IPaginatedResponse<IStatuses>>(
-                 this.resolveURL(url,version),
-                { queryParams: params }
-              );
-          return response.data;
+    const version = this.resource.dim.statuses.version;
+    const url = `${this.resource.dim.statuses.endpoint}`;
+    const response = await apiHandler.get<IPaginatedResponse<IStatuses>>(
+      this.resolveURL(url, version),
+      { queryParams: params }
+    );
+    return response.data;
   }
 
+  async updateProfileStatus(id: string, statusId: string): Promise<IProfile> {
+    const url = this.resource.edit.status.endpoint.replace('{id}', id);
+
+    const version = this.resource.edit.status.version;
+
+    try {
+      const res = await apiHandler.put<any>(this.resolveURL(url, version), {}, {
+        statusId
+      });
+
+      return res.data;
+    } catch (error: any) {
+      throw { error };
+    }
+  }
 }
 
