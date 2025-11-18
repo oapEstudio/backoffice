@@ -135,6 +135,14 @@ export const NEW_DOCUMENT_INVISIBLE: IRoute = {
     viewNav: true
 }
 
+export const EDIT_DYNAMIC_PAGE: IRoute = {
+    title: 'Nuevo Documento Invisible',
+    order:  'EditDynamicPage',
+    name: '/edit_dynamic_page/:id',
+    children: [],
+    viewNav: true
+}
+
 export const ROUTES: IRoute[] =[
     HOME, FATHER_PROFILE, NOTIFICATION, FUNTIONALITIES, DYNAMIC_PAGE, HELP
 ];

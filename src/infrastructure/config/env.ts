@@ -91,10 +91,34 @@ export const env = {
       }
     },
     dynamic_pages: {
+      dim: {      
+        dataset: {
+           endpoint: 'pages/dataset/{dataset}',   
+           version: 'v1'
+        }
+      },  
        getAll: {   
-         endpoint: 'notifications',   
+         endpoint: 'pages',   
          version: 'v1'
       },
+      create: {
+         endpoint: 'pages',   
+         version: 'v1'
+      },
+      edit: {
+        profiles: {
+         endpoint: 'pages/{id}/profiles',   
+         version: 'v1'
+        },
+        page: {
+          endpoint: 'pages/{id}',   
+          version: 'v1'
+        },
+         status: {
+          endpoint: 'pages/{id}/status',   
+          version: 'v1'
+        }
+      }
     },
     notifications: { 
       dim: {      

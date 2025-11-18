@@ -37,6 +37,11 @@ import { UpdateHelpUseCase } from '../../application/usecases/UpdateHelpUseCase'
 import { CancellationHelpUseCase } from '../../application/usecases/CancellationHelpUseCase';
 import { GetDynamicPagesUseCase } from '../../application/usecases/GetDynamicPagesUseCase';
 import { DynamicPageRepository } from '../../infrastructure/adapters/http/DynamicPageRepository';
+import { CreateDynamicPageUseCase } from '../../application/usecases/CreateDynamicPageUseCase';
+import { GetDynamicPageByIdUseCase } from '../../application/usecases/GetDynamicPageByIdUseCase';
+import { CancellationDynamicPageUseCase } from '../../application/usecases/CancellationDynamicPageUseCase';
+import { UpdateDynamicPageProfilesUseCase } from '../../application/usecases/UpdateDynamicPageProfilesUseCase';
+import { UpdateDynamicPageUseCase } from '../../application/usecases/UpdateDynamicPageUseCase';
 
 
 const profileRepo = new ProfileRepository();
@@ -85,12 +90,19 @@ export interface IDependencies{
   updateHelp: UpdateHelpUseCase,
   cancellationHelp: CancellationHelpUseCase,
   getHelpProfiles: GetDatasetFiltersUseCase,
-  getDynamicPages: GetDynamicPagesUseCase
+  getDynamicPages: GetDynamicPagesUseCase,
+  createDynamicPage: CreateDynamicPageUseCase,
+  getDynamicPageById: GetDynamicPageByIdUseCase,
+  getDynamicPageStatuses: GetDatasetFiltersUseCase,
+  cancellationDynamicPage: CancellationDynamicPageUseCase,
+  updateDynamicPageProfiles: UpdateDynamicPageProfilesUseCase,
+  updateDynamicPage: UpdateDynamicPageUseCase
 }
 
 const resourseDimDatasetProfile = env.resources.profiles.dim.dataset;
 const resourseDimDatasetNotification = env.resources.notifications.dim.dataset;
 const resourseDimDatasetHelp = env.resources.helps.dim.dataset;
+const resourseDimDataseDynamicPage = env.resources.dynamic_pages.dim.dataset;
 
 /**Profiles */
 const urlProfileStatus = resourseDimDatasetProfile.endpoint.replace('{dataset}','statuses');
@@ -109,6 +121,10 @@ const urlHelpsSections = resourseDimDatasetHelp.endpoint.replace('{dataset}','se
 const urlHelpsArticles = resourseDimDatasetHelp.endpoint.replace('{dataset}','articles');
 const urlHelpsDocumentTypes = resourseDimDatasetHelp.endpoint.replace('{dataset}','documentTypes');
 const urlHelpsProfiles = resourseDimDatasetHelp.endpoint.replace('{dataset}','profiles');
+
+/* DynamicPage */
+
+const urlDynamicPageStatus = resourseDimDataseDynamicPage.endpoint.replace('{dataset}','statuses');
 
 export const defaultDependencies: IDependencies = {
   getProfiles: new GetProfilesUseCase(profileRepo),
@@ -148,7 +164,13 @@ export const defaultDependencies: IDependencies = {
   updateHelpProfiles: new UpdateHelpProfilesUseCase(helpRepo),
   updateHelp: new UpdateHelpUseCase(helpRepo),
   cancellationHelp: new CancellationHelpUseCase(helpRepo),
-  getDynamicPages: new GetDynamicPagesUseCase(dynamicPageRepo)
+  getDynamicPages: new GetDynamicPagesUseCase(dynamicPageRepo),
+  createDynamicPage: new CreateDynamicPageUseCase(dynamicPageRepo),
+  getDynamicPageById: new GetDynamicPageByIdUseCase(dynamicPageRepo),
+  getDynamicPageStatuses: new GetDatasetFiltersUseCase(new DatasetFilterRepository(urlDynamicPageStatus,resourseDimDataseDynamicPage.version)),  
+  cancellationDynamicPage: new CancellationDynamicPageUseCase(dynamicPageRepo),
+  updateDynamicPageProfiles: new UpdateDynamicPageProfilesUseCase(dynamicPageRepo),
+  updateDynamicPage: new UpdateDynamicPageUseCase(dynamicPageRepo)
 };
 
 export const DependencyContext = React.createContext<IDependencies>(defaultDependencies);

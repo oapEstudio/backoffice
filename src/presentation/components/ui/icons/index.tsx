@@ -50,6 +50,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import type { ElementType } from "react";
 import SettingsIcon from '@mui/icons-material/Settings';
 import AppsIcon from '@mui/icons-material/Apps';
+import SaveIcon from '@mui/icons-material/Save';
 
 export interface IIconAction{
   handleClick?: any;
@@ -252,6 +253,12 @@ export const DownloaddIcon = () =>{
 export const WarningTriangleIcon = () =>{
   return <WarningAmberIcon />
 } 
+
+export const SaveeIcon : React.FC<IIconAction> = ({handleClick, parameterHandleClick, style}) => {
+  return <SaveIcon style={style} onClick={()=>{
+      if(handleClick) parameterHandleClick? handleClick(parameterHandleClick) : handleClick();
+  }} />
+};
 
 export const Visibility = () => {
   return <VisibilityIcon />;

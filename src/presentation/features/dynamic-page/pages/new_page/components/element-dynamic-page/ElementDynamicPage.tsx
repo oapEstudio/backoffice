@@ -29,12 +29,12 @@ export enum eTypeElement{
 }
 
 export interface IElementDynamicPage{
-    id: number;  
+    id: string;  
     label: string;
     text: string;
     fontSize: string;
     type: eTypeElement;
-    file: File;
+    file?: File | null;
     height: number;
     align: string;
     link: string;
@@ -44,8 +44,8 @@ export interface IElementDynamicPageProps{
     isEdit: boolean;
     element: IElementDynamicPage,
     size: number;
-    sectionId: number;
-    handleDeleteElement?: (id: number)=>void;
+    sectionId: string;
+    handleDeleteElement?: (id: string)=>void;
 }
 export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({size, element,sectionId, handleDeleteElement, isEdit}) => {
 
@@ -58,7 +58,7 @@ export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({size, el
                  </>
                 <CustomBox sx={{height: '100%', border: isEdit? '0.2rem dashed #9E9E9E' : 'none', minHeight: 100, alignContent: 'center'}}>                                                                                         
                     {element.type === eTypeElement.BACKGROUND_IMAGE?
-                                    <img width={'100%'} height={element.height} src={URL.createObjectURL(element.file)} /> :
+                                    <img width={'100%'} height={element.height} src={URL.createObjectURL(element.file as File)} /> :
                                     <></>}
                     {element.type === eTypeElement.TITLE?
                                     <TitlePages title={element.label} style={{fontSize: element.fontSize, padding: '0px 2rem', textAlign: element.align }} /> :
@@ -69,17 +69,17 @@ export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({size, el
                                     </CustomBox> :
                                     <></>}   
                    {element.type === eTypeElement.FILE?
-                                    <a href={URL.createObjectURL(element.file)} target='_blank'>{element.file.name}</a> :
+                                    <a href={URL.createObjectURL(element.file as File)} target='_blank'>{element.file?.name}</a> :
                                     <></>} 
                     {element.type === eTypeElement.IMG?
                                     <img 
-                                        src={URL.createObjectURL(element.file)} 
+                                        src={URL.createObjectURL(element.file as File)} 
                                         width={'100%'} 
                                         height={element.height>0?element.height : 50}/> :
                                     <></>} 
                     {element.type === eTypeElement.VIDEO?
                                     <VideoPlayer 
-                                        file={element.file} 
+                                        file={element.file as File} 
                                         height={element.height} /> :
                                     <></>}  
 

@@ -32,4 +32,14 @@ export abstract class RepositoryAbstract{
     protected resolveURL(url: string, version: string){
       return `${version}/${url}`;
     }
+
+    protected appendFormDataIfDefined(form: FormData, key: string, value: unknown) {
+      if (value === undefined || value === null) return;
+
+      if (value instanceof File) {
+        form.append(key, value, value.name);
+      } else {
+        form.append(key, String(value));
+      }
+    }
 }

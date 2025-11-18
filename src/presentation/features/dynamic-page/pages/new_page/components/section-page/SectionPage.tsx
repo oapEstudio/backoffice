@@ -14,16 +14,16 @@ const ROW_MAX_SIZE: number = 12;
 export interface ISectionPage{
   order: number;
   elements: IElementDynamicPage[];
-  id: number;
+  id: string;
   backgroundColor: string;
 }
 
 export interface ISectionPageProps{
   section: ISectionPage;
   isEdit: boolean;
-  handleDeleteSections?: (id: number) => void;
-  handleAddElement?: (id: number) => void;
-  handleDeleteElement?: (id: number) => void;
+  handleDeleteSections?: (id: string) => void;
+  handleAddElement?: (id: string) => void;
+  handleDeleteElement?: (id: string) => void;
 }
 
 
