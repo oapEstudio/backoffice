@@ -16,6 +16,7 @@ import { BulletList } from '@tiptap/extension-bullet-list';
 import { OrderedList } from '@tiptap/extension-ordered-list';
 import { Underline } from '@tiptap/extension-underline';
 import { CustomRichTextView } from '../../../../../../components/ui/rich-text-editor/CustomRichTextEditor';
+import { DownloadAction } from '../../../../../../components/ui/download-action/DownloadAction';
 
 export enum eTypeElement{
     BACKGROUND_IMAGE = "1",
@@ -69,7 +70,9 @@ export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({size, el
                                     </CustomBox> :
                                     <></>}   
                    {element.type === eTypeElement.FILE?
-                                    <a href={URL.createObjectURL(element.file as File)} target='_blank'>{element.file?.name}</a> :
+                                    <CustomBox sx={{alignContent: 'center', padding: '2rem',lineHeight: 'normal'}}>
+                                        <DownloadAction label={element.label} url={URL.createObjectURL(element.file as File)} /> 
+                                    </CustomBox>:
                                     <></>} 
                     {element.type === eTypeElement.IMG?
                                     <img 
