@@ -82,24 +82,25 @@ export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({ size, e
                 <></>}
 
             {element.type === eTypeElement.ACCORDEON ?
-                <><CustomAccordion
+                <CustomBox sx={{ alignContent: 'center', padding: '2rem', lineHeight: 'normal' }}>
+                    <CustomAccordion
                     title={element.label}
                     titleSx={{
                         fontSize: '1.1rem',
                     }}
                     content={<CustomBox
-                        sx={{
-                            mb: 3,
-                            p: 2,
-                            backgroundColor: 'grey.50',
-                            borderRadius: 1,
-                            borderLeft: 1,
-                            borderColor: 'primary.main'
-                        }}
-                    >
-                        <CustomRichTextView content={element.text} />
+                                    sx={{
+                                        mb: 3,
+                                        p: 2,
+                                        backgroundColor: 'grey.50',
+                                        borderRadius: 1,                           
+                                    }}
+                                >
+                                    <CustomRichTextView content={element.text} />
 
-                    </CustomBox>} /><Divider /></> : <></>}
+                                </CustomBox>} />
+                    <Divider />
+                </CustomBox> : <></>}
         </CustomBox>
     </CustomGrid>
 }

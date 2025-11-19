@@ -51,6 +51,7 @@ import type { ElementType } from "react";
 import SettingsIcon from '@mui/icons-material/Settings';
 import AppsIcon from '@mui/icons-material/Apps';
 import SaveIcon from '@mui/icons-material/Save';
+import DisplaySettingsIcon from '@mui/icons-material/DisplaySettings';
 
 export interface IIconAction{
   handleClick?: any;
@@ -139,6 +140,13 @@ export const EditActionIcon: React.FC<IIconAction> = ({handleClick, parameterHan
   }} />
 };
 
+
+export const DisplaySettingIcon:React.FC<IIconAction> = ({handleClick, parameterHandleClick}) => {
+  //return <EditIcon sx={{ color: baselightTheme.palette.info.dark }} />;
+  return <DisplaySettingsIcon onClick={()=>{
+      if(handleClick) parameterHandleClick? handleClick(parameterHandleClick) : handleClick();
+  }} />
+};
 export const GroupActionIcon: React.FC<IIconAction> = ({handleClick, parameterHandleClick, style}) => {
   //return <EditIcon sx={{ color: baselightTheme.palette.info.dark }} />;
   return <GroupAddOutlinedIcon style={style} onClick={()=>{

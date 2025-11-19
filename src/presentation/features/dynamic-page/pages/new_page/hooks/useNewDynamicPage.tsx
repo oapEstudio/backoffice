@@ -4,7 +4,7 @@ import { ID_SECTION_ITEM_MENU } from "../../../shared/constants/constants";
 import type { ISectionPage } from "../components/section-page/SectionPage";
 import { useCreateDynamicPages } from "../../../hooks/useCreateDynamicPages";
 import { useHref, useNavigate, useParams } from "react-router-dom";
-import { DYNAMIC_PAGE, PREVIEW_DYNAMIC_PAGE } from "../../../../../router/routes";
+import { DYNAMIC_PAGE, MODE_ROUTE_UPDATE, PREVIEW_DYNAMIC_PAGE } from "../../../../../router/routes";
 import { resetDynamicPageStorage } from "../../../shared/storage/dp-reset";
 import { saveDynamicPageToStorage } from "../../../shared/storage/dp-save";
 import type { IModalSaveFormValues } from "../components/modal-save/ModalSave";
@@ -44,7 +44,7 @@ export function useNewDynamicPage(init?: IDynamicPage){
   const navigate = useNavigate();
 
 
- const { id } = useParams<{ id: string }>();
+ const { id, mode } = useParams<{ id: string, mode: string }>();
  const pageId = useMemo(() => (id ? id : undefined), [id]);
 
 
@@ -115,7 +115,7 @@ export function useNewDynamicPage(init?: IDynamicPage){
           profiles: pageById.profiles,
           state: String(pageById.statusId)
         })
-        setIsEdit(true);
+        setIsEdit(mode==MODE_ROUTE_UPDATE);
         setHasMenu(pageById.hasMenu);
 
       } 
@@ -263,7 +263,7 @@ export function useNewDynamicPage(init?: IDynamicPage){
                     
        
              Toast({
-               message: 'Pagina creada correctamente',
+               message: 'Página creada correctamente',
                type: eToast.Success
              });
     
@@ -272,7 +272,7 @@ export function useNewDynamicPage(init?: IDynamicPage){
            } catch(e) {
               
              Toast({
-               message: 'Error al crear la pagina',
+               message: 'Error al crear la página',
                type: eToast.Error
              });
            }

@@ -19,7 +19,7 @@ export interface IPanelNewPageProps{
 export const PanelNewPage: React.FC<IPanelNewPageProps> = ({setOpenAddSection, handlePreview, hasMenu,setHasMenu,handleSave}) => {
   return (
      <CustomStack spacing={5} direction='column'  sx={{backgroundColor: '#f5f5f5',padding: '1rem', marginTop: 10, position: 'fixed'}}>
-        <CustomToggle sx={{justifyContent: 'left'}}  label='Pagina con menu?' options={[{label: 'SI',value: true},{label: 'NO',value: false}]} state={hasMenu} setState={setHasMenu} />
+        <CustomToggle sx={{justifyContent: 'left'}}  label='Página con menú?' options={[{label: 'SI',value: true},{label: 'NO',value: false}]} state={hasMenu} setState={setHasMenu} />
             <CustomBox>              
                 <Button variant='primary' title='Añadir sección' style={{width: '100%'}} icon={ <AddActionIcon style={{marginRight: '0.5rem', color: 'white'}} />} onClick={()=>setOpenAddSection(true)}/>
             </CustomBox>                                                    

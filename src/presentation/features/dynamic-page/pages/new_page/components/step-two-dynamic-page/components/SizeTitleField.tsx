@@ -30,7 +30,7 @@ export const SizeTitleField: React.FC = () => {
             <Button
               onClick={() => field.onChange('1.33rem')}
               variant={val === '1.33rem' ? 'primary' : 'secondary'}
-              title="Chico"
+              title="Pequeño"
             />
           </ButtonGroup>
         );

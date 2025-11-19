@@ -51,14 +51,16 @@ export const DynamicPage: React.FC<IDynamicPageProps> = ({handleAddMenu,
                                                 <SVGIcon style={{width: '7rem', height: '3rem'}} icon={ LogoYPF }  /> 
                                             </IconButton>
                                               <CustomBox sx={{position: 'absolute',top: '4rem', left: 0}}>
-                                                    {isEdit && <CustomFab   style={{
+                                                    {isEdit && <CustomFab   variant="extended" style={{
                                                                                     backgroundColor: colors.palette.primary.main,
-                                                                                    width: '30px', 
-                                                                                    height: '30px'
+                                                                                      width: '7rem',
+                                                                                      padding: 0,
+                                                                                      height: '30px'  
                                                                                     }}
-                                                                            sx={{position: 'absolute'}} 
+                                                                            sx={{position: 'absolute', fontSize: '12px', color: 'white'}} 
                                                                             onClick={()=>{if(handleAddMenu) handleAddMenu();}}>
                                                                     <AddActionIcon  style={{color: 'white'}}/>
+                                                                    Añadir item
                                                                 </CustomFab>
                                                     }
                                              </CustomBox>

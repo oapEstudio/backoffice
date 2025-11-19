@@ -27,6 +27,11 @@ export const Headers: IColumn[] =[{
     order: 'urlRelative'
 },{
     align: 'left',
+    id: 'template',
+    label: 'Usar config.',
+    order: 'template'
+},{
+    align: 'left',
     id: 'actions',
     label: 'Acciones'
 },{

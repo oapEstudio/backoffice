@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 
 import StarterKit from "@tiptap/starter-kit";
-import { Color, TextStyle, TextStyleKit } from '@tiptap/extension-text-style';
+import { Color, TextStyle } from '@tiptap/extension-text-style';
 import TextAlign from '@tiptap/extension-text-align';
-import { OrderedList } from "@tiptap/extension-ordered-list";
-import { BulletList } from "@tiptap/extension-bullet-list";
-import { Underline } from "@tiptap/extension-underline";
 import { Highlight } from "@tiptap/extension-highlight";
-
+import { Link } from "@tiptap/extension-link";
 import {
   FontSize,
+  LinkBubbleMenu,
+  LinkBubbleMenuHandler,
   MenuButtonBold,
   MenuButtonBulletedList,
+  MenuButtonEditLink,
   MenuButtonHighlightColor,
   MenuButtonItalic,
   MenuButtonOrderedList,
@@ -37,6 +37,9 @@ interface ICustomRichTextEditorProps{
   change: (value: string)=>void;
 }
 
+const CustomLinkExtension = Link.extend({
+  inclusive: false,
+});
 const extensions: Extensions = [
                       StarterKit, 
                       TextStyle, 
@@ -44,6 +47,19 @@ const extensions: Extensions = [
                       FontSize,                     
                       Highlight.configure({ multicolor: true }),
                       TextAlign.configure({types: ['heading', 'paragraph'],}),
+                      CustomLinkExtension.configure({
+                      // autolink is generally useful for changing text into links if they
+                      // appear to be URLs (like someone types in literally "example.com"),
+                      // though it comes with the caveat that if you then *remove* the link
+                      // from the text, and then add a space or newline directly after the
+                      // text, autolink will turn the text back into a link again. Not ideal,
+                      // but probably still overall worth having autolink enabled, and that's
+                      // how a lot of other tools behave as well.
+                      autolink: true,
+                      linkOnPaste: true,
+                      openOnClick: false,
+                    }),
+                    LinkBubbleMenuHandler,
                     ];
 export const CustomRichTextEditor: React.FC<ICustomRichTextEditorProps> = ({change}) => {
 
@@ -69,12 +85,13 @@ export const CustomRichTextEditor: React.FC<ICustomRichTextEditorProps> = ({chan
     };
   }, [rteRef.current?.editor]);
 
+  
   return (
      <div>
       <RichTextEditor
         ref={rteRef}
         extensions={extensions} 
-        content={html}       
+        content={html}            
         renderControls={() => (
           <MenuControlsContainer>
             <MenuSelectHeading />
@@ -83,6 +100,7 @@ export const CustomRichTextEditor: React.FC<ICustomRichTextEditorProps> = ({chan
             <MenuButtonItalic />
             <MenuSelectFontSize  />
             <MenuSelectTextAlign />
+            <MenuButtonEditLink />
             <MenuButtonUnderline />
             <MenuButtonOrderedList />
             <MenuButtonTextColor
@@ -113,8 +131,16 @@ export const CustomRichTextEditor: React.FC<ICustomRichTextEditorProps> = ({chan
             <MenuButtonBulletedList />
             
           </MenuControlsContainer>
+        )}>
+
+           {() => (
+          <>
+            <LinkBubbleMenu />
+          
+          </>
         )}
-      />
+        </RichTextEditor>
+      
 
         
      
