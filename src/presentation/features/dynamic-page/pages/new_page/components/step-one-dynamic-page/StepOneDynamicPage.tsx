@@ -5,6 +5,7 @@ import type { IModalAddElementFormValues } from '../modal-add-element/ModalAddEl
 import { useElementTypeDynamicPage } from '../../../../hooks/useElementTypeDynamicPage';
 import type { SelectOption } from '../../../../../../components/ui/inputs/select/select.interface';
 import { toSelectOption } from '../../../../mappers/createDynamicPageMapper';
+import Loading from '../../../../../../components/ui/loading';
 
 export const StepOneDynamicPage = () => {
  
@@ -21,11 +22,13 @@ export const StepOneDynamicPage = () => {
     formState: { errors },
   } = useFormContext<IModalAddElementFormValues>();
 
+  if(loadingElementTypes) return <center><Loading></Loading></center>;
+
   return (
      <Controller
         name="type"
         control={control}
-         rules={{ required: 'El componente es obligatorio',minLength: 1 }}
+         rules={{ required: 'El componente es obligatorio',minLength:1 }}
         render={({ field }) => (
           <CustomSelect
             {...field}

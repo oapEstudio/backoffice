@@ -6,6 +6,8 @@ export interface IRoute {
     order: string;
 }
 
+export const MODE_ROUTE_UPDATE = 'update';
+export const MODE_ROUTE_CREATE = 'create';
 
 export const HOME: IRoute = {
     title: 'Inicio',
@@ -138,7 +140,7 @@ export const NEW_DOCUMENT_INVISIBLE: IRoute = {
 export const EDIT_DYNAMIC_PAGE: IRoute = {
     title: 'Nuevo Documento Invisible',
     order:  'EditDynamicPage',
-    name: '/edit_dynamic_page/:id',
+    name: '/edit_dynamic_page/:id/:mode',
     children: [],
     viewNav: true
 }

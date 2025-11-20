@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import type { IPageParameters, IPaginatedResponse } from "../../../../../application/common/IPaginatedResponse";
 import { INITIAL_PARAMS_TABLE } from "../../../../features/shared/constants/initialsParamTable";
 import type { IEntity } from "../../../../../domain/entities/IEntity";
@@ -16,6 +16,7 @@ interface IUseTableStandardProps<e extends IEntity>{
                                 },
     toMapper: (entity: e,callbackProfiles: (param: e)=>void, callbackCancelled: (param: e)=>void ) => IRow;
     actionsButton: React.ReactNode;
+    actionsButtonRow?: IAction[];
 }
 
 export function useTableStandard<e extends IEntity>(props: IUseTableStandardProps<e>){
@@ -84,11 +85,14 @@ export function useTableStandard<e extends IEntity>(props: IUseTableStandardProp
             {
                 icon: <Button variant="secondary" title="Editar" />,
                 onClick: (row: IRow) => {
-                const d = row as unknown as e;
-                setRowId(String(d.id));
-                setOpenEdit(true);
+                
+                    const d = row as unknown as e;
+
+                    setRowId(String(d.id));
+                    setOpenEdit(true);                    
                 },
-            }
+            },
+            ...(props.actionsButtonRow ?? []),
             ],
             []
       );            

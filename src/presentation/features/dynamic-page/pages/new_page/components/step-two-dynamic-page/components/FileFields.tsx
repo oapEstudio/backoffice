@@ -5,6 +5,7 @@ import type { IModalAddElementFormValues } from '../../modal-add-element/ModalAd
 import FileDropzone from '../../../../../../../components/ui/file-drop-zone/FileDropzone';
 import { CustomStack } from '../../../../../../../components/ui/stack/Stack';
 import CustomTextInput from '../../../../../../../components/ui/inputs/text-input/text-input.component';
+import { MAX_SIZE_FILE } from '../../../../../shared/constants/constants';
 
 export const FileFields: React.FC = () => {
   const { control, formState: { errors } } = useFormContext<IModalAddElementFormValues>();
@@ -30,7 +31,22 @@ export const FileFields: React.FC = () => {
       <Controller
         name="file"
         control={control}
-        rules={{ validate: v => (v !== undefined) || 'Debes adjuntar un archivo' }}
+        rules={{
+                      validate: (v) => {                      
+        
+                        if (!v || (Array.isArray(v) && v.length === 0)) {
+                          return 'Debes asignar un archivo';
+                        }
+        
+                        const file = Array.isArray(v) ? v[0] : v;
+        
+                        if (file.size > MAX_SIZE_FILE) {
+                          return 'El archivo no puede superar los 10 MB';
+                        }
+        
+                        return true;
+                      }
+                    }}
         render={({ field, fieldState: { error } }) => (
           <>
             <FileDropzone

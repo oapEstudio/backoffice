@@ -89,7 +89,7 @@ export const NewDynamicPagesPage = () => {
                       onCancel={handleCancelAddModal} onOk={isEdit?update:save} />  
 
                   {
-                    searchingById? <center> <Loading /> </center> :
+                    searchingById? <center style={{marginTop: '10rem'}}> <Loading /> </center> :
                      <BlankCard elevation={20}>
                       <DynamicPage 
                           isMenu={hasMenu}
