@@ -23,4 +23,8 @@ export const Headers: IColumn[] =[{
     align: 'left',
     id: 'actions',
     label: 'Acciones'
+},{
+    align: 'center',
+    id: 'cancellation',
+    label: 'Baja'
 }];

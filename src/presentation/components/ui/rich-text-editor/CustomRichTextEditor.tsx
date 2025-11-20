@@ -1,18 +1,21 @@
-import { useEffect, useRef, useState } from "react";
-
+import { useEffect, useMemo, useRef, useState } from "react";
 import StarterKit from "@tiptap/starter-kit";
-import { Color, TextStyle, TextStyleKit } from '@tiptap/extension-text-style';
+import { Color, TextStyle } from '@tiptap/extension-text-style';
 import TextAlign from '@tiptap/extension-text-align';
-import { OrderedList } from "@tiptap/extension-ordered-list";
-import { BulletList } from "@tiptap/extension-bullet-list";
-import { Underline } from "@tiptap/extension-underline";
 import { Highlight } from "@tiptap/extension-highlight";
+import { Link } from "@tiptap/extension-link";
+import { theme } from "../../../common/styles";
+import type { Extensions } from "@tiptap/core";
 
 import {
   FontSize,
+  LinkBubbleMenu,
+  LinkBubbleMenuHandler,
   MenuButtonBold,
   MenuButtonBulletedList,
+  MenuButtonEditLink,
   MenuButtonHighlightColor,
+  MenuButtonImageUpload,
   MenuButtonItalic,
   MenuButtonOrderedList,
   MenuButtonTextColor,
@@ -22,29 +25,59 @@ import {
   MenuSelectFontSize,
   MenuSelectHeading,
   MenuSelectTextAlign,
+  ResizableImage,
   RichTextEditor,
   RichTextReadOnly,
   type RichTextEditorRef,
 } from "mui-tiptap";
 
 
-import Button from "../button/button.component";
-import { theme } from "../../../common/styles";
-import type { Extensions } from "@tiptap/core";
-
-
 interface ICustomRichTextEditorProps{
   change: (value: string)=>void;
 }
 
-const extensions: Extensions = [
-                      StarterKit, 
-                      TextStyle, 
-                      Color,                    
-                      FontSize,                     
-                      Highlight.configure({ multicolor: true }),
-                      TextAlign.configure({types: ['heading', 'paragraph'],}),
-                    ];
+const CustomLinkExtension = Link.extend({
+  inclusive: false,
+
+});
+
+const common = [
+  StarterKit, TextStyle, Color, FontSize,
+  Highlight.configure({ multicolor: true }),
+  TextAlign.configure({ types: ['heading', 'paragraph', 'image', 'resizableImage'] }),
+  LinkBubbleMenuHandler,
+];
+
+const extensionsEdit: Extensions = [
+  ...common,
+  ResizableImage,   
+];
+
+const extensionsView: Extensions = [
+  ...common,          
+  ResizableImage,   
+];
+
+const MAX_IMAGE_BYTES = 500 * 1024;
+
+async function fileToDataUrlImage(file: File): Promise<string | null> {
+  if (!file || !file.type?.startsWith('image/')) return null;
+  if (file.size > MAX_IMAGE_BYTES) return null; // 500 KB
+
+  return await new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      
+      const result = typeof reader.result === 'string' ? reader.result : null;
+      resolve(result && result.startsWith('data:image/') ? result : null);
+    };
+    reader.onerror = () => resolve(null);
+    reader.readAsDataURL(file);
+  });
+}
+
+
+
 export const CustomRichTextEditor: React.FC<ICustomRichTextEditorProps> = ({change}) => {
 
  const rteRef = useRef<RichTextEditorRef>(null);
@@ -69,12 +102,13 @@ export const CustomRichTextEditor: React.FC<ICustomRichTextEditorProps> = ({chan
     };
   }, [rteRef.current?.editor]);
 
+  
   return (
      <div>
       <RichTextEditor
         ref={rteRef}
-        extensions={extensions} 
-        content={html}       
+        extensions={extensionsEdit} 
+        content={html}            
         renderControls={() => (
           <MenuControlsContainer>
             <MenuSelectHeading />
@@ -83,6 +117,7 @@ export const CustomRichTextEditor: React.FC<ICustomRichTextEditorProps> = ({chan
             <MenuButtonItalic />
             <MenuSelectFontSize  />
             <MenuSelectTextAlign />
+            <MenuButtonEditLink />
             <MenuButtonUnderline />
             <MenuButtonOrderedList />
             <MenuButtonTextColor
@@ -111,10 +146,29 @@ export const CustomRichTextEditor: React.FC<ICustomRichTextEditorProps> = ({chan
               ]}
             />
             <MenuButtonBulletedList />
-            
+           <MenuButtonImageUpload
+              onUploadFiles={(files) => {
+
+                   const results = files.map((file) => ({
+                                  src: 'https://ypf.com/images/home/ruta.webp',
+                                  alt: file.name,
+                                }));
+
+                  return results;
+                }}
+            />  
           </MenuControlsContainer>
+          
+        )}>
+
+           {() => (
+          <>
+            <LinkBubbleMenu />
+          
+          </>
         )}
-      />
+        </RichTextEditor>
+      
 
         
      
@@ -126,8 +180,12 @@ export const CustomRichTextEditor: React.FC<ICustomRichTextEditorProps> = ({chan
 
 export const CustomRichTextView: React.FC<{content: string}> = ({content})=>{
 
-  return <RichTextReadOnly 
-            content={content} 
-            extensions={extensions} 
-        />
+  
+ 
+  return (
+    <RichTextReadOnly
+      content={content}
+      extensions={extensionsView}
+    />
+  );
 }

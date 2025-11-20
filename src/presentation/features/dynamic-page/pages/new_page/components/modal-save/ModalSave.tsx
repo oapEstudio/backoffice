@@ -1,4 +1,4 @@
-import React, { useEffect} from 'react'
+import React, { useEffect, useMemo} from 'react'
 import CustomModal from '../../../../../../components/ui/modal/modal.component'
 import { CustomBox } from '../../../../../../components/ui/box/CustomBox';
 
@@ -16,6 +16,10 @@ import { styles } from '../../../../../../components/ui/inputs/styles';
 import Required from '../../../../../../components/ui/required/required.component';
 import DualProfileFetch from '../../../../../../components/widgets/dual-profile-add-fetch/DualProfileAddFetch';
 import Typography from '@mui/material/Typography';
+import { useDynamicPageFilterOptions } from '../../../../hooks/useDynamicPageFilterOptions';
+
+import type { SelectOption } from '../../../../../../components/ui/inputs/select/select.interface';
+import { toSelectOption } from '../../../../mappers/createDynamicPageMapper';
 
 interface IModalSaveProps{
     open: boolean;
@@ -23,7 +27,8 @@ interface IModalSaveProps{
     onCancel: ()=>void;
     onOk: (element: IModalSaveFormValues)=>void;
     init?: IModalSaveFormValues;
-    isEdit?: boolean
+    isEdit?: boolean,
+    saving?: boolean
 }
 
 export interface IModalSaveFormValues{
@@ -32,9 +37,21 @@ export interface IModalSaveFormValues{
   state: string;
 }
 
-export const ModalSave: React.FC<IModalSaveProps> = ({open, onClose, onCancel, onOk, init, isEdit = false}) => {
+export const ModalSave: React.FC<IModalSaveProps> = ({open, onClose, onCancel, onOk, init, isEdit = false, saving = false}) => {
+
+  const { resultState, loading } = useDynamicPageFilterOptions({
+     stateFilters:{ forCreate: true } 
+  });
 
  
+  const selectItemsStatuses: SelectOption[] = useMemo(
+      () => resultState.map(toSelectOption),
+      [resultState]
+    )
+    
+
+
+    
   const form = useForm<IModalSaveFormValues>({
         defaultValues: {
           name: init?.name,
@@ -83,11 +100,11 @@ export const ModalSave: React.FC<IModalSaveProps> = ({open, onClose, onCancel, o
                 key={open ? "open-modal-save" : "closed-modal-save"}
                 open={open} 
                 onClose={onClose} 
-                title='Guardar pagina'
+                title={isEdit?'Actualizar pagina': 'Guardar pagina'}
                 onOk={form.handleSubmit(onSubmit)}
                 onCancel={handleBack} 
                 labelCancel={'Cancelar'}
-                labelOk={'Aceptar'}
+                labelOk={saving? 'Guardando...' : 'Aceptar'}
                 maxWidth={'md'} 
                 disabled={!form.formState.isValid}>
                     
@@ -130,7 +147,7 @@ export const ModalSave: React.FC<IModalSaveProps> = ({open, onClose, onCancel, o
                                         <CustomSelect
                                           {...field}
                                           label="Estado"      
-                                          options={[]}
+                                          options={selectItemsStatuses}
                                           error={!!errors.state}           
                                         />
                                       )}

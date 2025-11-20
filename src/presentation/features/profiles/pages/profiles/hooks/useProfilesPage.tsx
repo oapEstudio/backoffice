@@ -13,6 +13,8 @@ import type { IProfileFormValues } from '../../shared/components/profile-form-va
 import type { IFilterProfileResult } from '../components/filter-profile-page/FilterProfilePage'
 import { Button } from '../../../../../components/ui/button'
 import TableFilterBar from '../../../../../components/widgets/table-filter-bar/TableFilterBar'
+import { eToast, Toast } from '../../../../../components/ui/toast/CustomToastService'
+import { useProfileCancellation } from '../../../hooks/useProfileCancellation'
 
 export function useProfilesPage() {
   const navigate = useNavigate()
@@ -23,8 +25,10 @@ export function useProfilesPage() {
   const [editGroupsOpen, setEditGroupsOpen] = useState(false)
   const [currentGroups, setCurrentGroups] = useState<IGroup[]>([])
   const [editingProfile, setEditingProfile] = useState<IProfile>()
-
+  const [openDelete, setOpenDelete] = useState(false);
   const [openFilter, setOpenFilter] = useState(false)
+  const [pendingDeleteId, setPendingDeleteId] = useState<string>('');
+  const { cancellation } = useProfileCancellation();
 
   const openEdit = useCallback((profile: IProfileFormValues & { id: string }) => {
     setToEdit(profile)
@@ -98,9 +102,39 @@ export function useProfilesPage() {
     ],
     [openEdit]
   )
+  const refresh = useCallback(() => setParams(p => ({ ...p })), [setParams])
+
+  const confirmDelete = useCallback((id: string) => {
+    setPendingDeleteId(String(id));
+    setOpenDelete(true);
+  }, []);
+
+  const doConfirmDelete = useCallback(async () => {
+      try {
+  
+        setOpenDelete(false);
+  
+        await cancellation(pendingDeleteId);
+  
+        Toast({ message: 'Perfil dado de baja correctamente', type: eToast.Success })
+  
+        refresh();
+  
+      } catch (err: any) {
+        const message = err?.error?.message;
+        Toast({ message: message ? message : 'Error al dar de baja el perfil', type: eToast.Error });
+      }
+    }, [cancellation, pendingDeleteId, refresh]);
+  
+    const callbackCancelled = useCallback((p: IProfile) => {
+  
+      confirmDelete(String(p.id));
+  
+    }, [confirmDelete]);
+
 
   const rows: IProfileRow[] = useMemo(
-    () => (result?.data ?? []).map(p => toProfileRow(p, openEditGroups)),
+    () => (result?.data ?? []).map(p => toProfileRow(p, openEditGroups, callbackCancelled)),
     [result?.data, openEditGroups]
   )
 
@@ -108,8 +142,6 @@ export function useProfilesPage() {
     profileIds: (params.filters?.Names as string[]) ?? [],
     status: (params.filters?.StatusIds as string[]) ?? [],
   }
-
-  const refresh = useCallback(() => setParams(p => ({ ...p })), [setParams])
 
   return {
     rows,
@@ -140,6 +172,10 @@ export function useProfilesPage() {
     currentGroups,
     editingProfile,
 
+
+    doConfirmDelete,
+    openDelete,
+    setOpenDelete,
     refresh,
     error,
   }

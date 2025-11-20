@@ -33,7 +33,7 @@ export const ActionStep: React.FC<ActionStepProps> = ({
           onClick={handleNext}
           disabled={!isValid || isLoading}
           variant="primary"
-          title={isLast ? 'Guardar Perfil' : 'Aceptar'}
+          title={isLast ? 'Guardar perfil' : 'Aceptar'}
           
         />
       </CustomStack>

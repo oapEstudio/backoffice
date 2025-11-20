@@ -1,33 +1,39 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import CustomSelect from '../../../../../../components/ui/inputs/select/select.component'
 import { Controller, useFormContext } from 'react-hook-form';
 import type { IModalAddElementFormValues } from '../modal-add-element/ModalAddElement';
+import { useElementTypeDynamicPage } from '../../../../hooks/useElementTypeDynamicPage';
+import type { SelectOption } from '../../../../../../components/ui/inputs/select/select.interface';
+import { toSelectOption } from '../../../../mappers/createDynamicPageMapper';
+import Loading from '../../../../../../components/ui/loading';
 
 export const StepOneDynamicPage = () => {
  
+   const { resultTypes, loading: loadingElementTypes } = useElementTypeDynamicPage({
+       elementTypeFilters:{ forCreate: true } 
+    });
+  
+    const selectItemsElementTypes: SelectOption[] = useMemo(
+        () => resultTypes.map(toSelectOption),
+        [resultTypes]
+    )
   const {
     control,
     formState: { errors },
   } = useFormContext<IModalAddElementFormValues>();
 
+  if(loadingElementTypes) return <center><Loading></Loading></center>;
+
   return (
      <Controller
         name="type"
         control={control}
-         rules={{ required: 'El componente es obligatorio',min: 1 }}
+         rules={{ required: 'El componente es obligatorio',minLength:1 }}
         render={({ field }) => (
           <CustomSelect
             {...field}
             label={'Componente'} 
-            options={[
-              {label: 'BackgroundImage', value: 1},
-              {label: 'Title', value: 2},
-              {label: 'Parrafo', value: 3},
-              {label: 'Archivo', value: 4},
-              {label: 'Imagen', value: 5},
-              {label: 'Video', value: 6},
-               {label: 'Accordeon', value: 8}
-            ]}            
+            options={selectItemsElementTypes}            
          />
         )}
       />   

@@ -33,11 +33,11 @@ export const BgImageFields: React.FC<{ initialImageUrl?: string }> = ({ initialI
           <Controller
                   name="height"
                   control={control}
-                  rules={{ required: 'El height es obligatorio' }}
+                  rules={{ required: 'El height es obligatorio',min: 1 }}
                   render={({ field }) => (
                     <CustomTextInput
                       {...field}
-                      label="HEIGHT"
+                      label="Alto en pixeles (HEIGHT)"
                       type="number"
                       error={!!errors.height}
                       helperText={errors.height?.message}

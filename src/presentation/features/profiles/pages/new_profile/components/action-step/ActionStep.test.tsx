@@ -124,7 +124,7 @@ describe('ActionStep',()=>{
             />
         );
 
-        const saveButton = screen.getByRole('button', { name: 'Guardar Perfil' });
+        const saveButton = screen.getByRole('button', { name: 'Guardar perfil' });
         expect(saveButton).toBeTruthy();
     });
 
@@ -138,7 +138,7 @@ describe('ActionStep',()=>{
             />
         );
 
-        const saveButton = screen.getByRole('button', { name: 'Guardar Perfil' });
+        const saveButton = screen.getByRole('button', { name: 'Guardar perfil' });
         expect(saveButton).toBeTruthy();
     });
 

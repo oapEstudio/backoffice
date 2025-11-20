@@ -8,11 +8,12 @@ import { Headers } from '../constants/configTable';
 import { useTableStandard } from '../../../../../components/widgets/table-page-standard/hooks/useTablePageStandard';
 import { Button } from '../../../../../components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { EDIT_DYNAMIC_PAGE, NEW_DYNAMIC_PAGE } from '../../../../../router/routes';
+import { EDIT_DYNAMIC_PAGE, MODE_ROUTE_UPDATE, NEW_DYNAMIC_PAGE } from '../../../../../router/routes';
 import { useCallback, useEffect } from 'react';
 import { useDynamicPageCancellation } from '../../../hooks/useCancellationDynamicPage';
 import type { IFilterDynamicPageResult } from '../components/filter-dynamic-page/FilterDynamicPage';
 import { eToast, Toast } from '../../../../../components/ui/toast/CustomToastService';
+import type { IRow } from '../../../../../components/ui/table/table.interface';
 
 export function useDynamicPagesPage(){
 
@@ -40,15 +41,15 @@ export function useDynamicPagesPage(){
             toMapper: toDynamicPageRow,
             actionsButton:  <Button
                             variant="primary"
-                            title="Crear nueva pagina"
+                            title="Crear nueva página"
                             onClick={() => navigate(NEW_DYNAMIC_PAGE.name)}
-      />
+                            />
     });
 
 
     useEffect(()=>{
         if(openEdit && rowId){
-            navigate(EDIT_DYNAMIC_PAGE.name.replace(':id',rowId))
+            navigate(EDIT_DYNAMIC_PAGE.name.replace(':id',rowId).replace(':mode',MODE_ROUTE_UPDATE))
         }
     },[openEdit,rowId]);
 

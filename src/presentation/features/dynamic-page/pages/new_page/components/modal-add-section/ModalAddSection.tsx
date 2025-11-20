@@ -15,7 +15,9 @@ import { eToast, Toast } from '../../../../../../components/ui/toast/CustomToast
 import type { IModalAddElementFormValues } from '../modal-add-element/ModalAddElement';
 import CustomTextInput from '../../../../../../components/ui/inputs/text-input/text-input.component';
 import { minTrimmed } from '../../../../../../utils/minTrimmed';
+import { colors } from '../../../../../../common/colors';
 import { CustomColorPicker } from '../../../../../../components/ui/color-picker/CustomColorPicker';
+import TextAlign from '@tiptap/extension-text-align';
 
 
 interface IModalAddSectionFormValues{
@@ -90,18 +92,30 @@ export const ModalAddSection: React.FC<ModalAddSectionProps> = ({open, onClose, 
                     
                 <FormProvider {...form}>
                       
-                        <CustomBox  sx={{ display: 'flex', justifyContent: 'center',  p: '0 4rem', minHeight: 100,paddingTop: '2rem' }}>
+                        <CustomBox  sx={{ display: 'flex', justifyContent: 'center', TextAlign: 'center', p: '0 4rem', minHeight: 100,paddingTop: '2rem' }}>
 
                                  <Controller
                                     name="backgroundColor"
                                     control={control}                                   
                                     render={({ field }) => (
-                                      <CustomColorPicker 
-                                          label='Seleccione un color'
-                                          init={field.value}
-                                          handleChange={(newColor)=>{
-                                            field.onChange(newColor);
-                                          }} />
+                                     <CustomColorPicker
+                                        label="Seleccione color predefinido"
+                                        value={field.value}
+                                        onChange={(v) => { field.onChange(v)}} 
+                                        palette={[ 
+                                          colors.white, 
+                                          colors.grey200,
+                                          colors.palette.primary.disabled,
+                                          colors.palette.primary.main, 
+                                          colors.palette.primary.dark, 
+                                          colors.palette.secondary.main, 
+                                          colors.darkBlue,
+                                          colors.green200,
+                                          colors.yellow100,
+                                          colors.alert.error,
+                                        ]} 
+                                        allowCustom={true} 
+                                      />
                                     )}
                                 />                                            
                         </CustomBox>

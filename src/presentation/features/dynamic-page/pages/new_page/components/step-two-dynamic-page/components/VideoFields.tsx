@@ -155,7 +155,7 @@ export const VideoFields = () => {
         render={({ field }) => (
           <CustomTextInput
             {...field}
-            label="HEIGHT"
+            label="Ancho en pixeles (HEIGHT)"
             type="number"
             error={!!errors.height}
             helperText={errors.height?.message}

@@ -4,7 +4,7 @@ import { ID_SECTION_ITEM_MENU } from "../../../shared/constants/constants";
 import type { ISectionPage } from "../components/section-page/SectionPage";
 import { useCreateDynamicPages } from "../../../hooks/useCreateDynamicPages";
 import { useHref, useNavigate, useParams } from "react-router-dom";
-import { DYNAMIC_PAGE, PREVIEW_DYNAMIC_PAGE } from "../../../../../router/routes";
+import { DYNAMIC_PAGE, MODE_ROUTE_UPDATE, PREVIEW_DYNAMIC_PAGE } from "../../../../../router/routes";
 import { resetDynamicPageStorage } from "../../../shared/storage/dp-reset";
 import { saveDynamicPageToStorage } from "../../../shared/storage/dp-save";
 import type { IModalSaveFormValues } from "../components/modal-save/ModalSave";
@@ -15,7 +15,7 @@ import { useGetDynamicPageById } from "../../../hooks/useGetDynamicPageById";
 import { dataUrlToFile } from "../../../../../utils/dataUrlToFile";
 import { useUpdateDynamicPage } from "../../../hooks/useUpdateDynamicPage";
 import type { IUpdateDynamicPageDto } from "../../../../../../application/dtos/IUpdateDynamicPageDto";
-import { eTypeElement } from "../components/element-dynamic-page/ElementDynamicPage";
+import { eTypeElement, type IElementDynamicPage } from "../components/element-dynamic-page/ElementDynamicPage";
 
 export function useNewDynamicPage(init?: IDynamicPage){
 
@@ -44,7 +44,7 @@ export function useNewDynamicPage(init?: IDynamicPage){
   const navigate = useNavigate();
 
 
- const { id } = useParams<{ id: string }>();
+ const { id, mode } = useParams<{ id: string, mode: string }>();
  const pageId = useMemo(() => (id ? id : undefined), [id]);
 
 
@@ -52,37 +52,74 @@ export function useNewDynamicPage(init?: IDynamicPage){
 
   useEffect(() => {
     
+    (async ()=>{
+         await resetDynamicPageStorage();
+    })();
+
     if (!pageId) return; 
 
     (async () => {
       try {
         const pageById = await fetchById(pageId);
 
-        setPagesProps(pageById.sections.map(s=>{
+       setPagesProps(() => {
 
-          const section: ISectionPage = {
-            elements: s.elements.map(e=>{
+          const MENU_ID = ID_SECTION_ITEM_MENU.toString();
+
+
+          const menuElements: IElementDynamicPage[] = [];
+          const normalSections: ISectionPage[] = [];
+
+          for (const s of pageById.sections) {
+           
+            const mapped = (s.elements ?? []).map((e: any): IElementDynamicPage => {
+              const type = e.type?.toString() as eTypeElement;              
+              const file = e.fileUrl ? dataUrlToFile(e.fileUrl) : null;
+
               return {
                 ...e,
-                id: e.id,
-                file: dataUrlToFile(e.fileUrl)
-              }
-            }),
-            backgroundColor: s.backgroundColor,
-            id: s.id,
-            order: s.order
-          };
-          
-          return section;
+                id: String(e.id),
+                type,
+                file, 
+              };
+            });
 
-        }));
+          
+            const sectionMenuElems = mapped.filter(el => el.type === eTypeElement.ITEM_MENU);
+            const sectionOtherElems = mapped.filter(el => el.type !== eTypeElement.ITEM_MENU);
+
+            
+            if (sectionMenuElems.length) menuElements.push(...sectionMenuElems);
+
+            
+            if (sectionOtherElems.length) {
+              normalSections.push({
+                id: String(s.id),
+                order: s.order,
+                backgroundColor: s.backgroundColor ?? '',
+                elements: sectionOtherElems,
+              });
+            }
+          }
+
+          
+          const menuSection: ISectionPage = {
+            id: MENU_ID,
+            order: 0,
+            backgroundColor: '',
+            elements: menuElements,
+          };
+
+          return [menuSection, ...normalSections];
+        });
+
 
         setInitFormSave({
           name: pageById.title,
           profiles: pageById.profiles,
           state: String(pageById.statusId)
         })
-        setIsEdit(true);
+        setIsEdit(mode==MODE_ROUTE_UPDATE);
         setHasMenu(pageById.hasMenu);
 
       } 
@@ -155,7 +192,8 @@ export function useNewDynamicPage(init?: IDynamicPage){
                     type: element.type, 
                     file: element.file, 
                     height: element.height,
-                    link: element.link 
+                    link: element.link,
+                    order: sec.elements.length + 1
                   }, 
                 ],
               }
@@ -229,7 +267,7 @@ export function useNewDynamicPage(init?: IDynamicPage){
                     
        
              Toast({
-               message: 'Pagina creada correctamente',
+               message: 'Página creada correctamente',
                type: eToast.Success
              });
     
@@ -238,7 +276,7 @@ export function useNewDynamicPage(init?: IDynamicPage){
            } catch(e) {
               
              Toast({
-               message: 'Error al crear la pagina',
+               message: 'Error al crear la página',
                type: eToast.Error
              });
            }
@@ -308,6 +346,8 @@ export function useNewDynamicPage(init?: IDynamicPage){
     openAddSection,
     handleAddSection,
     openSave,
+    creating,
+    updating,
     setOpenSave,
     searchingById,
     initFormSave,
