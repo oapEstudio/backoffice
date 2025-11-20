@@ -52,7 +52,7 @@ export const HighlightMenuItemModal: FC<HighlightModalProps> = ({id, open, onClo
  
   return (
     <CustomModal
-      title={'Item destacado'}
+      title={'Ítem destacado'}
       open={open}
       onClose={onClose}
       labelOk='Aceptar'

@@ -163,8 +163,8 @@ export const FileDropzone: React.FC<FileDropzoneProps> = ({
           <UploadFileIconn />
           <Typography variant="body2" sx={{ textAlign: 'center' }}>
             {multiple
-              ? 'Arrastrá y soltá archivos aquí, o hacé click para seleccionar (múltiples)'
-              : 'Arrastrá y soltá un archivo aquí, o hacé click para seleccionar'}
+              ? 'Arrastrá y soltá archivos acá, o hacé click para seleccionar (múltiples)'
+              : 'Arrastrá y soltá un archivo acá, o hacé click para seleccionar'}
           </Typography>
 
           <>

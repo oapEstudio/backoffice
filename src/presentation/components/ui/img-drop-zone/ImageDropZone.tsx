@@ -159,8 +159,8 @@ export const ImageDropzone: React.FC<ImageDropzoneProps> = ({
           <UploadFileIconn />
           <Typography variant="body2" sx={{ textAlign: 'center' }}>
             {multiple
-              ? 'Arrastrá y soltá imágenes aquí, o hacé click para seleccionar (múltiples)'
-              : 'Arrastrá y soltá una imagen aquí, o hacé click para seleccionar'}
+              ? 'Arrastrá y soltá imágenes acá, o hacé click para seleccionar (múltiples)'
+              : 'Arrastrá y soltá una imagen acá, o hacé click para seleccionar'}
           </Typography>
 
           <>
