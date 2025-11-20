@@ -40,6 +40,7 @@ export async function loadDynamicPageFromStorage(): Promise<IPreviewPage> {
 
         elements.push({
           id: (el as any).id ?? Math.random(),
+          order: el.order,
           label: el.label,
           type: el.type as any,
           height: el.height as any,

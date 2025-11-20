@@ -45,6 +45,20 @@ export interface IElementDynamicPageProps {
 }
 export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({ size, element, sectionId, handleDeleteElement, isEdit }) => {
 
+    const [url, setUrl] = useState<string>();
+
+    useEffect(()=>{
+        try {
+            if(element.type === eTypeElement.FILE || 
+               element.type === eTypeElement.IMG ||
+               element.type === eTypeElement.BACKGROUND_IMAGE){
+
+                setUrl(URL.createObjectURL(element.file as File)) 
+            }
+        } catch (error) {
+                setUrl('');
+        }
+    },[element]);
 
     return <CustomGrid size={size} >
         <>{handleDeleteElement && <CustomFab style={{ width: '30px', height: '30px' }} sx={{ position: 'absolute' }} onClick={() => { handleDeleteElement(element.id) }}>
@@ -54,7 +68,7 @@ export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({ size, e
         </>
         <CustomBox sx={{ height: '100%', border: isEdit ? '0.2rem dashed #9E9E9E' : 'none', minHeight: 100, alignContent: 'center' }}>
             {element.type === eTypeElement.BACKGROUND_IMAGE ?
-                <img width={'100%'} height={element.height} src={URL.createObjectURL(element.file as File)} /> :
+                <img width={'100%'} height={element.height} src={url} /> :
                 <></>}
             {element.type === eTypeElement.TITLE ?
                 <TitlePages title={element.label} style={{ fontSize: element.fontSize, padding: '0px 2rem', textAlign: element.align }} /> :
@@ -66,12 +80,12 @@ export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({ size, e
                 <></>}
             {element.type === eTypeElement.FILE ?
                 <CustomBox sx={{ alignContent: 'center', padding: '2rem', lineHeight: 'normal' }}>
-                    <DownloadAction label={element.label} url={URL.createObjectURL(element.file as File)} />
+                    <DownloadAction label={element.label} url={url as string} />
                 </CustomBox> :
                 <></>}
             {element.type === eTypeElement.IMG ?
                 <img
-                    src={URL.createObjectURL(element.file as File)}
+                    src={url}
                     width={'100%'}
                     height={element.height > 0 ? element.height : 50} /> :
                 <></>}
