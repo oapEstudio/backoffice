@@ -40,7 +40,7 @@ export interface IModalSaveFormValues{
 export const ModalSave: React.FC<IModalSaveProps> = ({open, onClose, onCancel, onOk, init, isEdit = false, saving = false}) => {
 
   const { resultState, loading } = useDynamicPageFilterOptions({
-     stateFilters:{ forCreate: true } 
+     stateFilters: isEdit? { forUpdate: true } : { forCreate: true }
   });
 
  
