@@ -52,6 +52,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import AppsIcon from '@mui/icons-material/Apps';
 import SaveIcon from '@mui/icons-material/Save';
 import DisplaySettingsIcon from '@mui/icons-material/DisplaySettings';
+import FormatColorTextIcon from '@mui/icons-material/FormatColorText';
+import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
 
 export interface IIconAction{
   handleClick?: any;
@@ -147,6 +149,13 @@ export const DisplaySettingIcon:React.FC<IIconAction> = ({handleClick, parameter
       if(handleClick) parameterHandleClick? handleClick(parameterHandleClick) : handleClick();
   }} />
 };
+
+export const ColorFillIcon:React.FC<IIconAction> = ({handleClick, parameterHandleClick}) => {
+  //return <EditIcon sx={{ color: baselightTheme.palette.info.dark }} />;
+  return <FormatColorFillIcon onClick={()=>{
+      if(handleClick) parameterHandleClick? handleClick(parameterHandleClick) : handleClick();
+  }} />
+};
 export const GroupActionIcon: React.FC<IIconAction> = ({handleClick, parameterHandleClick, style}) => {
   //return <EditIcon sx={{ color: baselightTheme.palette.info.dark }} />;
   return <GroupAddOutlinedIcon style={style} onClick={()=>{
@@ -188,6 +197,10 @@ export const EyeIcon: React.FC<IIconAction> = ({style}) => {
 
 export const SettingIcon: React.FC<IIconAction> = ({style}) => {
   return <SettingsIcon style={style} />
+}
+
+export const ColorTextIcon: React.FC<IIconAction> = ({style}) => {
+  return <FormatColorTextIcon style={style} />
 }
 
 export const AppIcon: React.FC<IIconAction> = ({style}) => {
