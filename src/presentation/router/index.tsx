@@ -22,6 +22,10 @@ import { NewDynamicPagesPage } from "../features/dynamic-page/pages/new_page/New
 import { BlankBackOffice } from "../layout/backoffice/BlankBackOffice";
 import { PreviewPage } from "../features/dynamic-page/pages/preview_page/PreviewPage";
 import { DynamicPagesPage } from "../features/dynamic-page/pages/dynamic_pages/DynamicPagesPage";
+import { Page404BackOffice } from "../layout/backoffice/Page404BackOffice";
+import { PageError } from "../components/widgets/page-error/PageError";
+
+const loginUrl = new URL('/.auth/login', window.location.origin);
 
 const router = createBrowserRouter([
   {
@@ -45,8 +49,8 @@ const router = createBrowserRouter([
           { path: NEW_DOCUMENT.name, element: <NewDocumentPage />},
           { path: NEW_DOCUMENT_INVISIBLE.name, element: <NewInvisibleDocumentPage />},
           { path: FUNTIONALITIES.name, element: <MenuesPage /> },
-           { path: EDIT_DYNAMIC_PAGE.name, element: <NewDynamicPagesPage /> },
-                    
+          { path: EDIT_DYNAMIC_PAGE.name, element: <NewDynamicPagesPage /> },
+          {path: '*',  element: <Page404BackOffice /> }        
         ],
       },
     ],
@@ -62,7 +66,7 @@ const router = createBrowserRouter([
       }      
     ]
   },
-  { path: '*', element: <div>404</div> },
+  { path: '*', element: <PageError cod='401' error='Acceso denegado' details='La solicitud requiere autenticación válida para continuar.' redirectPath={loginUrl.toString()} /> }
 ]);
 
 export default function AppRouter() {
