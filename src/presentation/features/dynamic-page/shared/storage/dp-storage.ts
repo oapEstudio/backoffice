@@ -9,6 +9,7 @@ export type DPManifest = {
     backgroundColor: string;
     elements: Array<{
       id: string;
+      order: number;
       label: string;
       text: string;
       fontSize: string;

@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from "react";
-
+import { useEffect, useMemo, useRef, useState } from "react";
 import StarterKit from "@tiptap/starter-kit";
 import { Color, TextStyle } from '@tiptap/extension-text-style';
 import TextAlign from '@tiptap/extension-text-align';
 import { Highlight } from "@tiptap/extension-highlight";
 import { Link } from "@tiptap/extension-link";
+import { theme } from "../../../common/styles";
+import type { Extensions } from "@tiptap/core";
+
 import {
   FontSize,
   LinkBubbleMenu,
@@ -13,6 +15,7 @@ import {
   MenuButtonBulletedList,
   MenuButtonEditLink,
   MenuButtonHighlightColor,
+  MenuButtonImageUpload,
   MenuButtonItalic,
   MenuButtonOrderedList,
   MenuButtonTextColor,
@@ -22,15 +25,11 @@ import {
   MenuSelectFontSize,
   MenuSelectHeading,
   MenuSelectTextAlign,
+  ResizableImage,
   RichTextEditor,
   RichTextReadOnly,
   type RichTextEditorRef,
 } from "mui-tiptap";
-
-
-import Button from "../button/button.component";
-import { theme } from "../../../common/styles";
-import type { Extensions } from "@tiptap/core";
 
 
 interface ICustomRichTextEditorProps{
@@ -39,28 +38,46 @@ interface ICustomRichTextEditorProps{
 
 const CustomLinkExtension = Link.extend({
   inclusive: false,
+
 });
-const extensions: Extensions = [
-                      StarterKit, 
-                      TextStyle, 
-                      Color,                    
-                      FontSize,                     
-                      Highlight.configure({ multicolor: true }),
-                      TextAlign.configure({types: ['heading', 'paragraph'],}),
-                      CustomLinkExtension.configure({
-                      // autolink is generally useful for changing text into links if they
-                      // appear to be URLs (like someone types in literally "example.com"),
-                      // though it comes with the caveat that if you then *remove* the link
-                      // from the text, and then add a space or newline directly after the
-                      // text, autolink will turn the text back into a link again. Not ideal,
-                      // but probably still overall worth having autolink enabled, and that's
-                      // how a lot of other tools behave as well.
-                      autolink: true,
-                      linkOnPaste: true,
-                      openOnClick: false,
-                    }),
-                    LinkBubbleMenuHandler,
-                    ];
+
+const common = [
+  StarterKit, TextStyle, Color, FontSize,
+  Highlight.configure({ multicolor: true }),
+  TextAlign.configure({ types: ['heading', 'paragraph', 'image', 'resizableImage'] }),
+  LinkBubbleMenuHandler,
+];
+
+const extensionsEdit: Extensions = [
+  ...common,
+  ResizableImage,   
+];
+
+const extensionsView: Extensions = [
+  ...common,          
+  ResizableImage,   
+];
+
+const MAX_IMAGE_BYTES = 500 * 1024;
+
+async function fileToDataUrlImage(file: File): Promise<string | null> {
+  if (!file || !file.type?.startsWith('image/')) return null;
+  if (file.size > MAX_IMAGE_BYTES) return null; // 500 KB
+
+  return await new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      
+      const result = typeof reader.result === 'string' ? reader.result : null;
+      resolve(result && result.startsWith('data:image/') ? result : null);
+    };
+    reader.onerror = () => resolve(null);
+    reader.readAsDataURL(file);
+  });
+}
+
+
+
 export const CustomRichTextEditor: React.FC<ICustomRichTextEditorProps> = ({change}) => {
 
  const rteRef = useRef<RichTextEditorRef>(null);
@@ -90,7 +107,7 @@ export const CustomRichTextEditor: React.FC<ICustomRichTextEditorProps> = ({chan
      <div>
       <RichTextEditor
         ref={rteRef}
-        extensions={extensions} 
+        extensions={extensionsEdit} 
         content={html}            
         renderControls={() => (
           <MenuControlsContainer>
@@ -129,8 +146,19 @@ export const CustomRichTextEditor: React.FC<ICustomRichTextEditorProps> = ({chan
               ]}
             />
             <MenuButtonBulletedList />
-            
+           <MenuButtonImageUpload
+              onUploadFiles={(files) => {
+
+                   const results = files.map((file) => ({
+                                  src: 'https://ypf.com/images/home/ruta.webp',
+                                  alt: file.name,
+                                }));
+
+                  return results;
+                }}
+            />  
           </MenuControlsContainer>
+          
         )}>
 
            {() => (
@@ -152,8 +180,12 @@ export const CustomRichTextEditor: React.FC<ICustomRichTextEditorProps> = ({chan
 
 export const CustomRichTextView: React.FC<{content: string}> = ({content})=>{
 
-  return <RichTextReadOnly 
-            content={content} 
-            extensions={extensions} 
-        />
+  
+ 
+  return (
+    <RichTextReadOnly
+      content={content}
+      extensions={extensionsView}
+    />
+  );
 }

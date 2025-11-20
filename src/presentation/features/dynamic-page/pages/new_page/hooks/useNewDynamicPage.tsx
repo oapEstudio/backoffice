@@ -52,6 +52,10 @@ export function useNewDynamicPage(init?: IDynamicPage){
 
   useEffect(() => {
     
+    (async ()=>{
+         await resetDynamicPageStorage();
+    })();
+
     if (!pageId) return; 
 
     (async () => {
@@ -69,7 +73,7 @@ export function useNewDynamicPage(init?: IDynamicPage){
           for (const s of pageById.sections) {
            
             const mapped = (s.elements ?? []).map((e: any): IElementDynamicPage => {
-              const type = e.type?.toString() as eTypeElement;
+              const type = e.type?.toString() as eTypeElement;              
               const file = e.fileUrl ? dataUrlToFile(e.fileUrl) : null;
 
               return {
