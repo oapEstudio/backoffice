@@ -12,10 +12,10 @@ import type { ICreateDynamicPageDto, ISectionDto } from "../../../../../../appli
 import { eToast, Toast } from "../../../../../components/ui/toast/CustomToastService";
 import type { IModalAddElementFormValues } from "../components/modal-add-element/ModalAddElement";
 import { useGetDynamicPageById } from "../../../hooks/useGetDynamicPageById";
-import { dataUrlToFile } from "../../../../../utils/dataUrlToFile";
 import { useUpdateDynamicPage } from "../../../hooks/useUpdateDynamicPage";
 import type { IUpdateDynamicPageDto } from "../../../../../../application/dtos/IUpdateDynamicPageDto";
 import { eTypeElement, type IElementDynamicPage } from "../components/element-dynamic-page/ElementDynamicPage";
+import { urlOrDataUrlToFile } from "../../../../../utils/urlToFile";
 
 export function useNewDynamicPage(init?: IDynamicPage){
 
@@ -74,7 +74,7 @@ export function useNewDynamicPage(init?: IDynamicPage){
            
             const mapped = (s.elements ?? []).map((e: any): IElementDynamicPage => {
               const type = e.type?.toString() as eTypeElement;              
-              const file = e.fileUrl ? dataUrlToFile(e.fileUrl) : null;
+              const file = e.fileUrl ? urlOrDataUrlToFile(e.fileUrl) : null;
 
               return {
                 ...e,
