@@ -32,6 +32,10 @@ export const env = {
          version: 'v1'
       },
       edit: {
+        status: {
+          endpoint: 'profiles/{id}/status',   
+          version: 'v1'
+        },
         groups: {
          endpoint: 'profiles/{id}/groups',   
          version: 'v1'

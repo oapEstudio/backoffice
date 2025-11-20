@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Headers } from './constants/configTable';
 
@@ -11,6 +11,7 @@ import { EditGroups } from './components/edit-group/EditGroups';
 import { eToast, Toast } from '../../../../components/ui/toast/CustomToastService';
 import { useProfilesPage } from './hooks/useProfilesPage';
 import { FATHER_PROFILE, ROUTES } from '../../../../router/routes';
+import { ConfirmDialog } from '../../../../components/ui/confirm-dialog/ConfirmDialog';
 
 export const ProfilesPage: React.FC = () => {
   const {
@@ -22,26 +23,29 @@ export const ProfilesPage: React.FC = () => {
     openFilter,
     setOpenFilter,
     filterButtons,
+    openDelete,
     actions,
     toEdit,
     editOpen,
     setEditOpen,
     currentFilters,
     refresh,
+    doConfirmDelete,
+    setOpenDelete,
     editGroupsOpen,
     editingProfile,
-    setEditGroupsOpen, 
+    setEditGroupsOpen,
     currentGroups,
     setFilters,
-    error,   
+    error,
   } = useProfilesPage()
 
 
 
- useEffect(() => {
+  useEffect(() => {
     if (error) {
       Toast({
-        message:  error.message,
+        message: error.message,
         type: eToast.Error
       });
     }
@@ -49,33 +53,36 @@ export const ProfilesPage: React.FC = () => {
 
 
 
- return (
+  return (
     <>
-      <FilterProfilePage 
+      <FilterProfilePage
         open={openFilter}
-        initialFilters={currentFilters} 
+        initialFilters={currentFilters}
         onOk={(f) => {
           setFilters(f);
           setOpenFilter(false);
         }}
-        onCancel={() => setOpenFilter(false)}/>
-        
+        onCancel={() => setOpenFilter(false)} />
+      <ConfirmDialog
+        open={openDelete}
+        onOk={doConfirmDelete}
+        onCancel={() => setOpenDelete(false)} />
       {toEdit && (
-          <EditProfile
-            open={editOpen}
-            initialData={toEdit}
-            onClose={() => setEditOpen(false)}
-            onSaved={() => {
-               Toast({
-                message: 'Perfil actualizado con éxito',
-                type: eToast.Success
-              });
-              refresh();        
-              setEditOpen(false);
-            }}
-          />
-        )}
-      
+        <EditProfile
+          open={editOpen}
+          initialData={toEdit}
+          onClose={() => setEditOpen(false)}
+          onSaved={() => {
+            Toast({
+              message: 'Perfil actualizado con éxito',
+              type: eToast.Success
+            });
+            refresh();
+            setEditOpen(false);
+          }}
+        />
+      )}
+
       <EditGroups
         open={editGroupsOpen}
         onClose={() => setEditGroupsOpen(false)}
@@ -87,7 +94,7 @@ export const ProfilesPage: React.FC = () => {
             type: eToast.Success
           });
 
-          refresh() 
+          refresh()
         }}
       />
       <TablePageStandard
@@ -99,7 +106,7 @@ export const ProfilesPage: React.FC = () => {
         columns={Headers}
         data={rows}
         setParams={setParams}
-        params={params}               
+        params={params}
         totalCount={count}
         actions={actions}
         contextType="profiles"

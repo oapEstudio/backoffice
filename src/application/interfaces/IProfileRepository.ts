@@ -10,6 +10,7 @@ export interface IProfileRepository {
   getProfiles(params: IPageParameters): Promise<IPaginatedResponse<IProfile>>;
   updateProfile(id: string, payload: IProfileUpdateDto): Promise<IProfile>;
   updateProfileGroups(id: string, payload: IProfileUpdateGroups): Promise<IProfile>;
+  updateProfileStatus(id: string, statusId: string): Promise<IProfile>;
   createProfile(dto: IProfileCreateDto): Promise<string>
   getStatuses(params: IPageParameters): Promise<IPaginatedResponse<IStatuses>>;
   

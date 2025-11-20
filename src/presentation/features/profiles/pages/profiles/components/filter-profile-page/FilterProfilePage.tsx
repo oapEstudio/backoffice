@@ -73,7 +73,7 @@ export const FilterProfilePage: React.FC<FilterProfilePageProps> = ({
 
   return (
     <CustomModal
-      title="Filtrar Perfiles"
+      title="Filtrar perfiles"
       labelOk="Aplicar"
       open={open}
       onClose={onCancel}
