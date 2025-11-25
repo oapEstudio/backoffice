@@ -309,7 +309,7 @@ export function useNewDynamicPage(init?: IDynamicPage){
                   return section
                 })
               };
-
+              debugger;
              await updatePage(pageId as string, mapCreate);
                     
        

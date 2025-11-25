@@ -121,8 +121,10 @@ export const SuccessIcon = () => {
   );
 };
 
-export const DangerIcon = () => {
-  return <CancelIcon sx={{ color: baselightTheme.palette.error.dark }} />;
+export const DangerIcon: React.FC<IIconAction> = ({handleClick, parameterHandleClick, style})  => {
+  return <CancelIcon style={style} onClick={()=>{
+      if(handleClick) parameterHandleClick? handleClick(parameterHandleClick) : handleClick();
+  }} sx={{ color: baselightTheme.palette.error.dark }} />;
 };
 
 export const WarningIcon = ({ color }: any) => {

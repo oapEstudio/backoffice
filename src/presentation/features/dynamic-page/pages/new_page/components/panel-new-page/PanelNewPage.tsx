@@ -1,11 +1,11 @@
 import React from 'react'
 import { CustomStack } from '../../../../../../components/ui/stack/Stack'
 import { CustomBox } from '../../../../../../components/ui/box/CustomBox'
-import { CustomFab } from '../../../../../../components/ui/fab/CustomFab'
-import { AddActionIcon, EyeIcon, GroupActionIcon, SaveeIcon } from '../../../../../../components/ui/icons'
+import { AddActionIcon, DangerIcon, EyeIcon, GroupActionIcon, SaveeIcon } from '../../../../../../components/ui/icons'
 import { CustomToggle } from '../../../../../../components/ui/toggle/CustomToggle'
-import { colors } from '../../../../../../common/colors'
 import { Button } from '../../../../../../components/ui/button'
+import { useNavigate } from 'react-router-dom'
+import { DYNAMIC_PAGE } from '../../../../../../router/routes'
 
 
 export interface IPanelNewPageProps{
@@ -17,17 +17,26 @@ export interface IPanelNewPageProps{
 
 }
 export const PanelNewPage: React.FC<IPanelNewPageProps> = ({setOpenAddSection, handlePreview, hasMenu,setHasMenu,handleSave}) => {
+
+  const navigate = useNavigate();
+
   return (
-     <CustomStack spacing={5} direction='column'  sx={{backgroundColor: '#f5f5f5',padding: '1rem', marginTop: 10, position: 'fixed'}}>
+     <CustomStack spacing={5} direction='column'  sx={{backgroundColor: '#f5f5f5',padding: '1rem', marginTop: 3, position: 'fixed'}}>
         <CustomToggle sx={{justifyContent: 'left'}}  label='Página con menú?' options={[{label: 'SI',value: true},{label: 'NO',value: false}]} state={hasMenu} setState={setHasMenu} />
             <CustomBox>              
-                <Button variant='primary' title='Añadir sección' style={{width: '100%'}} icon={ <AddActionIcon style={{marginRight: '0.5rem', color: 'white'}} />} onClick={()=>setOpenAddSection(true)}/>
+                <Button variant='primary' title='Añadir sección' style={{display:'flex',justifyContent: 'left',width: '100%'}} icon={ <AddActionIcon style={{marginRight: '0.5rem', color: 'white'}} />} onClick={()=>setOpenAddSection(true)}/>
             </CustomBox>                                                    
             <CustomBox >               
-                 <Button variant='primary' title='Previsualización' style={{width: '100%'}}icon={<EyeIcon  style={{marginRight: '0.5rem', color: 'white'}} />} onClick={handlePreview}/>
+                 <Button variant='primary' title='Previsualización' style={{display:'flex',justifyContent: 'left',width: '100%'}}icon={<EyeIcon  style={{marginRight: '0.5rem', color: 'white'}} />} onClick={handlePreview}/>
             </CustomBox>
              <CustomBox >             
-                <Button variant='primary' title='Guardar'  style={{width: '100%'}} icon={<SaveeIcon  style={{marginRight: '0.5rem', color: 'white'}} />} onClick={handleSave}/>
+                <Button variant='primary' title='Guardar'  style={{display:'flex',justifyContent: 'left',width: '100%'}} icon={<SaveeIcon  style={{marginRight: '0.5rem', color: 'white'}} />} onClick={handleSave}/>
+            </CustomBox>
+
+             <CustomBox >             
+                <Button variant='primary' title='Cancelar'  style={{display:'flex',justifyContent: 'left', width: '100%'}} icon={<DangerIcon  style={{marginRight: '0.5rem', color: 'white'}} />} onClick={()=>{
+                   navigate(DYNAMIC_PAGE.name);
+                }}/>
             </CustomBox>
             
     </CustomStack> 
