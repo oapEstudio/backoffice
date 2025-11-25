@@ -248,7 +248,7 @@ export function useNewDynamicPage(init?: IDynamicPage){
              const mapCreate: ICreateDynamicPageDto = {
                 hasMenu: hasMenu,
                 profiles: form.profiles.map(p=>p.id),
-                statusId: 1,
+                statusId: Number(form.state),
                 title: form.name,
                 description: '',
                 sections: pagesProps.map(s=>{
@@ -291,7 +291,7 @@ export function useNewDynamicPage(init?: IDynamicPage){
              const mapCreate: IUpdateDynamicPageDto = {
                 hasMenu: hasMenu,
                 profiles: form.profiles.map(p=>p.id),
-                statusId: 1,
+                statusId: Number(form.state),
                 title: form.name,
                 description: '',
                 sections: pagesProps.map(s=>{
