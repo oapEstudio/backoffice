@@ -39,8 +39,13 @@ export interface IModalSaveFormValues{
 
 export const ModalSave: React.FC<IModalSaveProps> = ({open, onClose, onCancel, onOk, init, isEdit = false, saving = false}) => {
 
+  const stateFilters = useMemo(
+    () => (isEdit ? { forUpdate: true } : { forCreate: true }),
+    [isEdit]
+  );
+
   const { resultState, loading } = useDynamicPageFilterOptions({
-     stateFilters: isEdit? { forUpdate: true } : { forCreate: true }
+     stateFilters: stateFilters
   });
 
  
@@ -97,7 +102,7 @@ export const ModalSave: React.FC<IModalSaveProps> = ({open, onClose, onCancel, o
        }
      
   return <CustomModal 
-                key={open ? "open-modal-save" : "closed-modal-save"}
+                key={`modal-save-${isEdit ? 'edit' : 'create'}`}
                 open={open} 
                 onClose={onClose} 
                 title={isEdit?'Actualizar pagina': 'Guardar pagina'}

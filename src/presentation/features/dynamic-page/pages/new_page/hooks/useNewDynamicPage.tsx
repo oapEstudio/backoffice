@@ -36,7 +36,6 @@ export function useNewDynamicPage(init?: IDynamicPage){
   const [sectionID, setSectionID] = useState<string>();    
   const [hasMenu, setHasMenu] = useState<boolean>(true);
   const [initFormSave, setInitFormSave] = useState<IModalSaveFormValues>()
-  const [isEdit, setIsEdit] = useState(false);
   
 
   const hrefDynamicPage = useHref(PREVIEW_DYNAMIC_PAGE.name); 
@@ -47,7 +46,10 @@ export function useNewDynamicPage(init?: IDynamicPage){
  const { id, mode } = useParams<{ id: string, mode: string }>();
  const pageId = useMemo(() => (id ? id : undefined), [id]);
 
-
+ const isEdit = useMemo(
+  () => (mode ?? '').toLowerCase() === MODE_ROUTE_UPDATE.toLowerCase(),
+  [mode]
+ );
 
 
   useEffect(() => {
@@ -119,7 +121,8 @@ export function useNewDynamicPage(init?: IDynamicPage){
           profiles: pageById.profiles,
           state: String(pageById.statusId)
         })
-        setIsEdit(mode==MODE_ROUTE_UPDATE);
+       
+       
         setHasMenu(pageById.hasMenu);
 
       } 
@@ -129,6 +132,7 @@ export function useNewDynamicPage(init?: IDynamicPage){
        
       }
     })();
+    
 
   }, [pageId]);
 
