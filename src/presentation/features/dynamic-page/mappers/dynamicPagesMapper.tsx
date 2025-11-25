@@ -75,7 +75,7 @@ export function toDynamicPageRow(d: IDynamicPage, callbackEdit: any, callbackCan
       </IconButton>
     );
 
-    const urlComp = d.urlRelative ? <CopyUrlButton url={d.urlRelative} /> : <p style={{ textAlign: 'center', paddingRight: '20%'}}> - </p>;
+    const urlComp = d.url ? <CopyUrlButton url={d.url} /> : <p style={{ textAlign: 'center', paddingRight: '20%'}}> - </p>;
    
     return {
         id: String(d.id),

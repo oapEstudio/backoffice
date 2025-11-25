@@ -6,7 +6,7 @@ export interface IDynamicPage{
     statusColor:       string;
     description:       string;
     hasMenu:           boolean;
-    urlRelative:       string;
+    url:       string;
     statusId:          number;
     statusDescription: string;
     dateUpdated:       Date;
