@@ -91,6 +91,8 @@ export abstract class RepositoryAbstract{
     retryOnUnauthorized: boolean,
     refresh: () => Promise<IStorageSas>
   ): Promise<void> {
+
+    
     const doPut = async (u: string) => {
       return fetch(u, {
         method: "PUT",

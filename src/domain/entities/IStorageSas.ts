@@ -1,10 +1,11 @@
 export interface IStorageSas {
     sas: IBlobStorageSas;
-    pathTemplate: string;
+    pathTemplate: string;   
 }
 export interface IBlobStorageSas {
     containerPath: string;
     sasToken: string;
+    expiresOn: Date
 }
 export enum StorageTemplate {
     Notification = "Notification",

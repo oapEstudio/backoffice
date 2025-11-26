@@ -4,6 +4,7 @@ import type { IStorageSas, StorageTemplate } from "../../../domain/entities/ISto
 import { env } from "../../config/env";
 
 import { apiHandler } from "./apiHandler";
+import { mock } from "./mock/getStorageSasMock";
 import { RepositoryAbstract } from "./RepositoryAbstract";
  
 export class StorageRepository
@@ -24,11 +25,12 @@ export class StorageRepository
         const query = new URLSearchParams({ template });
         const refreshQuery = forceRefresh ? "&refresh=true" : "";
  
+        return mock;
         const response = await apiHandler.get<IStorageSas>(
             `${url}?${query.toString()}${refreshQuery}`,
         );
  
-        return response.data;
+        return response.data;        
     }
  
     async refreshStorageSas(template: StorageTemplate): Promise<IStorageSas> {
