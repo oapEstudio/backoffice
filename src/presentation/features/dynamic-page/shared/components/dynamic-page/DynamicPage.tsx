@@ -197,7 +197,7 @@ export const DynamicPage: React.FC<IDynamicPageProps> = ({
                         '& .MuiDrawer-paper': { 
                             boxSizing: 'border-box', 
                             width: 280,
-                            boxShadow: '5px 0 10px rgba(0, 0, 0, 0.3)'
+                            boxShadow: '5px 0 10px rgba(0, 0, 0, 0.3)',
                         },
                     }}
                 >
@@ -217,7 +217,8 @@ export const DynamicPage: React.FC<IDynamicPageProps> = ({
                         sx={{                                                          
                             display: 'flex',
                             position: 'relative',
-                            boxShadow: '5px 0 10px rgba(0, 0, 0, 0.3)'
+                            boxShadow: '5px 0 10px rgba(0, 0, 0, 0.3)',
+                            zIndex: 99
                         }}
                     >
                         <Paper sx={{width: '100%', minHeight: 500, height: '100%'}}>
