@@ -192,6 +192,12 @@ export const env = {
         }
       }
     },
+    storage: {
+        sas: {
+             endpoint: 'storage/sas',
+             version: 'v1'
+        }
+    }
   }
 };
 

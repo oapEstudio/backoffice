@@ -6,15 +6,68 @@ import { env } from "../../config/env";
 import type { IDynamicPageRepository } from "../../../application/interfaces/IDynamicPageRepository";
 import type { IDynamicPage } from "../../../domain/entities/IDynamicPage";
 import type { ICreateDynamicPageDto } from "../../../application/dtos/ICreateDynamicPageDto";
-import type { INotificationUpdateProfiles } from "../../../application/dtos/INotificationUpdateProfiles";
 import type { IDynamicPageUpdateProfiles } from "../../../application/dtos/IDynamicPageUpdateProfiles";
 import type { IUpdateDynamicPageDto } from "../../../application/dtos/IUpdateDynamicPageDto";
+import type { IStorageRepository } from "../../../application/interfaces/IStorageRepository";
+import { StorageRepository } from "./StorageRepository";
+import { StorageTemplate } from "../../../domain/entities/IStorageSas";
 
 
 export class DynamicPageRepository extends RepositoryAbstract implements IDynamicPageRepository {
 
   resource = env.resources.dynamic_pages;
 
+
+  constructor(private readonly storageRepo: IStorageRepository = new StorageRepository()) {
+    super();
+  }
+
+  private async mapFilesToStoragePaths<T extends ICreateDynamicPageDto | IUpdateDynamicPageDto>(
+    dto: T,
+    template: StorageTemplate,
+    folder: string
+  ): Promise<T> {
+
+    const ndto = this.normalizeDto(dto); 
+
+    const sections = await Promise.all(
+      (ndto.sections ?? []).map(async (s: any) => {
+        const elements = await Promise.all(
+          (s.elements ?? []).map(async (el: any) => {
+            const out = { ...el };
+
+            
+            if (out.file instanceof File) {
+              const path = await this.uploadFileToStorage(
+                out.file,
+                this.storageRepo,       
+                template,
+                folder,
+                out.file.name
+              );
+              (out as any).file = path; 
+            }
+
+            
+            delete (out as any)._eidx;
+            return out;
+          })
+        );
+
+        const outSection = { ...s, elements };
+
+        
+        delete (outSection as any)._idx;
+
+        return outSection;
+      })
+    );
+
+    const result: any = { ...ndto, sections };
+
+    
+    return result as T;
+  }
 
   async getDynamicPages(params: IPageParameters): Promise<IPaginatedResponse<IDynamicPage>> {
     
@@ -55,56 +108,50 @@ normalizeDto(dto: ICreateDynamicPageDto) {
 
  async createDynamicPage(dto: ICreateDynamicPageDto): Promise<string> {
 
-      const version = this.resource.create.version;
-      const url = `${this.resource.create.endpoint}`;
+    const { version, endpoint: url } = this.resource.create;
+    //const url = `${this.resource.create.endpoint}`;
 
-
-      const form = new FormData();
-      
-      const ndto = this.normalizeDto(dto);
+    const folder = `${this.slug(dto.title)}`;
     
-      form.append("title", ndto.title);
-
-      ndto.profiles.forEach((p, i) => form.append(`profiles[${i}]`, p));
+    const dtoWithPaths = await this.mapFilesToStoragePaths(dto, StorageTemplate.Pages, folder);
     
-      this.appendFormDataIfDefined(form, "description", ndto.description);
-      this.appendFormDataIfDefined(form, "hasMenu", ndto.hasMenu);
-      this.appendFormDataIfDefined(form, "statusId", ndto.statusId);
+    const form = new FormData();
 
-      let contador = 0;
-      ndto.sections?.forEach((section) => {
+    form.append("title", dtoWithPaths.title);
+    dtoWithPaths.profiles.forEach((p, i) => form.append(`profiles[${i}]`, p));
 
+    this.appendFormDataIfDefined(form, "description", dtoWithPaths.description);
+    this.appendFormDataIfDefined(form, "hasMenu", dtoWithPaths.hasMenu);
+    this.appendFormDataIfDefined(form, "statusId", dtoWithPaths.statusId);
 
-          if(section.backgroundColor  || section.elements.length > 0 ){
+    let contador = 0;
 
-             
+    dtoWithPaths.sections?.forEach((section) => {
+      if (section.backgroundColor || (section.elements?.length ?? 0) > 0) {
+    
+        this.appendFormDataIfDefined(form, `sections[${contador}].order`, section.order);
+        this.appendFormDataIfDefined(form, `sections[${contador}].backgroundColor`, section.backgroundColor);
 
-              this.appendFormDataIfDefined(form, `sections[${contador}].order`, section.order);
-              this.appendFormDataIfDefined(form, `sections[${contador}].backgroundColor`, section.backgroundColor);
+        section.elements?.forEach((el, ei) => {
+    
+          const base = `sections[${contador}].elements[${ei}]`;
+          this.appendFormDataIfDefined(form, `${base}.order`, el.order);
+          this.appendFormDataIfDefined(form, `${base}.label`, el.label);
+          this.appendFormDataIfDefined(form, `${base}.text`, el.text);
+          this.appendFormDataIfDefined(form, `${base}.fontSize`, el.fontSize);
+          this.appendFormDataIfDefined(form, `${base}.type`, el.type);    
+          this.appendFormDataIfDefined(form, `${base}.file`, el.file);
+          this.appendFormDataIfDefined(form, `${base}.height`, el.height);
+          this.appendFormDataIfDefined(form, `${base}.align`, el.align);
+          this.appendFormDataIfDefined(form, `${base}.link`, el.link);
+        });
 
-              section.elements?.forEach((el, ei) => {
-                const base = `sections[${contador}].elements[${ei}]`;          
-                this.appendFormDataIfDefined(form, `${base}.order`, el.order);
-                this.appendFormDataIfDefined(form, `${base}.label`, el.label);
-                this.appendFormDataIfDefined(form, `${base}.text`, el.text);
-                this.appendFormDataIfDefined(form, `${base}.fontSize`, el.fontSize);
-                this.appendFormDataIfDefined(form, `${base}.type`, el.type);
-                this.appendFormDataIfDefined(form, `${base}.file`, el.file);
-                this.appendFormDataIfDefined(form, `${base}.height`, el.height);
-                this.appendFormDataIfDefined(form, `${base}.align`, el.align);
-                this.appendFormDataIfDefined(form, `${base}.link`, el.link);
-              });
+        contador++;
+      }
+    });
 
-               contador++;
-          }
-      });
-
-      const res = await apiHandler.post<{ id: string }, FormData>(
-        this.resolveURL(url, version),
-        {},
-        form
-      );
-      return res.data.id;
+    const res = await apiHandler.post<{ id: string }, FormData>(this.resolveURL(url, version), {}, form);
+    return res.data.id;
   }
 
  async getDynamicPageById(id: string): Promise<IDynamicPage> {
