@@ -16,12 +16,12 @@ export const FileFields: React.FC = () => {
                   name="label"
                   control={control}
                   rules={{
-                    required: 'El label es obligatorio',                                                
+                    required: 'El título es obligatorio',                                                
                   }}
                   render={({ field }) => (
                     <CustomTextInput
                       {...field}
-                      label="Label"
+                      label="Título"
                       type="text"           
                       error={!!errors.label}
                       helperText={errors.label?.message}
