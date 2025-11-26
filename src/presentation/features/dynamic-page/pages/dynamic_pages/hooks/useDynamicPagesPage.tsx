@@ -80,7 +80,7 @@ export function useDynamicPagesPage(){
               refresh();
           
             } catch {
-              Toast({ message: 'Error al dar de baja la notificación', type: eToast.Error })
+              Toast({ message: 'Error al dar de baja la página', type: eToast.Error })
             }
           }, [cancellation, pendingDeleteId, refresh]);
     
