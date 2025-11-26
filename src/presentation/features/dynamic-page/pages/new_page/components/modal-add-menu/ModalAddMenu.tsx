@@ -90,14 +90,14 @@ export const ModalAddMenu: React.FC<ModalAddElementProps> = ({open, onClose, onC
                                     name="label"
                                     control={control}
                                     rules={{
-                                    required: 'El label es obligatorio',
+                                    required: 'El título es obligatorio',
                                     minLength: { value: 3, message: 'Mínimo 3 caracteres' },         
                                     validate: { minTrimmed: minTrimmed(3) },
                                     }}
                                     render={({ field }) => (
                                     <CustomTextInput
                                         {...field}
-                                        label="Label"
+                                        label="Título"
                                         type="text"           
                                         error={!!errors.label}
                                         helperText={errors.label?.message}
