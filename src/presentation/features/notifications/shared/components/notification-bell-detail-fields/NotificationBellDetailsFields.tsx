@@ -350,11 +350,11 @@ export const NotificationBellDetailsFields: React.FC<NotificatioBellDetailsField
        <Controller
         name="notificationCommonTypeId"
         control={control}
-        rules={{ required: 'El tipo de notificacion es obligatorio', min: 1 }}
+        rules={{ required: 'El tipo de notificación es obligatorio', min: 1 }}
         render={({ field }) => (
           <CustomSelect
             {...field}
-            label="Tipo de notificacion"
+            label="Tipo de notificación"
             options={selectItemsCommon}
             error={!!errors.state}            
           />

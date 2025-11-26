@@ -43,7 +43,7 @@ export const StepThreeBell: React.FC = () => {
                 title: 'Perfiles asignados',
                 value: profiles.length.toString() ?? 'No'
               },{
-                title: 'Tipo de notificacion',
+                title: 'Tipo de notificación',
                 value: selectedIconsNotificationCommon(notificationCommonTypeId)
               }];
   
