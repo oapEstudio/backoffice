@@ -66,7 +66,7 @@ export const UpdateDynamicPageProfile: React.FC<UpdateDynamicPageProfileProps> =
       reset()
       onClose()
     } catch {
-      Toast({ message: 'Error al asignar perfiles a la notificación', type: eToast.Error })
+      Toast({ message: 'Error al asignar perfiles a la página', type: eToast.Error })
     }
   })
 
