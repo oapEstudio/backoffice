@@ -3,3 +3,4 @@ export const DP_FILE_PREFIX = 'dp:file:';
 export const ID_SECTION_ITEM_MENU = 9999999;
 export const STATE_DYNAMIC_PAGE_CANCEL: number = 4;
 export const MAX_SIZE_FILE = 10 * 1024 * 1024; 
+export const MAX_SIZE_IMAGE = 3 * 1024 * 1024; 

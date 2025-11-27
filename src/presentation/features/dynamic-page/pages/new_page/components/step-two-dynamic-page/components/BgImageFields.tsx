@@ -6,6 +6,7 @@ import type { IModalAddElementFormValues } from '../../modal-add-element/ModalAd
 import ImageDropzone from '../../../../../../../components/ui/img-drop-zone/ImageDropZone';
 import CustomTextInput from '../../../../../../../components/ui/inputs/text-input/text-input.component';
 import { CustomStack } from '../../../../../../../components/ui/stack/Stack';
+import { MAX_SIZE_IMAGE } from '../../../../../shared/constants/constants';
 
 export const BgImageFields: React.FC<{ initialImageUrl?: string }> = ({ initialImageUrl }) => {
   const { control, formState: { errors } } = useFormContext<IModalAddElementFormValues>();
@@ -15,7 +16,23 @@ export const BgImageFields: React.FC<{ initialImageUrl?: string }> = ({ initialI
               name="file"
               control={control}
               rules={{
-                validate: v => (v !== undefined || !!initialImageUrl) || 'Debes asignar una imagen',
+                validate: (v) => {
+                  if (v === undefined && !initialImageUrl) {
+                    return 'Debes asignar una imagen';
+                  }
+
+                  if (v === undefined) {
+                    return true;
+                  }
+
+                  const file = Array.isArray(v) ? v[0] : v;
+
+                  if (file.size > MAX_SIZE_IMAGE) {
+                    return 'La imagen no puede superar los 3MB';
+                  }
+
+                  return true;
+                }
               }}
               render={({ field, fieldState: { error } }) => (
                 <>
@@ -26,7 +43,7 @@ export const BgImageFields: React.FC<{ initialImageUrl?: string }> = ({ initialI
                     onFiles={(files) => field.onChange(files[0])}
                     helperText="JPG/PNG hasta 3MB"
                   />
-                  {error && <Typography color="error" variant="caption">{error.message}</Typography>}
+                  {error && <Typography color="error.main" variant="caption">{error.message}</Typography>}
                 </>
               )}
             />
