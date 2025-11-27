@@ -38,18 +38,19 @@ export class DynamicPageRepository extends RepositoryAbstract implements IDynami
 
             
             if (out.file instanceof File) {
+              
               const path = await this.uploadFileToStorage(
-                out.file,
-                this.storageRepo,       
-                template,
-                folder,
-                out.file.name
-              );
+                                                          out.file,
+                                                          this.storageRepo,       
+                                                          template,
+                                                          folder,
+                                                          out.file.name);
               (out as any).file = path; 
             }
 
             
             delete (out as any)._eidx;
+            
             return out;
           })
         );
@@ -124,17 +125,17 @@ normalizeDto(dto: ICreateDynamicPageDto) {
     this.appendFormDataIfDefined(form, "hasMenu", dtoWithPaths.hasMenu);
     this.appendFormDataIfDefined(form, "statusId", dtoWithPaths.statusId);
 
-    let contador = 0;
+    let counter = 0;
 
     dtoWithPaths.sections?.forEach((section) => {
       if (section.backgroundColor || (section.elements?.length ?? 0) > 0) {
     
-        this.appendFormDataIfDefined(form, `sections[${contador}].order`, section.order);
-        this.appendFormDataIfDefined(form, `sections[${contador}].backgroundColor`, section.backgroundColor);
+        this.appendFormDataIfDefined(form, `sections[${counter}].order`, section.order);
+        this.appendFormDataIfDefined(form, `sections[${counter}].backgroundColor`, section.backgroundColor);
 
         section.elements?.forEach((el, ei) => {
     
-          const base = `sections[${contador}].elements[${ei}]`;
+          const base = `sections[${counter}].elements[${ei}]`;
           this.appendFormDataIfDefined(form, `${base}.order`, el.order);
           this.appendFormDataIfDefined(form, `${base}.label`, el.label);
           this.appendFormDataIfDefined(form, `${base}.text`, el.text);
@@ -146,14 +147,67 @@ normalizeDto(dto: ICreateDynamicPageDto) {
           this.appendFormDataIfDefined(form, `${base}.link`, el.link);
         });
 
-        contador++;
+        counter++;
       }
     });
 
     const res = await apiHandler.post<{ id: string }, FormData>(this.resolveURL(url, version), {}, form);
     return res.data.id;
   }
+ async updateDynamicPage(id: string, dto: IUpdateDynamicPageDto): Promise<IDynamicPage> {
+        
+          const version = this.resource.edit.page.version;
+          const url = this.resource.edit.page.endpoint.replace('{id}', id);
+          const folder = `${this.slug(dto.title)}`;
+    
+          const dtoWithPaths = await this.mapFilesToStoragePaths(dto, StorageTemplate.Pages, folder);
+    
+          
+          const form = new FormData();
+            
+    
+          form.append("title", dtoWithPaths.title);
 
+          dtoWithPaths.profiles.forEach((p, i) => form.append(`profiles[${i}]`, p));
+        
+          this.appendFormDataIfDefined(form, "description", dtoWithPaths.description);
+          this.appendFormDataIfDefined(form, "hasMenu", dtoWithPaths.hasMenu);
+          this.appendFormDataIfDefined(form, "statusId", dtoWithPaths.statusId);
+          
+          let counter = 0;
+
+          dtoWithPaths.sections?.forEach((section) => {
+
+
+                if(section.backgroundColor || section.elements.length > 0 ){
+                    this.appendFormDataIfDefined(form, `sections[${counter}].order`, section.order);
+                    this.appendFormDataIfDefined(form, `sections[${counter}].backgroundColor`, section.backgroundColor);
+
+                    section.elements?.forEach((el, ei) => {
+                      const base = `sections[${counter}].elements[${ei}]`;  
+
+                      this.appendFormDataIfDefined(form, `${base}.order`, el.order);
+                      this.appendFormDataIfDefined(form, `${base}.label`, el.label);
+                      this.appendFormDataIfDefined(form, `${base}.text`, el.text);
+                      this.appendFormDataIfDefined(form, `${base}.fontSize`, el.fontSize);
+                      this.appendFormDataIfDefined(form, `${base}.type`, el.type);
+                      this.appendFormDataIfDefined(form, `${base}.file`, el.file);
+                      this.appendFormDataIfDefined(form, `${base}.height`, el.height);
+                      this.appendFormDataIfDefined(form, `${base}.align`, el.align);
+                      this.appendFormDataIfDefined(form, `${base}.link`, el.link);
+                    });
+
+                     counter++;
+                }
+            });
+
+          const res = await apiHandler.put<IDynamicPage, FormData>(
+            this.resolveURL(url, version),
+            {},
+            form
+          );
+          return res.data;
+       }
  async getDynamicPageById(id: string): Promise<IDynamicPage> {
     const version = this.resource.edit.page.version;
     const url = this.resource.edit.page.endpoint.replace('{id}', id);
@@ -185,58 +239,7 @@ normalizeDto(dto: ICreateDynamicPageDto) {
               return res.data;
      }
 
-      async updateDynamicPage(id: string, dto: IUpdateDynamicPageDto): Promise<IDynamicPage> {
-        
-        const version = this.resource.edit.page.version;
-         const url = this.resource.edit.page.endpoint.replace('{id}', id);
      
-         const form = new FormData();
-    
-         const ndto = this.normalizeDto(dto);
-        
-         
-    
-          form.append("title", ndto.title);
-
-          ndto.profiles.forEach((p, i) => form.append(`profiles[${i}]`, p));
-        
-          this.appendFormDataIfDefined(form, "description", ndto.description);
-          this.appendFormDataIfDefined(form, "hasMenu", ndto.hasMenu);
-          this.appendFormDataIfDefined(form, "statusId", ndto.statusId);
-          
-          let contador = 0;
-          ndto.sections?.forEach((section) => {
-
-
-                if(section.backgroundColor || section.elements.length > 0 ){
-                    this.appendFormDataIfDefined(form, `sections[${contador}].order`, section.order);
-                    this.appendFormDataIfDefined(form, `sections[${contador}].backgroundColor`, section.backgroundColor);
-
-                    section.elements?.forEach((el, ei) => {
-                      const base = `sections[${contador}].elements[${ei}]`;  
-
-                      this.appendFormDataIfDefined(form, `${base}.order`, el.order);
-                      this.appendFormDataIfDefined(form, `${base}.label`, el.label);
-                      this.appendFormDataIfDefined(form, `${base}.text`, el.text);
-                      this.appendFormDataIfDefined(form, `${base}.fontSize`, el.fontSize);
-                      this.appendFormDataIfDefined(form, `${base}.type`, el.type);
-                      this.appendFormDataIfDefined(form, `${base}.file`, el.file);
-                      this.appendFormDataIfDefined(form, `${base}.height`, el.height);
-                      this.appendFormDataIfDefined(form, `${base}.align`, el.align);
-                      this.appendFormDataIfDefined(form, `${base}.link`, el.link);
-                    });
-
-                     contador++;
-                }
-            });
-
-          const res = await apiHandler.put<IDynamicPage, FormData>(
-            this.resolveURL(url, version),
-            {},
-            form
-          );
-          return res.data;
-       }
      
   
 }

@@ -8,12 +8,18 @@ import type { INotificationRepository } from "../../../application/interfaces/IN
 import type { INotificationCreateDto } from "../../../application/dtos/INotificationCreateDto";
 import type { INotificationUpdateProfiles } from "../../../application/dtos/INotificationUpdateProfiles";
 import type { INotificationUpdateDto } from "../../../application/dtos/INotificationUpdateDto";
+import type { IStorageRepository } from "../../../application/interfaces/IStorageRepository";
+import { StorageRepository } from "./StorageRepository";
+import { StorageTemplate } from "../../../domain/entities/IStorageSas";
 
 
 export class NotificationRepository extends RepositoryAbstract implements INotificationRepository {
 
   resource = env.resources.notifications;
 
+  constructor(private readonly storageRepo: IStorageRepository = new StorageRepository()) {
+      super();
+    }
 
   async getNotifications(params: IPageParameters): Promise<IPaginatedResponse<INotification>> {
     
@@ -65,7 +71,14 @@ export class NotificationRepository extends RepositoryAbstract implements INotif
     form.append('notificationCommonTypeId', String(dto.notificationCommonTypeId ?? ''));
 
     if (dto.image instanceof File) {
-      form.append('image', dto.image, dto.image.name);
+      
+      const path = await this.uploadFileToStorage(
+                                                          dto.image,
+                                                          this.storageRepo,       
+                                                          StorageTemplate.Notification,
+                                                          dto.name,
+                                                          dto.image.name);
+      form.append('image', path);
     }
     
     form.append('buttonText', String(dto.buttonText ?? ''));
@@ -101,14 +114,24 @@ export class NotificationRepository extends RepositoryAbstract implements INotif
     const url = this.resource.edit.notification.endpoint.replace('{id}', id);
 
     const form = new FormData();
+    
     form.append('notificationTypeId', String(payload.notificationTypeId ?? ''));
     form.append('name', String(payload.name ?? ''));
     form.append('title', String(payload.title ?? ''));
     form.append('description', String(payload.description ?? ''));
     form.append('notificationCommonTypeId', String(payload.notificationCommonTypeId ?? ''));
+    
     if (payload.image instanceof File) {
-      form.append('image', payload.image, payload.image.name);
+       
+      const path = await this.uploadFileToStorage(
+                                                          payload.image,
+                                                          this.storageRepo,       
+                                                          StorageTemplate.Notification,
+                                                          payload.name,
+                                                          payload.image.name);
+      form.append('image', path);
     }
+
     form.append('buttonText', String(payload.buttonText ?? ''));
     form.append('buttonLink', String(payload.buttonLink ?? ''));
     form.append('statusId', String(payload.statusId ?? ''));

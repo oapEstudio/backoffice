@@ -7,12 +7,18 @@ import type { IHelpRepository } from "../../../application/interfaces/IHelpRepos
 import type { IHelpCreateDto } from "../../../application/dtos/IHelpCreateDto";
 import type { IHelpUpdateProfiles } from "../../../application/dtos/IHelpUpdateProfiles";
 import type { IHelpUpdateDto } from "../../../application/dtos/IHelpUpdateDto";
+import type { IStorageRepository } from "../../../application/interfaces/IStorageRepository";
+import { StorageRepository } from "./StorageRepository";
+import { StorageTemplate } from "../../../domain/entities/IStorageSas";
 
 
 export class HelpRepository extends RepositoryAbstract implements IHelpRepository {
 
   resource = env.resources.helps;
 
+  constructor(private readonly storageRepo: IStorageRepository = new StorageRepository()) {
+        super();
+      }
   async getHelps(params: IPageParameters): Promise<IPaginatedResponse<IHelp>> {
 
     const mapped = this.paramsMap(params);
@@ -34,10 +40,12 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
   }
 
   async createHelp(dto: IHelpCreateDto): Promise<string> {
+    
     const version = this.resource.create.version;
     const url = `${this.resource.create.endpoint}`;
 
     const form = new FormData();
+    
     form.append('name', String(dto.name ?? ''));
     form.append('title', String(dto.title ?? ''));
     form.append('helpTypeId', String(dto.helpTypeId ?? ''));
@@ -48,10 +56,19 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
 
     if (dto.documents) {
       const files = Array.isArray(dto.documents) ? dto.documents : [dto.documents];
-      files.forEach((file) => {
+      
+      files.forEach(async (file) => {
+
         if (file instanceof File) {
-          form.append('documents', file, file.name);
+          const path = await this.uploadFileToStorage(
+                                                          file,
+                                                          this.storageRepo,       
+                                                          StorageTemplate.Help,
+                                                          dto.name,
+                                                          file.name);
+          form.append('documents', path);          
         }
+
       });
     }
 
@@ -89,12 +106,23 @@ export class HelpRepository extends RepositoryAbstract implements IHelpRepositor
     form.append('link', String(dto.link ?? ''));
 
     if (dto.documents) {
+
       const files = Array.isArray(dto.documents) ? dto.documents : [dto.documents];
-      files.forEach((file) => {
+
+      files.forEach(async (file) => {
+       
         if (file instanceof File) {
-          form.append('documents', file, file.name);
+          const path = await this.uploadFileToStorage(
+                                                          file,
+                                                          this.storageRepo,       
+                                                          StorageTemplate.Help,
+                                                          dto.name,
+                                                          file.name);
+          form.append('documents', path);          
         }
+
       });
+      
     }
 
     form.append('statusId', String(dto.statusId ?? ''));
