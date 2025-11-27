@@ -13,7 +13,6 @@ export const Headers: IColumn[] =[{
     align: 'left',
     id: 'groups',
     label: 'Grupos AD',
-    order: 'groupsCount'
 },{
     align: 'left',
     id: 'state',
@@ -24,7 +23,7 @@ export const Headers: IColumn[] =[{
     id: 'actions',
     label: 'Acciones'
 },{
-    align: 'center',
+    align: 'left',
     id: 'cancellation',
     label: 'Baja'
 }];

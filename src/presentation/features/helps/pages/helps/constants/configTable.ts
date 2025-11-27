@@ -29,12 +29,10 @@ export const Headers: IColumn[] =[{
     align: 'left',
     id: 'profiles',
     label: 'Perfiles',
-    order: 'profiles'
 },{
-    align: 'center',
+    align: 'left',
     id: 'actions',
     label: 'Acciones',
-    order: 'actions'
 },{
     align: 'left',
     id: 'cancellation',
