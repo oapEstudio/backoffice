@@ -75,12 +75,13 @@ normalizeDto(dto: ICreateDynamicPageDto) {
       ndto.sections?.forEach((section) => {
 
 
-          if(section.backgroundColor  || section.elements.length > 0 ){
+          if(section.backgroundColor  || section.backgroundImage || section.elements.length > 0 ){
 
              
 
               this.appendFormDataIfDefined(form, `sections[${contador}].order`, section.order);
               this.appendFormDataIfDefined(form, `sections[${contador}].backgroundColor`, section.backgroundColor);
+              this.appendFormDataIfDefined(form, `sections[${contador}].backgroundImage`, section.backgroundImage);
 
               section.elements?.forEach((el, ei) => {
                 const base = `sections[${contador}].elements[${ei}]`;          

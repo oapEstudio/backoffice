@@ -12,7 +12,7 @@ interface IPreviewPage{
 
 export async function loadDynamicPageFromStorage(): Promise<IPreviewPage> {
   
-    const raw = localStorage.getItem(KEY_STORAGE_PROPS_DYNAMIC_PAGE);
+  const raw = localStorage.getItem(KEY_STORAGE_PROPS_DYNAMIC_PAGE);
 
   if (!raw) return {sections: [], hasMenu: false};
   
@@ -52,9 +52,12 @@ export async function loadDynamicPageFromStorage(): Promise<IPreviewPage> {
         });
       }
 
+    const blob = await idbGet(`dp:file:${s.backgroundImageKey}`, dpStore);
+
     sections.push({
       id: s.id,
       order: s.order,
+      backgroundImage: blob,
       elements,
       backgroundColor: s.backgroundColor
     });

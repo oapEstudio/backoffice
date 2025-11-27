@@ -15,7 +15,22 @@ export async function saveDynamicPageToStorage(sections: ISectionPage[],hasMenu:
 
     const manElems: DPManifest['sections'][number]['elements'] = [];
 
+    let backgroundImageKey: string | undefined;
+
+    const bgInput = (s as any).backgroundImage?.dataUrl ?? (s as any).backgroundImage; 
+    
+
+    if (bgInput) {
+
+      const bgBlob = await blobFromFileOrDataUrl(bgInput);
+
+      backgroundImageKey = crypto.randomUUID();
+
+      await idbSet(`dp:file:${backgroundImageKey}`, bgBlob, dpStore);
+    }
+
     for (const el of s.elements) {
+    
       const { file, ...rest } = el as any;
 
       let fileKey: string | undefined;
@@ -40,6 +55,7 @@ export async function saveDynamicPageToStorage(sections: ISectionPage[],hasMenu:
     manifest.sections.push({
       id: s.id,
       order: s.order,
+      backgroundImageKey,
       elements: manElems,
       backgroundColor: s.backgroundColor
     });

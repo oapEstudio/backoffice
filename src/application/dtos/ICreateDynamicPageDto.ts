@@ -11,6 +11,7 @@ export interface ICreateDynamicPageDto {
 export interface ISectionDto{
      order:           number;
      backgroundColor?: string;
+     backgroundImage?: File;
      elements:        IElementDto[];
 }
 
