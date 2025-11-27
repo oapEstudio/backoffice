@@ -17,7 +17,7 @@ export function useDynamicPageCancellation(){
                return updated;
    
            } catch(e: any){
-               setError(e.message || 'Error al dar de baja la pagina');
+               setError(e.message || 'Error al dar de baja la página');
                throw e;
            }finally{
                setLoading(false);

@@ -14,7 +14,7 @@ export function useGetDynamicPageById() {
       const n = await getDynamicPageById.execute(id);
       return n;
     } catch (e: any) {
-      setError(e?.message ?? 'Error al obtener la pagina');
+      setError(e?.message ?? 'Error al obtener la página');
       throw e;
     } finally {
       setLoading(false);

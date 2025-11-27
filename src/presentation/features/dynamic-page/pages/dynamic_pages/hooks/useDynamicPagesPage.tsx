@@ -75,7 +75,7 @@ export function useDynamicPagesPage(){
           
               await cancellation(pendingDeleteId);
           
-              Toast({ message: 'Pagina dada de baja correctamente', type: eToast.Success })
+              Toast({ message: 'Página dada de baja correctamente', type: eToast.Success })
           
               refresh();
           

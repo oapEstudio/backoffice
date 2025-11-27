@@ -314,7 +314,7 @@ export function useNewDynamicPage(init?: IDynamicPage){
                     
        
              Toast({
-               message: 'Pagina actualizada correctamente',
+               message: 'Página actualizada correctamente',
                type: eToast.Success
              });
     
@@ -323,7 +323,7 @@ export function useNewDynamicPage(init?: IDynamicPage){
            } catch(e) {
               
              Toast({
-               message: 'Error al actualizar la pagina',
+               message: 'Error al actualizar la página',
                type: eToast.Error
              });
            }

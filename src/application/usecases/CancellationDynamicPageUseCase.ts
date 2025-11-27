@@ -13,7 +13,7 @@ export class CancellationDynamicPageUseCase{
           } catch (err) {
             
               if (err instanceof Error) {
-                throw new Error(`No se pudo dar de baja la pagina: ${err.message}`)
+                throw new Error(`No se pudo dar de baja la página: ${err.message}`)
               }
               throw err
           }   

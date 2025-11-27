@@ -13,7 +13,7 @@ export class UpdateDynamicPageProfilesUseCase{
           } catch (err) {
             
               if (err instanceof Error) {
-                throw new Error(`No se pudo actualizar los perfiles de la pagina: ${err.message}`)
+                throw new Error(`No se pudo actualizar los perfiles de la página: ${err.message}`)
               }
               throw err
           }   
