@@ -20,7 +20,7 @@ export function useUpdateDynamicPage(){
       return res;
       
     } catch (e: any) {
-      setError(e?.message ?? 'Error al actualizar la pagina');
+      setError(e?.message ?? 'Error al actualizar la página');
       throw e;
     } finally {
       setLoading(false);

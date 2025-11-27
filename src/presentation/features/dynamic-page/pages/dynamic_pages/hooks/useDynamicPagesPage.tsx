@@ -75,12 +75,12 @@ export function useDynamicPagesPage(){
           
               await cancellation(pendingDeleteId);
           
-              Toast({ message: 'Pagina dada de baja correctamente', type: eToast.Success })
+              Toast({ message: 'Página dada de baja correctamente', type: eToast.Success })
           
               refresh();
           
             } catch {
-              Toast({ message: 'Error al dar de baja la notificación', type: eToast.Error })
+              Toast({ message: 'Error al dar de baja la página', type: eToast.Error })
             }
           }, [cancellation, pendingDeleteId, refresh]);
     

@@ -15,7 +15,7 @@ export function useCreateDynamicPages() {
         const newId = await createDynamicPage.execute(dto);
         return newId
       } catch (err: any) {
-        setError(err.message || 'Error al crear la pagina')
+        setError(err.message || 'Error al crear la página')
         throw err
       } finally {
         setLoading(false)

@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import type { IModalAddElementFormValues } from '../../modal-add-element/ModalAddElement';
 import ImageDropzone from '../../../../../../../components/ui/img-drop-zone/ImageDropZone';
 import CustomTextInput from '../../../../../../../components/ui/inputs/text-input/text-input.component';
+import { MAX_SIZE_IMAGE } from '../../../../../shared/constants/constants';
 
 export const ImageFields: React.FC<{ initialImageUrl?: string }> = ({ initialImageUrl }) => {
   const { control, formState: { errors } } = useFormContext<IModalAddElementFormValues>();
@@ -15,7 +16,23 @@ export const ImageFields: React.FC<{ initialImageUrl?: string }> = ({ initialIma
         name="file"
         control={control}
         rules={{
-          validate: v => (v !== undefined || !!initialImageUrl) || 'Debes asignar una imagen',
+          validate: (v) => {
+            if (v === undefined && !initialImageUrl) {
+              return 'Debes asignar una imagen';
+            }
+
+            if (v === undefined) {
+              return true;
+            }
+
+            const file = Array.isArray(v) ? v[0] : v;
+
+            if (file.size > MAX_SIZE_IMAGE) {
+              return 'La imagen no puede superar los 3MB';
+            }
+
+            return true;
+          }
         }}
         render={({ field, fieldState: { error } }) => (
           <>
@@ -26,14 +43,14 @@ export const ImageFields: React.FC<{ initialImageUrl?: string }> = ({ initialIma
               onFiles={(files) => field.onChange(files[0])}
               helperText="JPG/PNG hasta 3MB"
             />
-            {error && <Typography color="error" variant="caption">{error.message}</Typography>}
+            {error && <Typography color="error.main" variant="caption">{error.message}</Typography>}
           </>
         )}
       />
       <Controller
         name="height"
         control={control}
-        rules={{ required: 'El height es obligatorio',min: 1 }}
+        rules={{ required: 'El height es obligatorio', min: 1 }}
         render={({ field }) => (
           <CustomTextInput
             {...field}

@@ -18,7 +18,7 @@ export function useUpdateDynamicPageProfile(){
                return updated;
    
            } catch(e: any){
-               setError(e.message || 'Error al actualizar los perfiles de la pagina');
+               setError(e.message || 'Error al actualizar los perfiles de la página');
                throw e;
            }finally{
                setLoading(false);
