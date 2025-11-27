@@ -2,6 +2,7 @@ import { Box, Stack, InputLabel, Typography } from "@mui/material";
 import { MuiColorInput } from "mui-color-input";
 import Required from "../required/required.component";
 import { colors } from "../../../common/colors";
+import { PALETTE_COLORS_ELEMENTS } from "../../../common/palette-colors-elements";
 
 interface CustomColorPickerProps {
     label?: string;
@@ -12,19 +13,12 @@ interface CustomColorPickerProps {
     allowCustom?: boolean;
 }
 
-const defaultPalette = [
-    colors.white,
-    colors.palette.primary.main,
-    colors.palette.primary.dark,
-    colors.palette.primary.disabled
-];
-
 export const CustomColorPicker: React.FC<CustomColorPickerProps> = ({
     label,
     required,
     value,
     onChange,
-    palette = defaultPalette,
+    palette = PALETTE_COLORS_ELEMENTS,
     allowCustom = true,
 }) => {
     return (

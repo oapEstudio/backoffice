@@ -1,23 +1,9 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useEffect } from 'react'
 import CustomModal from '../../../../../../components/ui/modal/modal.component'
-import StepperWrapperBackOfficeDefault from '../../../../../../components/ui/step/stepper-wrapper-backoffice-default';
-import StepNavigationBackOffice, { type StepType } from '../../../../../../components/ui/step/step-navigation-backoffice';
-import { InfoIcon, LinksIcon } from '../../../../../../components/ui/icons';
 import { CustomBox } from '../../../../../../components/ui/box/CustomBox';
-import { ActionStepReducer, eStep, getActionStepInitialState } from '../../reducers/ActionStepReducer';
-import CustomSelect from '../../../../../../components/ui/inputs/select/select.component';
-import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form';
-import { eTypeElement } from '../element-dynamic-page/ElementDynamicPage';
-import { StepOneDynamicPage } from '../step-one-dynamic-page/StepOneDynamicPage';
-import { StepTwoDynamicPage } from '../step-two-dynamic-page/StepTwoDynamicPage';
-import { navStepSelected } from '../../../../../../utils/navStepSelected';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { eToast, Toast } from '../../../../../../components/ui/toast/CustomToastService';
-import type { IModalAddElementFormValues } from '../modal-add-element/ModalAddElement';
-import CustomTextInput from '../../../../../../components/ui/inputs/text-input/text-input.component';
-import { minTrimmed } from '../../../../../../utils/minTrimmed';
-import { colors } from '../../../../../../common/colors';
 import { CustomColorPicker } from '../../../../../../components/ui/color-picker/CustomColorPicker';
-import TextAlign from '@tiptap/extension-text-align';
 
 
 interface IModalAddSectionFormValues{
@@ -102,18 +88,6 @@ export const ModalAddSection: React.FC<ModalAddSectionProps> = ({open, onClose, 
                                         label="Seleccione color predefinido"
                                         value={field.value}
                                         onChange={(v) => { field.onChange(v)}} 
-                                        palette={[ 
-                                          colors.white, 
-                                          colors.grey200,
-                                          colors.palette.primary.disabled,
-                                          colors.palette.primary.main, 
-                                          colors.palette.primary.dark, 
-                                          colors.palette.secondary.main, 
-                                          colors.darkBlue,
-                                          colors.green200,
-                                          colors.yellow100,
-                                          colors.alert.error,
-                                        ]} 
                                         allowCustom={true} 
                                       />
                                     )}

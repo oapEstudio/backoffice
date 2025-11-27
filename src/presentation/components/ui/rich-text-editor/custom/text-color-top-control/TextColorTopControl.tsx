@@ -7,14 +7,10 @@ import IconButton from "@mui/material/IconButton";
 import { ColorTextIcon } from "../../../icons";
 import { Swatch } from "../swatch/Swatch";
 import { selectWholeParagraphIfEmpty } from "../utils/selectWholeParagraphIfEmpty";
+import { PALETTE_COLORS_ELEMENTS } from "../../../../../common/palette-colors-elements";
 
-const PALETTE_TEXT = [
-  '#000000', '#ffffff', '#888888', '#ff0000', '#ff9900',
-  '#ffff00', '#00d000', '#0000ff', '#800080', '#00bcd4',
-  '#795548', '#9e9e9e',
-];
 
-export const TextColorTopControl: React.FC<{ editor: Editor }> = ({ editor }) => {
+export const TextColorTopControl: React.FC<{ editor: Editor, palette?: string[]}> = ({ editor, palette = PALETTE_COLORS_ELEMENTS }) => {
   
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
@@ -51,7 +47,7 @@ export const TextColorTopControl: React.FC<{ editor: Editor }> = ({ editor }) =>
           }}
         >     
           <Swatch onPick={onPick} />
-          {PALETTE_TEXT.map((c) => (
+          {palette.map((c) => (
             <Swatch key={c} color={c} onPick={onPick} />
           ))}
         </CustomBox>
