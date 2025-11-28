@@ -180,7 +180,7 @@ export const ModalSave: React.FC<IModalSaveProps> = ({open, onClose, onCancel, o
                                                 />
                                     
                                                 {error && (
-                                                  <Typography color="error" variant="caption">
+                                                  <Typography color="error.main" variant="caption">
                                                     {error.message}
                                                   </Typography>
                                                 )}

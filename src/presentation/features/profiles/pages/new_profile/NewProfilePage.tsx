@@ -54,7 +54,7 @@ export const NewProfilePage: React.FC = () => {
         </CustomBox>
 
         {createError && !isSuccess && (
-          <Typography color="error" align="center">
+          <Typography color="error.main" align="center">
             {createError}
           </Typography>
         )}

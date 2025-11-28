@@ -191,7 +191,7 @@ export const MenuForm = forwardRef<MenuFormHandle, MenuFormProps>((props, ref) =
 
        <>
         {serverError && (
-          <Typography color="error" variant="caption">
+          <Typography color="error.main" variant="caption">
             {serverError}
           </Typography>
         )}

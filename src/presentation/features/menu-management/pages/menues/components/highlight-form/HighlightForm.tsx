@@ -144,7 +144,7 @@ export const HighlightForm = forwardRef<HighlightFormHandle, HighlightFormProps>
 
        <>
         {serverError && (
-          <Typography color="error" variant="caption">
+          <Typography color="error.main" variant="caption">
             {serverError}
           </Typography>
         )}
