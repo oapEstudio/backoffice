@@ -158,16 +158,17 @@ normalizeDto(dto: ICreateDynamicPageDto) {
           this.appendFormDataIfDefined(form, "hasMenu", ndto.hasMenu);
           this.appendFormDataIfDefined(form, "statusId", ndto.statusId);
           
-          let contador = 0;
+          let counter = 0;
           ndto.sections?.forEach((section) => {
 
 
-                if(section.backgroundColor || section.elements.length > 0 ){
-                    this.appendFormDataIfDefined(form, `sections[${contador}].order`, section.order);
-                    this.appendFormDataIfDefined(form, `sections[${contador}].backgroundColor`, section.backgroundColor);
+                if(section.backgroundColor   || section.backgroundImage || section.elements.length > 0 ){
+                    this.appendFormDataIfDefined(form, `sections[${counter}].order`, section.order);
+                    this.appendFormDataIfDefined(form, `sections[${counter}].backgroundColor`, section.backgroundColor);
+                    this.appendFormDataIfDefined(form, `sections[${counter}].backgroundImage`, section.backgroundImage);
 
                     section.elements?.forEach((el, ei) => {
-                      const base = `sections[${contador}].elements[${ei}]`;  
+                      const base = `sections[${counter}].elements[${ei}]`;  
 
                       this.appendFormDataIfDefined(form, `${base}.order`, el.order);
                       this.appendFormDataIfDefined(form, `${base}.label`, el.label);
@@ -180,7 +181,7 @@ normalizeDto(dto: ICreateDynamicPageDto) {
                       this.appendFormDataIfDefined(form, `${base}.link`, el.link);
                     });
 
-                     contador++;
+                     counter++;
                 }
             });
 

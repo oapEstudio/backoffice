@@ -133,18 +133,7 @@ export const CustomRichTextEditor: React.FC<ICustomRichTextEditorProps> = ({chan
                   <HighlightTopControl editor={editor} />
                 </>
               )}
-              <MenuButtonBulletedList />
-            <MenuButtonImageUpload
-                onUploadFiles={(files) => {
-
-                    const results = files.map((file) => ({
-                                    src: 'https://ypf.com/images/home/ruta.webp',
-                                    alt: file.name,
-                                  }));
-
-                    return results;
-                  }}
-              />  
+              <MenuButtonBulletedList />            
             </div>)
           
         }}>
