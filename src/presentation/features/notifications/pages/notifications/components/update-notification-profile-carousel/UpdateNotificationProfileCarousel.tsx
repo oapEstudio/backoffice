@@ -94,7 +94,7 @@ export const UpdateNotificationProfileCarousel: React.FC<UpdateNotificationProfi
                 onChange={field.onChange}
               />
               {error && (
-                <Typography color="error" variant="caption">
+                <Typography color="error.main" variant="caption">
                   {error.message}
                 </Typography>
               )}

@@ -94,7 +94,7 @@ export const AddProfile: React.FC<AddProfileProps> = ({
                 onChange={field.onChange}               
               />
               {error && (
-                <Typography color="error" variant="caption">
+                <Typography color="error.main" variant="caption">
                   {error.message}
                 </Typography>
               )}

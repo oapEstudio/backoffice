@@ -87,7 +87,7 @@ export const StepOneGeneric: React.FC<StepOneGenericProps> = ({
             />
 
             {error && (
-              <Typography color="error" variant="caption">
+              <Typography color="error.main" variant="caption">
                 {error.message}
               </Typography>
             )}

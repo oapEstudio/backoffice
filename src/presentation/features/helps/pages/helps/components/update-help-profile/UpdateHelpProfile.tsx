@@ -73,7 +73,7 @@ export const UpdateHelpProfile: React.FC<UpdateHelpProfilesProps> = ({
                 />
               )}
               {!!error && (
-                <Typography color="error" variant="caption" sx={{ mt: 1, display: "block" }}>
+                <Typography color="error.main" variant="caption" sx={{ mt: 1, display: "block" }}>
                   {error.message}
                 </Typography>
               )}

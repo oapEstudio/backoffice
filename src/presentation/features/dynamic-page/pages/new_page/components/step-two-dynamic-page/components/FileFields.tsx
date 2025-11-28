@@ -54,7 +54,7 @@ export const FileFields: React.FC = () => {
               value={field.value ? [field.value] : []}
               onFiles={(files) => field.onChange(files[0])}
             />
-            {error && <Typography color="error" variant="caption">{error.message}</Typography>}
+            {error && <Typography color="error.main" variant="caption">{error.message}</Typography>}
           </>
         )}
       />
