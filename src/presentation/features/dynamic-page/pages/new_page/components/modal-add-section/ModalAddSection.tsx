@@ -85,6 +85,7 @@ export const ModalAddSection: React.FC<ModalAddSectionProps> = ({open, onClose, 
                 <FormProvider {...form}>
                       
                         <CustomStack direction={'row'} spacing={3} sx={{  display: 'flex', justifyContent: 'center', TextAlign: 'center', p: '0 4rem', minHeight: 100,paddingTop: '2rem' }}>
+                                <CustomBox direction={'column'} width='45%'>
 
                                 <Controller
                                     name="backgroundColor"
@@ -98,22 +99,24 @@ export const ModalAddSection: React.FC<ModalAddSectionProps> = ({open, onClose, 
                                       />
                                     )}
                                 /> 
+                                </CustomBox>
+                                <CustomBox direction={'column'} width='55%'>
                                 <Controller
                                         name="backgroundImage"
                                         control={control}
                                         rules={{
                                           validate: (v) => {
-                                           
+
                                             if (v === undefined) {
                                               return true;
                                             }
-                                
+
                                             const file = Array.isArray(v) ? v[0] : v;
-                                
+
                                             if (file.size > MAX_SIZE_IMAGE) {
                                               return 'La imagen no puede superar los 3MB';
                                             }
-                                
+
                                             return true;
                                           }
                                         }}
@@ -125,10 +128,12 @@ export const ModalAddSection: React.FC<ModalAddSectionProps> = ({open, onClose, 
                                               onFiles={(files) => field.onChange(files[0])}
                                               helperText="JPG/PNG hasta 3MB"
                                             />
+                                            <br />
                                             {error && <Typography color="error.main" variant="caption">{error.message}</Typography>}
                                           </>
                                         )}
-                                      />                                           
+                                      /> 
+                                </CustomBox>
                         </CustomStack>
                 </FormProvider>
                 

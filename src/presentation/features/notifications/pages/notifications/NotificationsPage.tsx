@@ -63,7 +63,10 @@ export const NotificationsPage = () => {
               }} 
               onCancel={()=>setOpenFilter(false)} 
             />
-             <ConfirmDialog 
+             <ConfirmDialog
+                   icon = 'warning'
+                   title = '¡Atención!'
+                   subtitle= '¿Desea continuar con la operación? Su acción no puede revertirse.'  
                    open={openDelete} 
                    onOk={doConfirmDelete} 
                    onCancel={()=>setOpenDelete(false)}  />

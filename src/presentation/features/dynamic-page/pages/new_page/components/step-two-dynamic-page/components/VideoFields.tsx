@@ -144,7 +144,7 @@ export const VideoFields = () => {
                 onFiles={(files) => field.onChange(files[0])}
                 helperText="Formatos típicos: MP4, WebM, Ogg. Máx 50MB"
              />
-            {error && <Typography color="error" variant="caption">{error.message}</Typography>}
+            {error && <Typography color="error.main" variant="caption">{error.message}</Typography>}
           </>
         )}
       />

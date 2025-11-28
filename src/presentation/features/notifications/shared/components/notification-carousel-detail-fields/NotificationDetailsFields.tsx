@@ -18,6 +18,7 @@ import { CustomBox } from '../../../../../components/ui/box/CustomBox';
 import CustomDateInput from '../../../../../components/ui/inputs/date-input/date-input.component';
 import CustomTimePicker from '../../../../../components/ui/inputs/date-time-input/date-time-input.component';
 import CustomSelect from '../../../../../components/ui/inputs/select/select.component';
+import { MAX_SIZE_IMAGE } from '../../constants/notifications';
 
 interface NotificationDetailsFieldsProps {
   autoCleanup?: boolean;
@@ -159,7 +160,23 @@ export const NotificationDetailsFields: React.FC<NotificationDetailsFieldsProps>
         name="img"
         control={control}
         rules={{
-          validate: (v) => (v !== undefined || !!initialImageUrl) || 'Debes asignar una imagen',
+          validate: (v) => {
+            if (v === undefined && !initialImageUrl) {
+              return 'Debes asignar una imagen';
+            }
+
+            if (v === undefined) {
+              return true;
+            }
+
+            const file = Array.isArray(v) ? v[0] : v;
+
+            if (file.size > MAX_SIZE_IMAGE) {
+              return 'La imagen no puede superar los 3MB';
+            }
+
+            return true;
+          }
         }}
         render={({ field, fieldState: { error } }) => (
           <>
@@ -168,11 +185,11 @@ export const NotificationDetailsFields: React.FC<NotificationDetailsFieldsProps>
               initialPreviewUrl={initialImageUrl}
               value={field.value ? [field.value] : []}
               onFiles={(files) => field.onChange(files[0])}
-              helperText="JPG/PNG hasta 3MB"
+              helperText="JPG/PNG/GIF hasta 3MB"
               disabled={disabledAll}
             />
             {error && (
-              <Typography color="error" variant="caption">
+              <Typography color="error.main" variant="caption">
                 {error.message}
               </Typography>
             )}

@@ -36,7 +36,7 @@ export const AccordeonField: React.FC = () => {
             render={({ field, fieldState: { error } }) => (
                 <>
                     <CustomRichTextEditor change={field.onChange} />
-                    {error && <Typography color="error" variant="caption">{error.message}</Typography>}
+                    {error && <Typography color="error.main" variant="caption">{error.message}</Typography>}
                 </>
             )}
             />

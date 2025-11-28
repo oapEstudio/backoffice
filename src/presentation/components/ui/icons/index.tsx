@@ -266,7 +266,7 @@ export const ImageIcon = () =>{
 }
 
 export const InfoIcon = () =>{
-  return <InfoOutlineIcon />
+  return <InfoOutlineIcon color={'primary'} />
 }
 
 export const DownloaddIcon = () =>{

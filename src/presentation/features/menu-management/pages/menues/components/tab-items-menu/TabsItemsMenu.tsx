@@ -100,7 +100,10 @@ export const TabsItemsMenu: React.FC<TabsItemsMenuProps> = ({
                                 onClose={()=>setOpenEditProfiles(false)} 
                                 onSaved={saveMenuSucess} />
                         
-                        <ConfirmDialog 
+                        <ConfirmDialog
+                              icon = 'warning'
+                              title = '¡Atención!'
+                              subtitle= '¿Desea continuar con la operación? Su acción no puede revertirse.' 
                               open={openDelete} 
                               onOk={confirmDelete} 
                               onCancel={()=>setOpenDelete(false)}  />
