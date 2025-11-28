@@ -29,7 +29,6 @@ export const Headers: IColumn[] =[{
     align: 'left',
     id: 'template',
     label: 'Usar config.',
-    order: 'template'
 },{
     align: 'left',
     id: 'actions',

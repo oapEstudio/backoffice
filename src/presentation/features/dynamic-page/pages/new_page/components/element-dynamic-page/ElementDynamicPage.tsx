@@ -66,7 +66,13 @@ export const ElementDynamicPage: React.FC<IElementDynamicPageProps> = ({ size, e
         </CustomFab>
         }
         </>
-        <CustomBox sx={{ height: '100%', border: isEdit ? '0.2rem dashed #9E9E9E' : 'none', minHeight: 100, alignContent: 'center' }}>
+        <CustomBox sx={{ 
+            height: '100%', 
+            border: isEdit ? '0.2rem dashed #9E9E9E' : 'none', 
+            minHeight: 100, alignContent: 'center',
+            overflowWrap: 'anywhere',     
+            wordBreak: 'break-word',      
+            hyphens: 'auto',   }}>
             {element.type === eTypeElement.BACKGROUND_IMAGE ?
                 <img width={'100%'} height={element.height} src={url} /> :
                 <></>}

@@ -78,7 +78,7 @@ export const NewDynamicPagesPage = () => {
                       open={openAddSection} 
                       onClose={()=>setOpenAddSection(false)} 
                       onCancel={handleCancelAddModal} 
-                      onOk={(element)=>{handleAddSection(element.backgroundColor)}} 
+                      onOk={(element)=>{handleAddSection(element.backgroundColor,element.backgroundImage)}} 
                   />   
                   <ModalSave 
                       isEdit={isEdit}

@@ -7,6 +7,7 @@ export type DPManifest = {
     id: string;
     order: number;
     backgroundColor: string;
+    backgroundImageKey?: string; 
     elements: Array<{
       id: string;
       order: number;

@@ -30,7 +30,7 @@ const navStepsInit: StepType[] = [{
     active: false,
     icon: <SettingIcon />,
     show: true,
-    title: 'Configuracion'
+    title: 'Configuración'
 }];
 
 

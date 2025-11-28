@@ -126,12 +126,25 @@ normalizeDto(dto: ICreateDynamicPageDto) {
     this.appendFormDataIfDefined(form, "statusId", dtoWithPaths.statusId);
 
     let counter = 0;
+    
+    dtoWithPaths.sections?.forEach(async (section) => {
 
-    dtoWithPaths.sections?.forEach((section) => {
-      if (section.backgroundColor || (section.elements?.length ?? 0) > 0) {
+      if (section.backgroundColor || section.backgroundImage || (section.elements?.length ?? 0) > 0) {
     
         this.appendFormDataIfDefined(form, `sections[${counter}].order`, section.order);
         this.appendFormDataIfDefined(form, `sections[${counter}].backgroundColor`, section.backgroundColor);
+
+        if (section.backgroundImage instanceof File) {
+              
+              const path = await this.uploadFileToStorage(
+                                                          section.backgroundImage,
+                                                          this.storageRepo,       
+                                                          StorageTemplate.Pages,
+                                                          folder,
+                                                          section.backgroundImage.name);
+             this.appendFormDataIfDefined(form, `sections[${counter}].backgroundImage`, path);
+        }
+        
 
         section.elements?.forEach((el, ei) => {
     
@@ -146,6 +159,8 @@ normalizeDto(dto: ICreateDynamicPageDto) {
           this.appendFormDataIfDefined(form, `${base}.align`, el.align);
           this.appendFormDataIfDefined(form, `${base}.link`, el.link);
         });
+        
+        
 
         counter++;
       }
@@ -176,13 +191,23 @@ normalizeDto(dto: ICreateDynamicPageDto) {
           
           let counter = 0;
 
-          dtoWithPaths.sections?.forEach((section) => {
+          dtoWithPaths.sections?.forEach(async (section) => {
 
 
-                if(section.backgroundColor || section.elements.length > 0 ){
+                if(section.backgroundColor || section.backgroundImage || section.elements.length > 0 ){
                     this.appendFormDataIfDefined(form, `sections[${counter}].order`, section.order);
                     this.appendFormDataIfDefined(form, `sections[${counter}].backgroundColor`, section.backgroundColor);
 
+                     if (section.backgroundImage instanceof File) {
+              
+                            const path = await this.uploadFileToStorage(
+                                                                        section.backgroundImage,
+                                                                        this.storageRepo,       
+                                                                        StorageTemplate.Pages,
+                                                                        folder,
+                                                                        section.backgroundImage.name);
+                          this.appendFormDataIfDefined(form, `sections[${counter}].backgroundImage`, path);
+                      }
                     section.elements?.forEach((el, ei) => {
                       const base = `sections[${counter}].elements[${ei}]`;  
 

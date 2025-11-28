@@ -1,27 +1,18 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useEffect } from 'react'
 import CustomModal from '../../../../../../components/ui/modal/modal.component'
-import StepperWrapperBackOfficeDefault from '../../../../../../components/ui/step/stepper-wrapper-backoffice-default';
-import StepNavigationBackOffice, { type StepType } from '../../../../../../components/ui/step/step-navigation-backoffice';
-import { InfoIcon, LinksIcon } from '../../../../../../components/ui/icons';
 import { CustomBox } from '../../../../../../components/ui/box/CustomBox';
-import { ActionStepReducer, eStep, getActionStepInitialState } from '../../reducers/ActionStepReducer';
-import CustomSelect from '../../../../../../components/ui/inputs/select/select.component';
-import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form';
-import { eTypeElement } from '../element-dynamic-page/ElementDynamicPage';
-import { StepOneDynamicPage } from '../step-one-dynamic-page/StepOneDynamicPage';
-import { StepTwoDynamicPage } from '../step-two-dynamic-page/StepTwoDynamicPage';
-import { navStepSelected } from '../../../../../../utils/navStepSelected';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { eToast, Toast } from '../../../../../../components/ui/toast/CustomToastService';
-import type { IModalAddElementFormValues } from '../modal-add-element/ModalAddElement';
-import CustomTextInput from '../../../../../../components/ui/inputs/text-input/text-input.component';
-import { minTrimmed } from '../../../../../../utils/minTrimmed';
-import { colors } from '../../../../../../common/colors';
 import { CustomColorPicker } from '../../../../../../components/ui/color-picker/CustomColorPicker';
-import TextAlign from '@tiptap/extension-text-align';
+import { MAX_SIZE_IMAGE } from '../../../../shared/constants/constants';
+import ImageDropzone from '../../../../../../components/ui/img-drop-zone/ImageDropZone';
+import Typography from '@mui/material/Typography';
+import { CustomStack } from '../../../../../../components/ui/stack/Stack';
 
 
 interface IModalAddSectionFormValues{
   backgroundColor: string;
+  backgroundImage: File;
 }
 interface ModalAddSectionProps{
     open: boolean;
@@ -37,7 +28,8 @@ export const ModalAddSection: React.FC<ModalAddSectionProps> = ({open, onClose, 
  
   const form = useForm<IModalAddSectionFormValues>({
         defaultValues: {
-          backgroundColor: ''
+          backgroundColor: '',
+          backgroundImage: undefined
         },
         mode: 'onChange',          
         reValidateMode: 'onChange' 
@@ -92,9 +84,9 @@ export const ModalAddSection: React.FC<ModalAddSectionProps> = ({open, onClose, 
                     
                 <FormProvider {...form}>
                       
-                        <CustomBox  sx={{ display: 'flex', justifyContent: 'center', TextAlign: 'center', p: '0 4rem', minHeight: 100,paddingTop: '2rem' }}>
+                        <CustomStack direction={'row'} spacing={3} sx={{  display: 'flex', justifyContent: 'center', TextAlign: 'center', p: '0 4rem', minHeight: 100,paddingTop: '2rem' }}>
 
-                                 <Controller
+                                <Controller
                                     name="backgroundColor"
                                     control={control}                                   
                                     render={({ field }) => (
@@ -102,23 +94,42 @@ export const ModalAddSection: React.FC<ModalAddSectionProps> = ({open, onClose, 
                                         label="Seleccione color predefinido"
                                         value={field.value}
                                         onChange={(v) => { field.onChange(v)}} 
-                                        palette={[ 
-                                          colors.white, 
-                                          colors.grey200,
-                                          colors.palette.primary.disabled,
-                                          colors.palette.primary.main, 
-                                          colors.palette.primary.dark, 
-                                          colors.palette.secondary.main, 
-                                          colors.darkBlue,
-                                          colors.green200,
-                                          colors.yellow100,
-                                          colors.alert.error,
-                                        ]} 
                                         allowCustom={true} 
                                       />
                                     )}
-                                />                                            
-                        </CustomBox>
+                                /> 
+                                <Controller
+                                        name="backgroundImage"
+                                        control={control}
+                                        rules={{
+                                          validate: (v) => {
+                                           
+                                            if (v === undefined) {
+                                              return true;
+                                            }
+                                
+                                            const file = Array.isArray(v) ? v[0] : v;
+                                
+                                            if (file.size > MAX_SIZE_IMAGE) {
+                                              return 'La imagen no puede superar los 3MB';
+                                            }
+                                
+                                            return true;
+                                          }
+                                        }}
+                                        render={({ field, fieldState: { error } }) => (
+                                          <>
+                                            <ImageDropzone
+                                              multiple={false}                                              
+                                              value={field.value ? [field.value] : []}
+                                              onFiles={(files) => field.onChange(files[0])}
+                                              helperText="JPG/PNG hasta 3MB"
+                                            />
+                                            {error && <Typography color="error.main" variant="caption">{error.message}</Typography>}
+                                          </>
+                                        )}
+                                      />                                           
+                        </CustomStack>
                 </FormProvider>
                 
         </CustomModal>

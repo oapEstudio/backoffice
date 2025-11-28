@@ -27,6 +27,7 @@ export function useNewDynamicPage(init?: IDynamicPage){
     elements: [],
     id: ID_SECTION_ITEM_MENU.toString(),
     backgroundColor: '',
+    backgroundImage: undefined,
     order: 0
   }]);
   const [openAddElement, setOpenAddElement] = useState<boolean>(false);
@@ -72,8 +73,7 @@ export function useNewDynamicPage(init?: IDynamicPage){
           const menuElements: IElementDynamicPage[] = [];
           const normalSections: ISectionPage[] = [];
 
-          for (const s of pageById.sections) {
-           
+          pageById.sections.forEach(async (s)=>{
             const mapped = (s.elements ?? []).map((e: any): IElementDynamicPage => {
               const type = e.type?.toString() as eTypeElement;              
               const file = e.fileUrl ? urlOrDataUrlToFile(e.fileUrl) : null;
@@ -95,14 +95,19 @@ export function useNewDynamicPage(init?: IDynamicPage){
 
             
             if (sectionOtherElems.length) {
+              const backgroundImage = s.backgroundImageUrl? await urlOrDataUrlToFile(s.backgroundImageUrl) as File: undefined;
               normalSections.push({
                 id: String(s.id),
                 order: s.order,
                 backgroundColor: s.backgroundColor ?? '',
+                backgroundImage: backgroundImage,
                 elements: sectionOtherElems,
               });
             }
-          }
+          })
+           
+            
+          
 
           
           const menuSection: ISectionPage = {
@@ -207,12 +212,13 @@ export function useNewDynamicPage(init?: IDynamicPage){
       setOpenAddElement(false);
       setOpenAddItemMenu(false);  
   }
-  const handleAddSection = (backgroundColor?: string)=>{
+  const handleAddSection = (backgroundColor?: string, backgroundImage?: File)=>{
 
     setPagesProps((previos)=>([
                 ...previos,
                 {
-                    backgroundColor: backgroundColor??'',
+                    backgroundColor: backgroundColor ?? '',
+                    backgroundImage: backgroundImage ?? undefined,
                     elements: [],
                     id: (previos.length + 1).toString(),
                     order: previos.length +1
@@ -260,7 +266,8 @@ export function useNewDynamicPage(init?: IDynamicPage){
                   const section: ISectionDto = {
                     order: s.order,
                     backgroundColor: s.backgroundColor,
-                    elements: s.elements
+                    elements: s.elements,
+                    backgroundImage: s.backgroundImage
                   };
 
                   return section
@@ -303,6 +310,7 @@ export function useNewDynamicPage(init?: IDynamicPage){
                   const section: ISectionDto = {
                     order: s.order,
                     backgroundColor: s.backgroundColor,
+                    backgroundImage: s.backgroundImage,
                     elements: s.elements
                   };
 

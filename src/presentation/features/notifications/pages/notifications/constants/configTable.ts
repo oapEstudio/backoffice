@@ -33,7 +33,6 @@ export const Headers: IColumn[] =[{
     align: 'left',
     id: 'profiles',
     label: 'Perfiles',
-    order: 'profiles'
 },{
     align: 'left',
     id: 'actions',

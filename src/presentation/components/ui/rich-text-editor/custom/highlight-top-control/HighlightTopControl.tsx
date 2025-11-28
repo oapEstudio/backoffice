@@ -7,15 +7,9 @@ import Typography from "@mui/material/Typography";
 import { CustomBox } from "../../../box/CustomBox";
 import { Swatch } from "../swatch/Swatch";
 import { selectWholeParagraphIfEmpty } from "../utils/selectWholeParagraphIfEmpty";
+import { PALETTE_COLORS_ELEMENTS } from "../../../../../common/palette-colors-elements";
 
-const PALETTE_BG = [
-  '#595959', '#dddddd', '#ffa6a6', '#ffd699', '#ffff00',
-  '#99cc99', '#90c6ff', '#8085e9', '#c8e6c9', '#ffe0b2',
-  '#e1bee7', '#f8bbd0',
-];
-
-
-export const HighlightTopControl: React.FC<{ editor: Editor }> = ({ editor }) => {
+export const HighlightTopControl: React.FC<{ editor: Editor, palette?: string[] }> = ({ editor, palette = PALETTE_COLORS_ELEMENTS }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
 
@@ -51,7 +45,7 @@ export const HighlightTopControl: React.FC<{ editor: Editor }> = ({ editor }) =>
         >
     
           <Swatch onPick={onPick} />
-          {PALETTE_BG.map((c) => (
+          {palette.map((c) => (
             <Swatch key={c} color={c} onPick={onPick} />
           ))}
         </CustomBox>

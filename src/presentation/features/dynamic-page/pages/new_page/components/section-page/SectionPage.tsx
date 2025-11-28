@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { CustomBox } from '../../../../../../components/ui/box/CustomBox';
 import { CustomGrid } from '../../../../../../components/ui/grid/CustomGrid';
 import BlankCard from '../../../../../../components/ui/card/blank';
@@ -16,6 +16,7 @@ export interface ISectionPage{
   elements: IElementDynamicPage[];
   id: string;
   backgroundColor: string;
+  backgroundImage?: File;
 }
 
 export interface ISectionPageProps{
@@ -86,15 +87,44 @@ export const SectionPage: React.FC<ISectionPageProps> = ({
 
   const rows = useMemo(() => buildRows(section.elements), [section.elements]);
 
+  const { bgUrl, needsRevoke } = useMemo(() => {
+ 
+    const img = section.backgroundImage as unknown;
+
+    if (!img) return { bgUrl: undefined as string | undefined, needsRevoke: false };
+    
+    if (img instanceof Blob) return { bgUrl: URL.createObjectURL(img), needsRevoke: true };
+    
+    if (typeof img === 'string') return { bgUrl: img, needsRevoke: false };
+    
+    return { bgUrl: undefined, needsRevoke: false };
+    
+  }, [section.backgroundImage]);
+
+  useEffect(() => {
+    return () => { if (bgUrl && needsRevoke) URL.revokeObjectURL(bgUrl); };
+  }, [bgUrl, needsRevoke]);
   return (
-    <CustomBox sx={{backgroundColor: section.backgroundColor, border: isEdit? '0.3rem dashed '+ colors.palette.primary.main : 'none', px: 2, position: 'relative' }}>
+    <CustomBox 
+     sx={{
+        px: 2,
+        position: 'relative',
+        border: isEdit ? `0.3rem dashed ${colors.palette.primary.main}` : 'none',
+        backgroundColor: section.backgroundColor || 'transparent',
+        ...(bgUrl && {
+          backgroundImage: `url("${bgUrl}")`,
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }),
+      }}>
       <ToolbarSection
         id={section.id}
         isEdit={isEdit}
         handleDeleteSections={handleDeleteSections}
         handleAddElements={handleAddElement}
       />
-      <BlankCard color={section.backgroundColor?'transparent': ''}>    
+      <BlankCard color={section.backgroundColor || section.backgroundImage?'transparent': ''}>    
         {rows.map((row, rIdx) => (
           <CustomGrid container spacing={1} key={`row_${section.id}_${rIdx}`}>
             {
