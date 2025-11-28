@@ -7,6 +7,7 @@ import { CustomColorPicker } from '../../../../../../components/ui/color-picker/
 import { MAX_SIZE_IMAGE } from '../../../../shared/constants/constants';
 import ImageDropzone from '../../../../../../components/ui/img-drop-zone/ImageDropZone';
 import Typography from '@mui/material/Typography';
+import { CustomStack } from '../../../../../../components/ui/stack/Stack';
 
 
 interface IModalAddSectionFormValues{
@@ -83,9 +84,9 @@ export const ModalAddSection: React.FC<ModalAddSectionProps> = ({open, onClose, 
                     
                 <FormProvider {...form}>
                       
-                        <CustomBox  sx={{ display: 'flex', justifyContent: 'center', TextAlign: 'center', p: '0 4rem', minHeight: 100,paddingTop: '2rem' }}>
+                        <CustomStack direction={'row'} spacing={3} sx={{  display: 'flex', justifyContent: 'center', TextAlign: 'center', p: '0 4rem', minHeight: 100,paddingTop: '2rem' }}>
 
-                                 <Controller
+                                <Controller
                                     name="backgroundColor"
                                     control={control}                                   
                                     render={({ field }) => (
@@ -128,7 +129,7 @@ export const ModalAddSection: React.FC<ModalAddSectionProps> = ({open, onClose, 
                                           </>
                                         )}
                                       />                                           
-                        </CustomBox>
+                        </CustomStack>
                 </FormProvider>
                 
         </CustomModal>

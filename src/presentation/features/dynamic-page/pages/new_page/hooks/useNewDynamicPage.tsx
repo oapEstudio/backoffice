@@ -95,7 +95,7 @@ export function useNewDynamicPage(init?: IDynamicPage){
 
             
             if (sectionOtherElems.length) {
-              const backgroundImage = s.backgroundImage? await urlOrDataUrlToFile(s.backgroundImage) as File: undefined;
+              const backgroundImage = s.backgroundImageUrl? await urlOrDataUrlToFile(s.backgroundImageUrl) as File: undefined;
               normalSections.push({
                 id: String(s.id),
                 order: s.order,

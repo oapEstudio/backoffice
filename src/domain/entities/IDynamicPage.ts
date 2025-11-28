@@ -21,7 +21,7 @@ export interface ISection {
     id:              string;
     order:           number;
     backgroundColor: string;
-    backgroundImage: string;
+    backgroundImageUrl: string;
     elements:        IElement[];
 }
 
