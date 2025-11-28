@@ -25,7 +25,7 @@ export class StorageRepository
         const query = new URLSearchParams({ template });
         const refreshQuery = forceRefresh ? "&refresh=true" : "";
  
-        return mock;
+        //return mock;
         const response = await apiHandler.get<IStorageSas>(
             `${url}?${query.toString()}${refreshQuery}`,
         );
