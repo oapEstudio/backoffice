@@ -4,7 +4,7 @@ import type { INotification } from "../../../../domain/entities/INotification";
 import type { SelectOption } from "../../../components/ui/inputs/select/select.interface";
 import type { IRow } from "../../../components/ui/table/table.interface";
 import { formatDate } from "../../../utils/formatDate";
-import { EditActionIcon, DangerIcon, LinksIcon, InfoIcon, DownloaddIcon, WarningTriangleIcon } from '../../../components/ui/icons/index';
+import { EditActionIcon, DangerIcon} from '../../../components/ui/icons/index';
 import { CustomStack } from '../../../components/ui/stack/Stack';
 import type React from "react";
 import IconButton from "@mui/material/IconButton";

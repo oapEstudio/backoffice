@@ -64,6 +64,9 @@ export const ProfilesPage: React.FC = () => {
         }}
         onCancel={() => setOpenFilter(false)} />
       <ConfirmDialog
+        icon = 'warning'
+        title = '¡Atención!'
+        subtitle= '¿Desea continuar con la operación? Su acción no puede revertirse.'  
         open={openDelete}
         onOk={doConfirmDelete}
         onCancel={() => setOpenDelete(false)} />

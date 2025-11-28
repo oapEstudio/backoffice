@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useState } from 'react'
 import CustomModal from '../../../../../../components/ui/modal/modal.component'
 import StepperWrapperBackOfficeDefault from '../../../../../../components/ui/step/stepper-wrapper-backoffice-default';
 import StepNavigationBackOffice, { type StepType } from '../../../../../../components/ui/step/step-navigation-backoffice';
-import { InfoIcon, SettingIcon } from '../../../../../../components/ui/icons';
+import { SettingIcon } from '../../../../../../components/ui/icons';
 import { CustomBox } from '../../../../../../components/ui/box/CustomBox';
 import { ActionStepReducer, eStep, getActionStepInitialState } from '../../reducers/ActionStepReducer';
 import CustomSelect from '../../../../../../components/ui/inputs/select/select.component';
