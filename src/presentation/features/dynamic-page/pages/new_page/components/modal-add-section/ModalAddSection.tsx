@@ -4,7 +4,7 @@ import { CustomBox } from '../../../../../../components/ui/box/CustomBox';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { eToast, Toast } from '../../../../../../components/ui/toast/CustomToastService';
 import { CustomColorPicker } from '../../../../../../components/ui/color-picker/CustomColorPicker';
-import { MAX_SIZE_IMAGE } from '../../../../shared/constants/constants';
+import { ALLOW_IMAGES, MAX_SIZE_IMAGE } from '../../../../shared/constants/constants';
 import ImageDropzone from '../../../../../../components/ui/img-drop-zone/ImageDropZone';
 import Typography from '@mui/material/Typography';
 import { CustomStack } from '../../../../../../components/ui/stack/Stack';
@@ -116,6 +116,13 @@ export const ModalAddSection: React.FC<ModalAddSectionProps> = ({open, onClose, 
                                             if (file.size > MAX_SIZE_IMAGE) {
                                               return 'La imagen no puede superar los 3MB';
                                             }
+                                          
+                                            const allowed = ALLOW_IMAGES;
+                                            const extension = '.' + file.name.split('.').pop().toLowerCase();
+
+                                            if (!allowed.includes(extension)) {
+                                              return `Tipo de archivo no permitido. Tipos válidos: ${allowed.join(', ')}`;
+                                            }
 
                                             return true;
                                           }
@@ -126,7 +133,7 @@ export const ModalAddSection: React.FC<ModalAddSectionProps> = ({open, onClose, 
                                               multiple={false}                                              
                                               value={field.value ? [field.value] : []}
                                               onFiles={(files) => field.onChange(files[0])}
-                                              helperText="JPG/PNG hasta 3MB"
+                                              helperText="JPG/PNG/GIF hasta 3MB"
                                             />
                                             <br />
                                             {error && <Typography color="error.main" variant="caption">{error.message}</Typography>}
